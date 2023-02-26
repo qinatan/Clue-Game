@@ -30,7 +30,8 @@ public class TestBoardCell {
 		
 	}
 	
-	static Set<TestBoardCell> getAdjList() {
+	
+	public Set<TestBoardCell> getAdjList() {
 		return adjSet;
 	}
 	

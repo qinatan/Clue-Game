@@ -35,4 +35,27 @@ public class TestBoardCell {
 		return adjSet;
 	}
 	
+	//Section: Setters and getters for if a cell is part of a room
+	//sets a cell as part of a room
+	void setRoom(boolean inRoom) {
+		
+	}
+	
+	//returns if a cell in in a given room
+	boolean inRoom() {
+		
+	}
+	
+	//Section: setters and getter for if a player is in a given room 
+	void setOccupied(boolean inRoom) {
+		
+	} 
+	
+	//TODO: This need to be included with the data type of the rooms
+	void getOccupied(room ) {
+		
+	}
+	
+	
 }
+

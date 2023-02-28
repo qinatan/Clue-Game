@@ -17,7 +17,7 @@ public class TestBoardCell {
 	public int columnNum ;
 
 	private static List<TestBoardCell> adjList = new ArrayList<TestBoardCell> (); ;	
-	private Map<TestBoardCell, List<TestBoardCell>> adjMtx ; 
+
 
 	
 	

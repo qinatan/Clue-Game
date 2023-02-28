@@ -10,20 +10,42 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+//import <TestBoardCell> ; 
+
+
+
 
 public class TestBoard {
-	/**
-	 * Default Constructor
-	 */
+	
 	private Map<TestBoardCell, Set<TestBoardCell>> adjMtx ; 
-	public TestBoard() {
-		super();
-	}
-
+	
+	private TestBoardCell[][] grid ; 
+	
 	//Creates the visited list of the board
 	//TODO: This might fail with player crossing paths
 	ArrayList<TestBoardCell> visitedList = new ArrayList<TestBoardCell> (); 
 	ArrayList<TestBoardCell> tragetsList = new ArrayList<TestBoardCell> (); 
+	
+	final static int COLS = 4; 
+	final static int ROWS = 4 ;
+	
+	//private ArrayList<TestBoardCell> targets
+	/**
+	 * Default Constructor
+	 */
+	public TestBoard() {
+		super();
+		
+		
+		for (int i = 0 ; ) {
+			for() {
+				
+			}
+		}
+		
+	}
+
+
 
 	
 	/**
@@ -46,7 +68,7 @@ public class TestBoard {
 			
 		} else { //This is the base case
 			//Add the adjList to the targets list
-			for (int i = 0 ; i < adjMtx[currCell].size ;  i++ ) {
+			for (int i = 0 ; i < adjMtx.get(currCell).size() ;  i++ ) {
 				
 				
 				

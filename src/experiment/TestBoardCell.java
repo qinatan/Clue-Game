@@ -6,6 +6,7 @@
 
 package experiment;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ public class TestBoardCell {
 
 	public int rowNum ; 
 	public int columnNum ;
-	private static Set<TestBoardCell> adjSet;	
+	private static Set<TestBoardCell> adjSet = new HashSet<TestBoardCell> (); ;	
 	private Map<TestBoardCell, Set<TestBoardCell>> adjMtx ; 
 	
 	
@@ -49,8 +50,7 @@ public class TestBoardCell {
 	
 	//returns if a cell in in a given room
 	boolean inRoom() {
-		
-		
+	
 		return false ; 
 	}
 	

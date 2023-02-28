@@ -6,15 +6,18 @@
 
 package experiment;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 public class TestBoardCell {
 
 	public int rowNum ; 
 	public int columnNum ;
-	private static Set<TestBoardCell> adjSet = new HashSet<TestBoardCell> (); 
+
+	private static List<TestBoardCell> adjList = new ArrayList<TestBoardCell> (); ;	
+	private Map<TestBoardCell, List<TestBoardCell>> adjMtx ; 
 
 	
 	
@@ -33,13 +36,12 @@ public class TestBoardCell {
 	//Takes in cell (not our current position)
 	//adds it to the adj list. 
 	void addAdjacency (TestBoardCell cell) {
-		// Method Stub only
-		
+		adjList.add(cell);
 	}
 	
 	
-	public Set<TestBoardCell> getAdjList() {
-		return adjSet;
+	public List<TestBoardCell> getAdjList() {
+		return adjList;
 	}
 	
 	//Section: Setters and getters for if a cell is part of a room

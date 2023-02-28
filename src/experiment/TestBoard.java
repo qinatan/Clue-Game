@@ -1,3 +1,9 @@
+/**
+ * Michael Eack
+ * John O'Malley
+ * Clue
+ */
+
 package experiment;
 
 import java.util.Set;
@@ -55,7 +61,6 @@ public class TestBoard {
 	 */
 	public TestBoardCell getCell(int row, int col) {
 		TestBoardCell testBoardCell = new TestBoardCell(row, col);
-		System.out.println("In getCell");
 		return testBoardCell;
 	}
 

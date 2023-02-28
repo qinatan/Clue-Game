@@ -1,3 +1,9 @@
+/**
+ * Michael Eack
+ * John O'Malley
+ * Clue
+ */
+
 package experiment;
 
 import java.util.Map;

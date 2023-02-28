@@ -22,6 +22,7 @@ class BoardTestsExp {
 
 	// Methods to test the creation of adjacency lists for a 4x4 board including:
 	// Top left corner [0][0]
+	@Test
 	public void testAdjacency() {
 		// Top left corner
 		TestBoardCell cell1 = new TestBoardCell(0, 0);
@@ -54,7 +55,7 @@ class BoardTestsExp {
 		// Test of cell away from the current cell
 		// required 5th test
 		// This might accidently pass
-		TestBoardCell cell5 = new TestBoardCell(0, 0);
+		TestBoardCell cell5 = new TestBoardCell(2, 2);
 		Set<TestBoardCell> testList5 = cell1.getAdjList();
 		Assert.assertFalse(testList5.contains(board.getCell(2, 1)));
 		Assert.assertFalse(testList5.contains(board.getCell(3, 1)));
@@ -151,6 +152,7 @@ class BoardTestsExp {
 	}
 
 	// Testing targets with rooms cells
+	@Test 
 	public void testTargetsRoom() {
 		board.getCell(1, 2).isRoom(true);
 
@@ -179,6 +181,7 @@ class BoardTestsExp {
 
 	}
 
+	@Test
 	public void testTargetsOccupied() {
 		board.getCell(1, 2).setOccupied(true);
 
@@ -208,6 +211,7 @@ class BoardTestsExp {
 	}
 
 	// Tests a combined of occupied and is room arrangements
+	@Test
 	public void testTargetsMixed() {
 		board.getCell(1, 2).setOccupied(true);
 		board.getCell(2, 2).isRoom(true);
@@ -235,11 +239,6 @@ class BoardTestsExp {
 		Assert.assertTrue(targets1.contains(board.getCell(2, 2)));
 		Assert.assertTrue(targets1.contains(board.getCell(3, 1)));
 
-	}
-
-	@Test
-	void test() {
-		fail("Not yet implemented");
 	}
 
 }

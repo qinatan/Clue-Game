@@ -6,6 +6,7 @@
 
 package experiment;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class TestBoard {
@@ -70,7 +71,7 @@ public class TestBoard {
 	 * @return
 	 */
 	public Set<TestBoardCell> getTargets() {
-		Set<TestBoardCell> targetSet = null;
+		Set<TestBoardCell> targetSet = new HashSet<TestBoardCell> ();
 		return targetSet;
 	}
 

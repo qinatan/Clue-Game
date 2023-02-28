@@ -17,6 +17,7 @@ public class TestBoard {
 	 * @param pathLength
 	 */
 	@SuppressWarnings("null")
+	public
 	void calcTargets(TestBoardCell startCell, int pathLength) {
 
 		/*
@@ -63,7 +64,7 @@ public class TestBoard {
 	 * 
 	 * @return
 	 */
-	Set<TestBoardCell> getTargets() {
+	public Set<TestBoardCell> getTargets() {
 		Set<TestBoardCell> targetSet = null;
 		return targetSet;
 	}

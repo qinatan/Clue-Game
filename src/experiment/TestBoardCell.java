@@ -49,12 +49,20 @@ public class TestBoardCell {
 	}
 	
 	//Section: setters and getter for if a player is in a given room 
-	void setOccupied(boolean inRoom) {
+	public void setOccupied(boolean inRoom) {
 		
 	} 
 	
 	//TODO: This need to be included with the data type of the rooms
 	void getOccupied( ) {
+		
+	}
+
+
+	//This might be the same as inRoom above. This will get fixed when we 
+	//update and fill in these methods
+	public void isRoom(boolean b) {
+		// TODO Auto-generated method stub
 		
 	}
 	

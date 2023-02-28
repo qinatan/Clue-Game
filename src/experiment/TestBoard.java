@@ -19,34 +19,30 @@ public class TestBoard {
 	@SuppressWarnings("null")
 	void calcTargets(TestBoardCell startCell, int pathLength) {
 
-		int i = 0 ; 
-		int j = 0 ; 
-		
-		int numLoops = 0 ; 
-		
-
-		Set<TestBoardCell> cellTargets =  null;
-		
-		while (true) {
-			if (numLoops > pathLength) { //Check if this is either >= or > 
-				break;
-			}
-
-			//Sets the i and j values of the target cell
-			i = pathLength - numLoops ; 
-			j = 0 + numLoops; 
-			
-			//create the cell with the i and j
-			TestBoardCell tempCell = new TestBoardCell(i, j) ; 
-		
-			//add the cell to the set of cell targets
-			cellTargets.add(tempCell) ; 
-			
-			//incements the number of loops 
-			numLoops ++ ; 
-			
-			
-		}
+		/*
+		 * int i = 0 ; int j = 0 ;
+		 * 
+		 * int numLoops = 0 ;
+		 * 
+		 * 
+		 * Set<TestBoardCell> cellTargets = null;
+		 * 
+		 * while (true) { if (numLoops > pathLength) { //Check if this is either >= or >
+		 * break; }
+		 * 
+		 * //Sets the i and j values of the target cell i = pathLength - numLoops ; j =
+		 * 0 + numLoops;
+		 * 
+		 * //create the cell with the i and j TestBoardCell tempCell = new
+		 * TestBoardCell(i, j) ;
+		 * 
+		 * //add the cell to the set of cell targets cellTargets.add(tempCell) ;
+		 * 
+		 * //incements the number of loops numLoops ++ ;
+		 * 
+		 * 
+		 * }
+		 */
 	}
 
 	/**

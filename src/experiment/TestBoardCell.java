@@ -44,6 +44,8 @@ public class TestBoardCell {
 	//returns if a cell in in a given room
 	boolean inRoom() {
 		
+		
+		return false ; 
 	}
 	
 	//Section: setters and getter for if a player is in a given room 
@@ -52,7 +54,7 @@ public class TestBoardCell {
 	} 
 	
 	//TODO: This need to be included with the data type of the rooms
-	void getOccupied(room ) {
+	void getOccupied( ) {
 		
 	}
 	

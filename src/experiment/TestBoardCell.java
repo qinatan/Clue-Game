@@ -14,8 +14,8 @@ public class TestBoardCell {
 
 	public int rowNum ; 
 	public int columnNum ;
-	private static Set<TestBoardCell> adjSet = new HashSet<TestBoardCell> (); ;	
-	private Map<TestBoardCell, Set<TestBoardCell>> adjMtx ; 
+	private static Set<TestBoardCell> adjSet = new HashSet<TestBoardCell> (); 
+
 	
 	
 	/**

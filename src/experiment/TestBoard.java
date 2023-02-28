@@ -6,17 +6,26 @@
 
 package experiment;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class TestBoard {
 	/**
 	 * Default Constructor
 	 */
+	private Map<TestBoardCell, Set<TestBoardCell>> adjMtx ; 
 	public TestBoard() {
 		super();
 	}
 
+	//Creates the visited list of the board
+	//TODO: This might fail with player crossing paths
+	ArrayList<TestBoardCell> visitedList = new ArrayList<TestBoardCell> (); 
+	ArrayList<TestBoardCell> tragetsList = new ArrayList<TestBoardCell> (); 
+
+	
 	/**
 	 * Calculates legal targets for a move from startCell of length pathLength
 	 * 
@@ -24,33 +33,31 @@ public class TestBoard {
 	 * @param pathLength
 	 */
 	@SuppressWarnings("null")
-	public
-	void calcTargets(TestBoardCell startCell, int pathLength) {
+	public void calcTargets(TestBoardCell startCell, int pathLength) {
 
-		/*
-		 * int i = 0 ; int j = 0 ;
-		 * 
-		 * int numLoops = 0 ;
-		 * 
-		 * 
-		 * Set<TestBoardCell> cellTargets = null;
-		 * 
-		 * while (true) { if (numLoops > pathLength) { //Check if this is either >= or >
-		 * break; }
-		 * 
-		 * //Sets the i and j values of the target cell i = pathLength - numLoops ; j =
-		 * 0 + numLoops;
-		 * 
-		 * //create the cell with the i and j TestBoardCell tempCell = new
-		 * TestBoardCell(i, j) ;
-		 * 
-		 * //add the cell to the set of cell targets cellTargets.add(tempCell) ;
-		 * 
-		 * //incements the number of loops numLoops ++ ;
-		 * 
-		 * 
-		 * }
-		 */
+		TestBoardCell currCell = new TestBoardCell(startCell.rowNum, startCell.columnNum) ; 
+		
+		if (pathLength > 1) { //This is the recurse case where there is more than one space left to run.
+			
+			
+			pathLength -- ; 
+			calcTargets(currCell, pathLength) ; 
+			
+			
+		} else { //This is the base case
+			//Add the adjList to the targets list
+			for (int i = 0 ; i < adjMtx[currCell].size ;  i++ ) {
+				
+				
+				
+			}
+			
+			//Return
+		}
+		
+		
+
+		 
 	}
 
 	/**
@@ -71,7 +78,7 @@ public class TestBoard {
 	 * @return
 	 */
 	public Set<TestBoardCell> getTargets() {
-		Set<TestBoardCell> targetSet = new HashSet<TestBoardCell> ();
+		Set<TestBoardCell> targetSet = new HashSet<TestBoardCell>();
 		return targetSet;
 	}
 

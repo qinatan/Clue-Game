@@ -32,21 +32,21 @@ class BoardTestsExp {
 
 		// bottom right corner [3][3]
 		TestBoardCell cell2 = new TestBoardCell(3, 3);
-		Set<TestBoardCell> testList2 = cell1.getAdjList();
+		Set<TestBoardCell> testList2 = cell2.getAdjList();
 		Assert.assertTrue(testList2.contains(board.getCell(3, 2)));
 		Assert.assertTrue(testList2.contains(board.getCell(2, 3)));
 		Assert.assertEquals(2, testList2.size());
 
 		// right edge [1][3]
 		TestBoardCell cell3 = new TestBoardCell(1, 3);
-		Set<TestBoardCell> testList3 = cell1.getAdjList();
+		Set<TestBoardCell> testList3 = cell3.getAdjList();
 		Assert.assertTrue(testList3.contains(board.getCell(0, 3)));
 		Assert.assertTrue(testList3.contains(board.getCell(2, 3)));
 		Assert.assertEquals(2, testList3.size());
 
 		// left edge [3][0]
 		TestBoardCell cell4 = new TestBoardCell(3, 0);
-		Set<TestBoardCell> testList4 = cell1.getAdjList();
+		Set<TestBoardCell> testList4 = cell4.getAdjList();
 		Assert.assertTrue(testList4.contains(board.getCell(2, 0)));
 		Assert.assertTrue(testList4.contains(board.getCell(3, 1)));
 		Assert.assertEquals(2, testList4.size());
@@ -55,7 +55,7 @@ class BoardTestsExp {
 		// required 5th test
 		// This might accidently pass
 		TestBoardCell cell5 = new TestBoardCell(0, 0);
-		Set<TestBoardCell> testList5 = cell1.getAdjList();
+		Set<TestBoardCell> testList5 = cell5.getAdjList();
 		Assert.assertFalse(testList5.contains(board.getCell(2, 1)));
 		Assert.assertFalse(testList5.contains(board.getCell(3, 1)));
 		Assert.assertEquals(2, testList5.size());

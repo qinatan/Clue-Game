@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -26,28 +27,28 @@ class BoardTestsExp {
 	public void testAdjacency() {
 		// Top left corner
 		TestBoardCell cell1 = new TestBoardCell(0, 0);
-		Set<TestBoardCell> testList = cell1.getAdjList();
+		List<TestBoardCell> testList = cell1.getAdjList();
 		Assert.assertTrue(testList.contains(board.getCell(1, 0)));
 		Assert.assertTrue(testList.contains(board.getCell(0, 1)));
 		Assert.assertEquals(2, testList.size());
 
 		// bottom right corner [3][3]
 		TestBoardCell cell2 = new TestBoardCell(3, 3);
-		Set<TestBoardCell> testList2 = cell1.getAdjList();
+		List<TestBoardCell> testList2 = cell1.getAdjList();
 		Assert.assertTrue(testList2.contains(board.getCell(3, 2)));
 		Assert.assertTrue(testList2.contains(board.getCell(2, 3)));
 		Assert.assertEquals(2, testList2.size());
 
 		// right edge [1][3]
 		TestBoardCell cell3 = new TestBoardCell(1, 3);
-		Set<TestBoardCell> testList3 = cell1.getAdjList();
+		List<TestBoardCell> testList3 = cell1.getAdjList();
 		Assert.assertTrue(testList3.contains(board.getCell(0, 3)));
 		Assert.assertTrue(testList3.contains(board.getCell(2, 3)));
 		Assert.assertEquals(2, testList3.size());
 
 		// left edge [3][0]
 		TestBoardCell cell4 = new TestBoardCell(3, 0);
-		Set<TestBoardCell> testList4 = cell1.getAdjList();
+		List<TestBoardCell> testList4 = cell1.getAdjList();
 		Assert.assertTrue(testList4.contains(board.getCell(2, 0)));
 		Assert.assertTrue(testList4.contains(board.getCell(3, 1)));
 		Assert.assertEquals(2, testList4.size());
@@ -56,7 +57,7 @@ class BoardTestsExp {
 		// required 5th test
 		// This might accidently pass
 		TestBoardCell cell5 = new TestBoardCell(2, 2);
-		Set<TestBoardCell> testList5 = cell1.getAdjList();
+		List<TestBoardCell> testList5 = cell1.getAdjList();
 		Assert.assertFalse(testList5.contains(board.getCell(2, 1)));
 		Assert.assertFalse(testList5.contains(board.getCell(3, 1)));
 		Assert.assertEquals(2, testList5.size());

@@ -7,20 +7,14 @@
 package experiment;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 public class TestBoardCell {
+	public int rowNum; 
+	public int columnNum;
+	private ArrayList<TestBoardCell> adjList = new ArrayList<TestBoardCell> ();	
+	private Boolean isRoom, isOccupied;
 
-	public int rowNum ; 
-	public int columnNum ;
-
-	private static List<TestBoardCell> adjList = new ArrayList<TestBoardCell> (); ;	
-
-
-	
-	
 	/**
 	 * Parameterized Constructor
 	 * @param rowNum
@@ -40,7 +34,7 @@ public class TestBoardCell {
 	}
 	
 	
-	public List<TestBoardCell> getAdjList() {
+	public ArrayList<TestBoardCell> getAdjList() {
 		return adjList;
 	}
 	
@@ -53,7 +47,7 @@ public class TestBoardCell {
 	//returns if a cell in in a given room
 	boolean inRoom() {
 	
-		return false ; 
+		return false; 
 	}
 	
 	//Section: setters and getter for if a player is in a given room 
@@ -73,6 +67,14 @@ public class TestBoardCell {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	@Override
+	public String toString() {
+		return "TestBoardCell [rowNum=" + rowNum + ", columnNum=" + columnNum + "]";
+	}
+	
+	
 	
 	
 }

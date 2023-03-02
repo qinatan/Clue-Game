@@ -116,6 +116,16 @@ public class TestBoard {
 
 
 	
+	// Helper function to check if a cell is in the visited List
+	public Boolean inVisitedList(TestBoardCell cell) {
+		for (int i =0 ; i < visitedList.size(); i++) {
+			if (cell == visitedList.get(i)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Calculates legal targets for a move from startCell of length pathLength
 	 * 
@@ -125,17 +135,28 @@ public class TestBoard {
 	@SuppressWarnings("null")
 	
 	public void calcTargets(TestBoardCell startCell, int pathLength) {
-		
+		visitedList.add(startCell);
 		if (pathLength > 1) { //This is the recurse case where there is more than one space left to run.
 			pathLength -- ; 
-			calcTargets(startCell, pathLength) ; 
+			ArrayList<TestBoardCell> currTargetsList = startCell.getAdjList();
+			for(int cell = 0; cell < currTargetsList.size(); cell++) {
+				TestBoardCell currCell = currTargetsList.get(cell);
+				visitedList.add(currCell);
+				calcTargets(currCell, pathLength); 
+			}
 			
 			
-		} else { //This is the base case
-			//Add the adjList to the targets list
+		} else {  // Base case: check curr cell's adjList, subtract all cells in the visited list, and add the resulting list to targetsList. 
+			ArrayList<TestBoardCell> currTargetsList = startCell.getAdjList();
+			for (int cell = 0; cell < currTargetsList.size(); cell++) {
+				// check if the cell in targetsList is in the visited list, remove it from targetsList
+				if (inVisitedList(startCell)) {
+					currTargetsList.remove(cell);
+				}
+				targetsList.add(startCell);
 			
-			
-			//Return
+			}
+			visitedList.clear();
 		}
 		
 		
@@ -160,9 +181,8 @@ public class TestBoard {
 	 * 
 	 * @return
 	 */
-	public Set<TestBoardCell> getTargets() {
-		Set<TestBoardCell> targetSet = new HashSet<TestBoardCell>();
-		return targetSet;
+	public ArrayList<TestBoardCell> getTargets() {
+		return targetsList;
 	}
 
 

@@ -125,23 +125,15 @@ public class TestBoard {
 	@SuppressWarnings("null")
 	
 	public void calcTargets(TestBoardCell startCell, int pathLength) {
-
-		TestBoardCell currCell = new TestBoardCell(startCell.rowNum, startCell.columnNum) ; 
 		
 		if (pathLength > 1) { //This is the recurse case where there is more than one space left to run.
-			
-			
 			pathLength -- ; 
-			calcTargets(currCell, pathLength) ; 
+			calcTargets(startCell, pathLength) ; 
 			
 			
 		} else { //This is the base case
 			//Add the adjList to the targets list
-			for (int i = 0 ; i < adjMtx.get(currCell).size() ;  i++ ) {
-				
-				
-				
-			}
+			
 			
 			//Return
 		}

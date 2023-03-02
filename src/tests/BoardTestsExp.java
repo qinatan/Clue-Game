@@ -70,7 +70,7 @@ class BoardTestsExp {
 		Assert.assertEquals(4, testList5.size());
 
 	}
-/*
+
 	// Methods to test target creation on a 4x4 board
 
 	// Test targets Normal
@@ -158,7 +158,7 @@ class BoardTestsExp {
 		Assert.assertTrue(targets6.contains(board.getCell(1, 2)));
 		Assert.assertTrue(targets6.contains(board.getCell(2, 1)));
 	}
-
+/*
 	// Testing targets with rooms cells
 	@Test 
 	public void testTargetsRoom() {

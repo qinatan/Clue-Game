@@ -13,7 +13,8 @@ public class TestBoardCell {
 	public int rowNum; 
 	public int columnNum;
 	private ArrayList<TestBoardCell> adjList = new ArrayList<TestBoardCell> ();	
-	private Boolean isRoom, isOccupied;
+	private Boolean isRoom = false;
+	private Boolean isOccupied= false;
 
 	/**
 	 * Parameterized Constructor
@@ -38,34 +39,28 @@ public class TestBoardCell {
 		return adjList;
 	}
 	
-	//Section: Setters and getters for if a cell is part of a room
-	//sets a cell as part of a room
-	void setRoom(boolean inRoom) {
-		
-	}
 	
 	//returns if a cell in in a given room
 	boolean inRoom() {
-	
 		return false; 
 	}
 	
 	//Section: setters and getter for if a player is in a given room 
-	public void setOccupied(boolean inRoom) {
-		
+	public void setOccupied(boolean occupied) {
+		isOccupied = occupied;
 	} 
 	
-	//TODO: This need to be included with the data type of the rooms
-	void getOccupied( ) {
-		
+	public Boolean isOccupied() {
+		return isOccupied;
 	}
 
 
-	//This might be the same as inRoom above. This will get fixed when we 
-	//update and fill in these methods
-	public void isRoom(boolean b) {
-		// TODO Auto-generated method stub
-		
+	public Boolean isRoom() {
+		return isRoom;		
+	}
+	
+	public void setRoom(Boolean b) {
+		isRoom = b;
 	}
 
 

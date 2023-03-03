@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
-//import <TestBoardCell> ; 
 
 
 
@@ -22,8 +20,8 @@ public class TestBoard {
 	final static int ROWS = 4;
 	private Map<TestBoardCell, ArrayList<TestBoardCell>> adjMtx = new HashMap<TestBoardCell, ArrayList<TestBoardCell>> ();
 	private TestBoardCell[][] grid = new TestBoardCell[COLS][ROWS]; 
-	ArrayList<TestBoardCell> visitedList = new ArrayList<TestBoardCell> (); 
-	Set<TestBoardCell> targetsSet = new HashSet<TestBoardCell> (); 
+	private ArrayList<TestBoardCell> visitedList = new ArrayList<TestBoardCell> (); 
+	private Set<TestBoardCell> targetsSet = new HashSet<TestBoardCell> (); 
 
 	
 	//private ArrayList<TestBoardCell> targets
@@ -115,11 +113,10 @@ public class TestBoard {
 	}
 
 	
-	
 	public void findAllTargets(TestBoardCell startCell, int pathLength) {
 		// for each adjCell in adjCells
 		for (TestBoardCell adjCell : startCell.getAdjList()) {
-			if (visitedList.contains(adjCell)) {
+			if (visitedList.contains(adjCell) || adjCell.isRoom() || adjCell.isOccupied()) {
 				continue;
 			}
 			visitedList.add(adjCell);
@@ -133,6 +130,7 @@ public class TestBoard {
 			}
 		}
 	}
+	
 	/**
 	 * Calculates legal targets for a move from startCell of length pathLength
 	 * 

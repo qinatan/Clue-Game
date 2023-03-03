@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 //import <TestBoardCell> ; 
 
 
@@ -22,7 +23,7 @@ public class TestBoard {
 	private Map<TestBoardCell, ArrayList<TestBoardCell>> adjMtx = new HashMap<TestBoardCell, ArrayList<TestBoardCell>> ();
 	private TestBoardCell[][] grid = new TestBoardCell[COLS][ROWS]; 
 	ArrayList<TestBoardCell> visitedList = new ArrayList<TestBoardCell> (); 
-	ArrayList<TestBoardCell> targetsList = new ArrayList<TestBoardCell> (); 
+	Set<TestBoardCell> targetsSet = new HashSet<TestBoardCell> (); 
 
 	
 	//private ArrayList<TestBoardCell> targets
@@ -113,55 +114,37 @@ public class TestBoard {
 		}
 	}
 
-
-
 	
-	// Helper function to check if a cell is in the visited List
-	public Boolean inVisitedList(TestBoardCell cell) {
-		for (int i =0 ; i < visitedList.size(); i++) {
-			if (cell == visitedList.get(i)) {
-				return true;
+	
+	public void findAllTargets(TestBoardCell startCell, int pathLength) {
+		// for each adjCell in adjCells
+		for (TestBoardCell adjCell : startCell.getAdjList()) {
+			if (visitedList.contains(adjCell)) {
+				continue;
+			}
+			visitedList.add(adjCell);
+			if(pathLength == 1) {
+				targetsSet.add(adjCell);
+				visitedList.remove(adjCell);
+			}
+			else {
+				findAllTargets(adjCell, pathLength-1);
+				visitedList.remove(adjCell);
 			}
 		}
-		return false;
 	}
-	
 	/**
 	 * Calculates legal targets for a move from startCell of length pathLength
 	 * 
 	 * @param startCell
 	 * @param pathLength
 	 */
-	@SuppressWarnings("null")
-	
 	public void calcTargets(TestBoardCell startCell, int pathLength) {
+		visitedList.clear();
+		targetsSet.clear();
+		// Add start location to visited list
 		visitedList.add(startCell);
-		if (pathLength > 1) { //This is the recurse case where there is more than one space left to run.
-			pathLength -- ; 
-			ArrayList<TestBoardCell> currTargetsList = startCell.getAdjList();
-			for(int cell = 0; cell < currTargetsList.size(); cell++) {
-				TestBoardCell currCell = currTargetsList.get(cell);
-				visitedList.add(currCell);
-				calcTargets(currCell, pathLength); 
-			}
-			
-			
-		} else {  // Base case: check curr cell's adjList, subtract all cells in the visited list, and add the resulting list to targetsList. 
-			ArrayList<TestBoardCell> currTargetsList = startCell.getAdjList();
-			for (int cell = 0; cell < currTargetsList.size(); cell++) {
-				// check if the cell in targetsList is in the visited list, remove it from targetsList
-				if (inVisitedList(startCell)) {
-					currTargetsList.remove(cell);
-				}
-				targetsList.add(startCell);
-			
-			}
-			visitedList.clear();
-		}
-		
-		
-
-		 
+		findAllTargets(startCell, pathLength);
 	}
 
 	/**
@@ -181,8 +164,8 @@ public class TestBoard {
 	 * 
 	 * @return
 	 */
-	public ArrayList<TestBoardCell> getTargets() {
-		return targetsList;
+	public Set<TestBoardCell> getTargets() {
+		return targetsSet;
 	}
 
 

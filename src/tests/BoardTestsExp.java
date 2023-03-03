@@ -78,11 +78,13 @@ class BoardTestsExp {
 	@Test
 	public void testTargetsNormal() {
 		// tests targets
+		
 		TestBoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 3);
-		ArrayList<TestBoardCell> targets = board.getTargets();
-		for (int i =0 ; i < targets.size(); i++) {
-			System.out.println(targets.get(i).toString());
+		Set<TestBoardCell> targets = board.getTargets();
+		System.out.println(board.getTargets().size());
+		for (TestBoardCell target: targets) {
+			System.out.println(target.toString());
 		}
 		Assert.assertEquals(6, targets.size());
 
@@ -91,12 +93,17 @@ class BoardTestsExp {
 		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
 		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
 		Assert.assertTrue(targets.contains(board.getCell(0, 3)));
-		Assert.assertTrue(targets.contains(board.getCell(1, 0)));
-/*
+		Assert.assertTrue(targets.contains(board.getCell(1, 0))); 
+	
+
 		// Second Test for different location and distance
-		//TestBoardCell cell1 = board.getCell(3, 3);
-		//board.calcTargets(cell1, 2);
-		//Set<TestBoardCell> targets1 = board.getTargets();
+		TestBoardCell cell1 = board.getCell(3, 3);
+		board.calcTargets(cell1, 2);
+		Set<TestBoardCell> targets1 = board.getTargets();
+		System.out.println(board.getTargets().size());
+		for (TestBoardCell target: targets) {
+			System.out.println(target.toString());
+		}
 		Assert.assertEquals(3, targets1.size());
 
 		Assert.assertTrue(targets1.contains(board.getCell(1, 3)));
@@ -113,7 +120,7 @@ class BoardTestsExp {
 		Assert.assertTrue(targets2.contains(board.getCell(1, 2)));
 		Assert.assertTrue(targets2.contains(board.getCell(1, 0)));
 		Assert.assertTrue(targets2.contains(board.getCell(2, 1)));
-		
+/*		
 		// TEST3*
 		TestBoardCell cell3 = board.getCell(0, 3);
 		board.calcTargets(cell3, 4);
@@ -161,7 +168,8 @@ class BoardTestsExp {
 		Assert.assertTrue(targets6.contains(board.getCell(1, 0)));
 		Assert.assertTrue(targets6.contains(board.getCell(1, 2)));
 		Assert.assertTrue(targets6.contains(board.getCell(2, 1)));
-		*/
+		
+*/
 	}
 /*
 	// Testing targets with rooms cells

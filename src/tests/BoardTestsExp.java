@@ -82,10 +82,6 @@ class BoardTestsExp {
 		TestBoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 3);
 		Set<TestBoardCell> targets = board.getTargets();
-		System.out.println(board.getTargets().size());
-		for (TestBoardCell target: targets) {
-			System.out.println(target.toString());
-		}
 		Assert.assertEquals(6, targets.size());
 
 		Assert.assertTrue(targets.contains(board.getCell(3, 0)));
@@ -100,10 +96,6 @@ class BoardTestsExp {
 		TestBoardCell cell1 = board.getCell(3, 3);
 		board.calcTargets(cell1, 2);
 		Set<TestBoardCell> targets1 = board.getTargets();
-		System.out.println(board.getTargets().size());
-		for (TestBoardCell target: targets) {
-			System.out.println(target.toString());
-		}
 		Assert.assertEquals(3, targets1.size());
 
 		Assert.assertTrue(targets1.contains(board.getCell(1, 3)));
@@ -114,13 +106,11 @@ class BoardTestsExp {
 		TestBoardCell cell2 = board.getCell(3, 3);
 		board.calcTargets(cell2, 1);
 		Set<TestBoardCell> targets2 = board.getTargets();
-		Assert.assertEquals(4, targets2.size());
+		Assert.assertEquals(2, targets2.size());
 
-		Assert.assertTrue(targets2.contains(board.getCell(0, 1)));
-		Assert.assertTrue(targets2.contains(board.getCell(1, 2)));
-		Assert.assertTrue(targets2.contains(board.getCell(1, 0)));
-		Assert.assertTrue(targets2.contains(board.getCell(2, 1)));
-/*		
+		Assert.assertTrue(targets2.contains(board.getCell(2, 3)));
+		Assert.assertTrue(targets2.contains(board.getCell(3, 2)));
+	
 		// TEST3*
 		TestBoardCell cell3 = board.getCell(0, 3);
 		board.calcTargets(cell3, 4);
@@ -128,13 +118,12 @@ class BoardTestsExp {
 		Assert.assertEquals(6, targets3.size());
 
 		Assert.assertTrue(targets3.contains(board.getCell(0, 1)));
-		Assert.assertTrue(targets3.contains(board.getCell(0, 3)));
 		Assert.assertTrue(targets3.contains(board.getCell(1, 0)));
 		Assert.assertTrue(targets3.contains(board.getCell(1, 2)));
 		Assert.assertTrue(targets3.contains(board.getCell(2, 3)));
 		Assert.assertTrue(targets3.contains(board.getCell(3, 2)));
 		
-		
+	
 		// TEST 4*
 		TestBoardCell cell4 = board.getCell(3, 0);
 		board.calcTargets(cell4, 2);
@@ -147,17 +136,18 @@ class BoardTestsExp {
 
 		// TEST 5*
 		TestBoardCell cell5 = board.getCell(3, 3);
-		board.calcTargets(cell5, 2);
+		board.calcTargets(cell5, 3);
 		Set<TestBoardCell> targets5 = board.getTargets();
 		Assert.assertEquals(6, targets5.size());
 
-		Assert.assertTrue(targets5.contains(board.getCell(0, 2)));
-		Assert.assertTrue(targets5.contains(board.getCell(1, 1)));
-		Assert.assertTrue(targets5.contains(board.getCell(1, 3)));
-		Assert.assertTrue(targets5.contains(board.getCell(2, 0)));
-		Assert.assertTrue(targets5.contains(board.getCell(3, 1)));
-		Assert.assertTrue(targets5.contains(board.getCell(3, 3)));
+		Assert.assertTrue(targets5.contains(board.getCell(3, 0)));
+		Assert.assertTrue(targets5.contains(board.getCell(0, 3)));
+		Assert.assertTrue(targets5.contains(board.getCell(2, 1)));
+		Assert.assertTrue(targets5.contains(board.getCell(1, 2)));
+		Assert.assertTrue(targets5.contains(board.getCell(3, 2)));
+		Assert.assertTrue(targets5.contains(board.getCell(2, 3)));
 		
+	
 		// TEST 6*
 		TestBoardCell cell6 = board.getCell(1, 1);
 		board.calcTargets(cell6, 1);
@@ -169,7 +159,7 @@ class BoardTestsExp {
 		Assert.assertTrue(targets6.contains(board.getCell(1, 2)));
 		Assert.assertTrue(targets6.contains(board.getCell(2, 1)));
 		
-*/
+
 	}
 /*
 	// Testing targets with rooms cells

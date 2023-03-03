@@ -1,0 +1,14 @@
+//Rooms and room cards
+// format: Room, Name, Initial
+Room, Plant Room, P
+Room, Exercise Room, E
+Room, Dog House, D
+Room, Patio, O
+Room, Living Room, L
+Room, Theatre, T
+Room, Bedroom, B
+Room, Garage, G
+Room, Basement, A
+// Other spaces on board 
+Space, Unused, X
+Space, Walkway, W

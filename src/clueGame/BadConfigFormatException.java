@@ -1,5 +1,6 @@
 package clueGame;
 
-public class BadConfigFormatException extends Throwable {
+
+public class BadConfigFormatException extends Exception {
 
 }

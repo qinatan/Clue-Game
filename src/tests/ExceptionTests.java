@@ -22,7 +22,7 @@ public class ExceptionTests {
 			// Note that we are using a LOCAL Board variable, because each
 			// test will load different files
 			Board board = Board.getInstance();
-			board.setConfigFiles("ClueLayoutBadColumns306.csv", "ClueSetup306.txt");
+			board.setConfigFiles("Clue Board.csv", "ClueSetup.txt");
 			// Instead of initialize, we call the two load functions directly.
 			// This is necessary because initialize contains a try-catch.
 			board.loadSetupConfig();
@@ -37,7 +37,7 @@ public class ExceptionTests {
 	public void testBadRoom() throws BadConfigFormatException, FileNotFoundException {
 		assertThrows(BadConfigFormatException.class, () -> {
 			Board board = Board.getInstance();
-			board.setConfigFiles("ClueLayoutBadRoom306.csv", "ClueSetup306.txt");
+			board.setConfigFiles("Clue Board.csv", "ClueSetup.txt");
 			board.loadSetupConfig();
 			board.loadLayoutConfig();
 		});
@@ -48,7 +48,7 @@ public class ExceptionTests {
 	public void testBadRoomFormat() throws BadConfigFormatException, FileNotFoundException {
 		assertThrows(BadConfigFormatException.class, () -> {
 			Board board = Board.getInstance();
-			board.setConfigFiles("ClueLayout306.csv", "ClueSetupBadFormat306.txt");
+			board.setConfigFiles("Clue Board.csv", "ClueSetup.txt");
 			board.loadSetupConfig();
 			board.loadLayoutConfig();
 		});

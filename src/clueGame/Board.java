@@ -14,8 +14,9 @@ public class Board {
 	 */
 	private static Board theInstance = new Board();
 	
-	final static int COLS = 24; 
-	final static int ROWS = 24;
+	final static int ROWS = 22;
+	final static int COLS = 27; 
+	
 	private Map<BoardCell, ArrayList<BoardCell>> adjMtx = new HashMap<BoardCell, ArrayList<BoardCell>> ();
 	private BoardCell[][] grid = new BoardCell[COLS][ROWS]; 
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell> (); 

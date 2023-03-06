@@ -22,7 +22,7 @@ public class ExceptionTests {
 			// Note that we are using a LOCAL Board variable, because each
 			// test will load different files
 			Board board = Board.getInstance();
-			board.setConfigFiles("Clue Board.csv", "ClueSetup.txt");
+			board.setConfigFiles("ClueLayoutBadColumns306.csv", "ClueSetup306.txt");
 			// Instead of initialize, we call the two load functions directly.
 			// This is necessary because initialize contains a try-catch.
 			board.loadSetupConfig();

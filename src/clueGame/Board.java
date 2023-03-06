@@ -1,11 +1,11 @@
 package clueGame;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import clueGame.BoardCell;
 
 public class Board {
@@ -20,6 +20,8 @@ public class Board {
 	private BoardCell[][] grid = new BoardCell[COLS][ROWS]; 
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell> (); 
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell> (); 
+	private String layoutConfig;
+	private String setupConfig;
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -42,10 +44,23 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize() {
+		try {
+			loadSetupConfig();
+		} catch (FileNotFoundException | BadConfigFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			loadLayoutConfig();
+		} catch (FileNotFoundException | BadConfigFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public void setConfigFiles(String string, String string2) {
-		// TODO Auto-generated method stub
+	public void setConfigFiles (String string, String string2){
+		// TODO tests to see if each file exists
+
 		
 	}
 
@@ -55,16 +70,12 @@ public class Board {
 		return room;
 	}
 
-	public int getNumRows() {
-		// TODO Auto-generated method stub
-		int i = 0 ; 
-		return i;
+	public int getNumRows() { 
+		return ROWS;
 	}
 
 	public int getNumColumns() {
-		// TODO Auto-generated method stub
-		int i = 0 ; 
-		return i;
+		return COLS;
 	}
 
 	public BoardCell getCell(int i, int j) {
@@ -79,13 +90,13 @@ public class Board {
 		return null;
 	}
 
-	public void loadSetupConfig() throws BadConfigFormatException {
-		// TODO Auto-generated method stub
+	public void loadSetupConfig() throws BadConfigFormatException, FileNotFoundException {
+		
 		
 	}
 
-	public void loadLayoutConfig()  throws BadConfigFormatException{
-		// TODO Auto-generated method stub
+	public void loadLayoutConfig()  throws BadConfigFormatException, FileNotFoundException {
+		// Sets numRows and numColumns
 		
 	}
 }

@@ -158,7 +158,7 @@ public class Board {
 				}
 
 				// sets cell to "room" if not a walkway or unused square,
-				if (result[col] != "X" || result[col] != "W") {
+				if (result[col] != "X" && result[col] != "W") {
 					grid[row][col].setIsRoom(true);
 				}
 

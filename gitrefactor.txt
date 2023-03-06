@@ -14,7 +14,7 @@ index 0115d81..e930ab5 100644
 -				continue;
 -			}
 -			// If not a comment, split by ", "
--			else {
+-			else {git
 -				String[] result = line.split(", ");
 -				String resultZero = result[0];
 -				if (!resultZero.equals("Room") && !resultZero.equals("Space")) {

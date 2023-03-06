@@ -87,54 +87,53 @@ public class Board {
 
 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		File setupFile = new File(setupConfig);
-			Scanner myReader = new Scanner(setupFile);
-			while (myReader.hasNextLine()) {
-				String line = myReader.nextLine();
-				// Check for comments
-				if (line.contains("//")) {
-					continue;
-				} 
-				// If not a comment, split by ", " 
-				else {
-					String[] result = line.split(", ");
-					String resultZero = result[0];
-					if (!resultZero.equals("Room") && !resultZero.equals("Space")) {
-						throw new BadConfigFormatException("Bad setup file found");
-					}
-					Character roomSymbol = result[2].charAt(0);
-					Room room = new Room(result[1], roomSymbol);
-					RoomMap.put(roomSymbol, room);
-				}
+		Scanner myReader = new Scanner(setupFile);
+		while (myReader.hasNextLine()) {
+			String line = myReader.nextLine();
+			// Check for comments
+			if (line.contains("//")) {
+				continue;
 			}
-			myReader.close();
+			// If not a comment, split by ", "
+			else {
+				String[] result = line.split(", ");
+				String resultZero = result[0];
+				if (!resultZero.equals("Room") && !resultZero.equals("Space")) {
+					throw new BadConfigFormatException("Bad setup file found");
+				}
+				Character roomSymbol = result[2].charAt(0);
+				Room room = new Room(result[1], roomSymbol);
+				RoomMap.put(roomSymbol, room);
+			}
+		}
+		myReader.close();
 	}
 
 	public void loadLayoutConfig() throws FileNotFoundException, BadConfigFormatException {
 		// reads in file once to find numRows, numColumns
 		File layoutFile = new File(layoutConfig);
-			Scanner myReader = new Scanner(layoutFile);
-			int rows = 0;
-			int firstRowCols = 0;
-			while (myReader.hasNextLine()) {
-				if (firstRowCols == 0) {
-					String line = myReader.nextLine();
-					String[] result = line.split(",");
-					firstRowCols = result.length;
-				} else {
-					String line = myReader.nextLine();
-					String[] result = line.split(",");
-					int curRowCols = result.length;
-					if (curRowCols != firstRowCols) {
-						throw new BadConfigFormatException("Bad Config File found. Inconsistent number of columns.");
-					}
+		Scanner myReader = new Scanner(layoutFile);
+		int rows = 0;
+		int firstRowCols = 0;
+		while (myReader.hasNextLine()) {
+			if (firstRowCols == 0) {
+				String line = myReader.nextLine();
+				String[] result = line.split(",");
+				firstRowCols = result.length;
+			} else {
+				String line = myReader.nextLine();
+				String[] result = line.split(",");
+				int curRowCols = result.length;
+				if (curRowCols != firstRowCols) {
+					throw new BadConfigFormatException("Bad Config File found. Inconsistent number of columns.");
 				}
-				rows++;
 			}
-			ROWS = rows;
-			COLS = firstRowCols;
-			myReader.close();
-		
-		
+			rows++;
+		}
+		ROWS = rows;
+		COLS = firstRowCols;
+		myReader.close();
+
 		// Build grid of empty BoardCells
 		grid = new BoardCell[ROWS][COLS];
 		for (int col = 0; col < COLS; col++) {
@@ -144,48 +143,48 @@ public class Board {
 		}
 
 		// Reads in file second time to create the board
-			Scanner myReader2 = new Scanner(layoutFile);
-			int row = 0;
-			while (myReader2.hasNextLine()) {
-				String line = myReader2.nextLine();
-				String[] result = line.split(",");
-				for (int col = 0; col < result.length; col++) {
-					// sets BoardCell symbol for each BoardCell
-					grid[row][col].setCellSymbol(result[col]);
-					// Checks for bad config file
-					if(!RoomMap.containsKey(result[col].charAt(0))) {
-						throw new BadConfigFormatException("Letter found in config file that is not a known room: " + result[col].charAt(0));
-					}
-					// sets cell to "room" if not a walkway or unused square,
-					if (result[col] != "X" || result[col] != "W") {
-						grid[row][col].setIsRoom(true);
-					}
-					// If cell string has length 2 and char 1 is W, then doorway
-					if (result[col].length() == 2 && result[col].charAt(0) == 'W') {
+		Scanner myReader2 = new Scanner(layoutFile);
+		int row = 0;
+		while (myReader2.hasNextLine()) {
+			String line = myReader2.nextLine();
+			String[] result = line.split(",");
+			for (int col = 0; col < result.length; col++) {
+				// sets BoardCell symbol for each BoardCell
+				grid[row][col].setCellSymbol(result[col]);
+				// Checks for bad config file
+				if (!RoomMap.containsKey(result[col].charAt(0))) {
+					throw new BadConfigFormatException(
+							"Letter found in config file that is not a known room: " + result[col].charAt(0));
+				}
+
+				// sets cell to "room" if not a walkway or unused square,
+				if (result[col] != "X" || result[col] != "W") {
+					grid[row][col].setIsRoom(true);
+				}
+
+				if (result[col].length() == 2) {
+					if (result[col].charAt(0) == 'W') {
 						grid[row][col].setIsDoor(true);
 						// Set door direction
 						grid[row][col].setDoorDirection(result[col].charAt(1));
-					}
-					// If cell string has length 2 and char 1 is #, then Label found
-					if (result[col].length() == 2 && result[col].charAt(1) == '#') {
+					} else if (result[col].charAt(1) == '#') {
 						grid[row][col].setIsLabel(true);
 						// Set this cell to the Room's labelCell
 						Room room = RoomMap.get(result[col].charAt(0));
 						room.setLabelCell(grid[row][col]);
-					}
-					// If cell string has length 2 and char 1 is *, then centerCell found
-					if (result[col].length() == 2 && result[col].charAt(1) == '*') {
+					} else if (result[col].charAt(1) == '*') {
 						grid[row][col].setIsRoomCenterCell(true);
 						// Set this cell to the Room's centerCell
 						Room room = RoomMap.get(result[col].charAt(0));
 						room.setCenterCell(grid[row][col]);
-					}
-					// Secret Passageway found
-					else if (result[col].length() == 2) {
+					} else {
 						grid[row][col].setSecretPassage(result[col].charAt(1));
 					}
+
 				}
-				row++;
+
 			}
-		} 
+			row++;
+		}
+	}
 }

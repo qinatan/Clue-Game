@@ -69,7 +69,7 @@ public class BoardCell {
 	public Character getSecretPassage() {
 		return secretPassage;
 	}
-	
+
 	public void setSecretPassage(Character secretPassage) {
 		this.secretPassage = secretPassage;
 	}

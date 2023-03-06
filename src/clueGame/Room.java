@@ -3,6 +3,16 @@ package clueGame;
 public class Room {
 	private String Name;
 	private char Symbol;
+	BoardCell labelCell;
+	BoardCell centerCell;
+
+	public void setCenterCell(BoardCell centerCell) {
+		this.centerCell = centerCell;
+	}
+
+	public void setLabelCell(BoardCell labelCell) {
+		this.labelCell = labelCell;
+	}
 
 	@Override
 	public String toString() {
@@ -16,19 +26,15 @@ public class Room {
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-
 		return Name;
 	}
 
 	public BoardCell getLabelCell() {
-		// TODO Auto-generated method stub
-		return null;
+		return labelCell;
 	}
 
 	public BoardCell getCenterCell() {
-		// TODO Auto-generated method stub
-		return null;
+		return centerCell;
 	}
 
 	public char getSymbol() {

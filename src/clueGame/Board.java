@@ -12,14 +12,12 @@ import experiment.TestBoardCell;
 
 import java.io.*;
 
-
-
 public class Board {
 	/*
 	 * variable and methods used for singleton pattern
 	 */
 	private static Board theInstance = new Board();
-	
+
 	private int COLS;
 	private int ROWS;
 	private BoardCell[][] grid = new BoardCell[ROWS][COLS];
@@ -28,11 +26,11 @@ public class Board {
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
 	private Map<Character, Room> RoomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
-	private String setupConfig; 
+	private String setupConfig;
 
 	// constructor is private to ensure only one can be created
 	private Board() {
-		//super();
+		// super();
 	}
 
 	// this method returns the only Board
@@ -58,6 +56,12 @@ public class Board {
 		return room;
 	}
 
+	public Room getRoom(BoardCell cell) {
+		Character symbol = cell.getCellSymbol();
+		Room room = getRoom(symbol);
+		return room;
+	}
+
 	public int getNumRows() {
 		return ROWS;
 	}
@@ -69,11 +73,6 @@ public class Board {
 	public BoardCell getCell(int row, int col) {
 		BoardCell BoardCell = grid[row][col];
 		return BoardCell;
-	}
-
-	public Room getRoom(BoardCell cell) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@SuppressWarnings("resource")
@@ -88,10 +87,10 @@ public class Board {
 				} else {
 					String[] result = line.split(", ");
 					Character roomSymbol = result[2].charAt(0);
-					Room room = new Room (result[1], roomSymbol);
+					Room room = new Room(result[1], roomSymbol);
 					RoomMap.put(roomSymbol, room);
-					}
 				}
+			}
 			myReader.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -106,22 +105,21 @@ public class Board {
 		try {
 			Scanner myReader = new Scanner(layoutFile);
 			int rows = 0;
-			int firstRowCols = 0; 
+			int firstRowCols = 0;
 			while (myReader.hasNextLine()) {
-				if(firstRowCols == 0) {
+				if (firstRowCols == 0) {
 					String line = myReader.nextLine();
 					String[] result = line.split(",");
 					firstRowCols = result.length;
-				}
-				else {
+				} else {
 					String line = myReader.nextLine();
 					String[] result = line.split(",");
 					int curRowCols = result.length;
 					if (curRowCols != firstRowCols) {
-						//throw BadConfigFormatException;
+						// throw BadConfigFormatException;
 					}
 				}
-		
+
 				rows++;
 			}
 			ROWS = rows;
@@ -131,7 +129,7 @@ public class Board {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		grid = new BoardCell[ROWS][COLS];
 		// Build grid
 		for (int col = 0; col < COLS; col++) {
@@ -139,24 +137,52 @@ public class Board {
 				grid[row][col] = new BoardCell(row, col);
 			}
 		}
-		
+
 		// Reads in file second time to create the board
 		try {
 			Scanner myReader = new Scanner(layoutFile);
 			int row = 0;
-			while(myReader.hasNextLine()) {
+			while (myReader.hasNextLine()) {
 				String line = myReader.nextLine();
 				String[] result = line.split(",");
-				for (int col = 0; col < result.length; col ++) {
-					if (result[col] == "X" || result[col] == "W") {
-						continue;
+				for (int col = 0; col < result.length; col++) {
+					// sets BoardCell symbol for each BoardCell
+					grid[row][col].setCellSymbol(result[col]);
+					// sets cell to "room" if not a walkway or unused square,
+					if (result[col] != "X" || result[col] != "W") {
+						grid[row][col].setIsRoom(true);
 					}
-					grid[row][col].setIsRoom(true);
+					// If cell string has length 2 and char 1 is W, then doorway
+					if (result[col].length() == 2 && result[col].charAt(0) == 'W') {
+						grid[row][col].setIsDoor(true);
+						// Set door direction
+						grid[row][col].setDoorDirection(result[col].charAt(1));
+					}
+					// If cell string has length 2 and char 1 is #, then Label found
+					if (result[col].length() == 2 && result[col].charAt(1) == '#') {
+						grid[row][col].setIsLabel(true);
+						// Set this cell to the Room's labelCell
+						Room room = RoomMap.get(result[col].charAt(0));
+						room.setLabelCell(grid[row][col]);
+					}
+					// If cell string has length 2 and char 1 is *, then centerCell found
+					if (result[col].length() == 2 && result[col].charAt(1) == '*') {
+						grid[row][col].setIsRoomCenterCell(true);
+						// Set this cell to the Room's labelCell
+						Room room = RoomMap.get(result[col].charAt(0));
+						room.setCenterCell(grid[row][col]);
+					}
+					// Secret Passageway found
+					else if (result[col].length() == 2) {
+						grid[row][col].setSecretPassage(result[col].charAt(1));
+					}
 				}
 				row++;
 			}
 		} catch (FileNotFoundException e) {
-			
+
+		} finally {
+
 		}
 	}
 }

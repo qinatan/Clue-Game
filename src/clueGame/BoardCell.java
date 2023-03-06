@@ -106,4 +106,9 @@ public class BoardCell {
 		this.isRoomCenterCell = isRoomCenterCell;
 	}
 
+	public void setOccupied(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

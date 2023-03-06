@@ -187,4 +187,27 @@ public class Board {
 			row++;
 		}
 	}
+
+	public Set<BoardCell> getAdjList(int i, int j) {
+		// TODO Change this method. This is incorrect just to make the Junit test not
+		// have errors
+
+		targetsSet.add(getCell(i, j));
+		return targetsSet;
+	}
+
+	public Set<BoardCell> getTargets() {
+		// TODO Change this method. This is incorrect just to make the Junit test not
+		// have errors
+		int i = 1;
+		int j = 1;
+		targetsSet.add(getCell(i, j));
+		return targetsSet;
+	}
+
+	public void calcTargets(BoardCell cell, int i) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

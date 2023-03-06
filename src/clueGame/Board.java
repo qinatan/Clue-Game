@@ -97,7 +97,10 @@ public class Board {
 		
 				else {
 					String[] result = line.split(", ");
-					System.out.println(result[0]);
+					String resultZero = result[0];
+					if (resultZero.equals("Room ") || resultZero.equals("Space ")) {
+						throw new BadConfigFormatException("Bad setup file found");
+					}
 					Character roomSymbol = result[2].charAt(0);
 					Room room = new Room(result[1], roomSymbol);
 					RoomMap.put(roomSymbol, room);

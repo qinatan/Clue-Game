@@ -1,25 +1,30 @@
 package clueGame;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import clueGame.BoardCell;
+import clueGame.Room;
+import java.io.*;
+
+
 
 public class Board {
 	/*
 	 * variable and methods used for singleton pattern
 	 */
 	private static Board theInstance = new Board();
-	
-	final static int COLS = 24; 
-	final static int ROWS = 24;
-	private Map<BoardCell, ArrayList<BoardCell>> adjMtx = new HashMap<BoardCell, ArrayList<BoardCell>> ();
-	private BoardCell[][] grid = new BoardCell[COLS][ROWS]; 
-	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell> (); 
-	private Set<BoardCell> targetsSet = new HashSet<BoardCell> (); 
+
+	private int COLS;
+	private int ROWS;
+	private Map<BoardCell, ArrayList<BoardCell>> adjMtx = new HashMap<BoardCell, ArrayList<BoardCell>>();
+	private BoardCell[][] grid = new BoardCell[COLS][ROWS];
+	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
+	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
+	private Map<Character, Room> RoomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
 	private String setupConfig;
 
@@ -31,8 +36,6 @@ public class Board {
 				grid[row][col] = new BoardCell(row, col);
 			}
 		}
-		
-		
 	}
 
 	// this method returns the only Board
@@ -44,33 +47,21 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize() {
-		try {
-			loadSetupConfig();
-		} catch (FileNotFoundException | BadConfigFormatException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			loadLayoutConfig();
-		} catch (FileNotFoundException | BadConfigFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		loadSetupConfig();
+		loadLayoutConfig();
 	}
 
-	public void setConfigFiles (String string, String string2){
-		// TODO tests to see if each file exists
-
-		
+	public void setConfigFiles(String layoutConfig, String setupConfig) {
+		this.layoutConfig = "data/" + layoutConfig;
+		this.setupConfig = "data/" + setupConfig;
 	}
 
 	public Room getRoom(char c) {
-		// TODO Auto-generated method stub
-		Room room = new Room() ; 
+		Room room = RoomMap.get(c);
 		return room;
 	}
 
-	public int getNumRows() { 
+	public int getNumRows() {
 		return ROWS;
 	}
 
@@ -82,7 +73,6 @@ public class Board {
 		// TODO Auto-generated method stub
 		BoardCell BoardCell = grid[i][j];
 		return BoardCell;
-		
 	}
 
 	public Room getRoom(BoardCell cell) {
@@ -90,13 +80,50 @@ public class Board {
 		return null;
 	}
 
-	public void loadSetupConfig() throws BadConfigFormatException, FileNotFoundException {
-		
-		
+	@SuppressWarnings("resource")
+	public void loadSetupConfig() {
+		File setupFile = new File(setupConfig);
+		try {
+			Scanner myReader = new Scanner(setupFile);
+			while (myReader.hasNextLine()) {
+				String line = myReader.nextLine();
+				if (line.contains("//")) {
+					continue;
+				} else {
+					String[] result = line.split(", ");
+					Character roomSymbol = result[2].charAt(0);
+					Room room = new Room (result[1], roomSymbol);
+					RoomMap.put(roomSymbol, room);
+					}
+				}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public void loadLayoutConfig()  throws BadConfigFormatException, FileNotFoundException {
-		// Sets numRows and numColumns
-		
+	@SuppressWarnings("resource")
+	public void loadLayoutConfig() {
+		// reads in file once find numRows, numColumns
+		File layoutFile = new File(layoutConfig);
+		try {
+			Scanner myReader = new Scanner(layoutFile);
+			int rows = 0;
+			int cols = 0; 
+			while (myReader.hasNextLine()) {
+				String line = myReader.nextLine();
+				String[] result = line.split(",");
+				cols = result.length;
+				rows++;
+			}
+			ROWS = rows;
+			COLS = cols;
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// Reads in file second time to create the board
 	}
 }

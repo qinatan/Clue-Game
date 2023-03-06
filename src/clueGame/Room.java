@@ -2,8 +2,19 @@ package clueGame;
 
 public class Room {
 
-	private String Name = "here";
+	private String Name;
 	private char Symbol;
+	
+	@Override
+	public String toString() {
+		return Name;
+	}
+
+	public Room(String name, char symbol) {
+		super();
+		Name = name;
+		Symbol = symbol;
+	}
 
 	public String getName() {
 		// TODO Auto-generated method stub

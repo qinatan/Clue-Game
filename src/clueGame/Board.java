@@ -8,6 +8,8 @@ import java.util.Scanner;
 import java.util.Set;
 import clueGame.BoardCell;
 import clueGame.Room;
+import experiment.TestBoardCell;
+
 import java.io.*;
 
 
@@ -17,25 +19,20 @@ public class Board {
 	 * variable and methods used for singleton pattern
 	 */
 	private static Board theInstance = new Board();
-
+	
 	private int COLS;
 	private int ROWS;
+	private BoardCell[][] grid = new BoardCell[ROWS][COLS];
 	private Map<BoardCell, ArrayList<BoardCell>> adjMtx = new HashMap<BoardCell, ArrayList<BoardCell>>();
-	private BoardCell[][] grid = new BoardCell[COLS][ROWS];
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
 	private Map<Character, Room> RoomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
-	private String setupConfig;
+	private String setupConfig; 
 
 	// constructor is private to ensure only one can be created
 	private Board() {
-		// Build grid
-		for (int col = 0; col < COLS; col++) {
-			for (int row = 0; row < ROWS; row++) {
-				grid[row][col] = new BoardCell(row, col);
-			}
-		}
+		//super();
 	}
 
 	// this method returns the only Board
@@ -69,9 +66,8 @@ public class Board {
 		return COLS;
 	}
 
-	public BoardCell getCell(int i, int j) {
-		// TODO Auto-generated method stub
-		BoardCell BoardCell = grid[i][j];
+	public BoardCell getCell(int row, int col) {
+		BoardCell BoardCell = grid[row][col];
 		return BoardCell;
 	}
 
@@ -105,25 +101,62 @@ public class Board {
 
 	@SuppressWarnings("resource")
 	public void loadLayoutConfig() {
-		// reads in file once find numRows, numColumns
+		// reads in file once to find numRows, numColumns
 		File layoutFile = new File(layoutConfig);
 		try {
 			Scanner myReader = new Scanner(layoutFile);
 			int rows = 0;
-			int cols = 0; 
+			int firstRowCols = 0; 
 			while (myReader.hasNextLine()) {
-				String line = myReader.nextLine();
-				String[] result = line.split(",");
-				cols = result.length;
+				if(firstRowCols == 0) {
+					String line = myReader.nextLine();
+					String[] result = line.split(",");
+					firstRowCols = result.length;
+				}
+				else {
+					String line = myReader.nextLine();
+					String[] result = line.split(",");
+					int curRowCols = result.length;
+					if (curRowCols != firstRowCols) {
+						//throw BadConfigFormatException;
+					}
+				}
+		
 				rows++;
 			}
 			ROWS = rows;
-			COLS = cols;
+			COLS = firstRowCols;
 			myReader.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		grid = new BoardCell[ROWS][COLS];
+		// Build grid
+		for (int col = 0; col < COLS; col++) {
+			for (int row = 0; row < ROWS; row++) {
+				grid[row][col] = new BoardCell(row, col);
+			}
+		}
+		
 		// Reads in file second time to create the board
+		try {
+			Scanner myReader = new Scanner(layoutFile);
+			int row = 0;
+			while(myReader.hasNextLine()) {
+				String line = myReader.nextLine();
+				String[] result = line.split(",");
+				for (int col = 0; col < result.length; col ++) {
+					if (result[col] == "X" || result[col] == "W") {
+						continue;
+					}
+					grid[row][col].setIsRoom(true);
+				}
+				row++;
+			}
+		} catch (FileNotFoundException e) {
+			
+		}
 	}
 }

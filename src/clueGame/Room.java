@@ -1,10 +1,9 @@
 package clueGame;
 
 public class Room {
-
 	private String Name;
 	private char Symbol;
-	
+
 	@Override
 	public String toString() {
 		return Name;
@@ -18,7 +17,7 @@ public class Room {
 
 	public String getName() {
 		// TODO Auto-generated method stub
-		
+
 		return Name;
 	}
 

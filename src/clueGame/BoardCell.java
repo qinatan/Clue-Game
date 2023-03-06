@@ -12,9 +12,7 @@ public class BoardCell {
 	public int rowNum; 
 	public int columnNum;
 	private ArrayList<BoardCell> adjList = new ArrayList<BoardCell> ();	
-	@SuppressWarnings("unused")
 	private Boolean isRoom = false;
-	@SuppressWarnings("unused")
 	private Boolean isOccupied= false;
 	
 	public BoardCell(int rowNum, int columnNum) {
@@ -25,8 +23,7 @@ public class BoardCell {
 	
 	
 	public boolean isDoorway() {
-		// TODO Auto-generated method stub
-		return false;
+		return isRoom;
 	}
 
 	public DoorDirection getDoorDirection() {
@@ -48,6 +45,16 @@ public class BoardCell {
 	public char getSecretPassage() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+
+	public Boolean getIsRoom() {
+		return isRoom;
+	}
+
+
+	public void setIsRoom(Boolean isRoom) {
+		this.isRoom = isRoom;
 	}
 
 }

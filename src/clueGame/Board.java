@@ -42,8 +42,18 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize() {
-		loadSetupConfig();
-		loadLayoutConfig();
+		try {
+			loadSetupConfig();
+		} catch (FileNotFoundException | BadConfigFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			loadLayoutConfig();
+		} catch (FileNotFoundException | BadConfigFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void setConfigFiles(String layoutConfig, String setupConfig) {
@@ -75,34 +85,30 @@ public class Board {
 		return BoardCell;
 	}
 
-	@SuppressWarnings("resource")
-	public void loadSetupConfig() {
+	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		File setupFile = new File(setupConfig);
-		try {
+		
 			Scanner myReader = new Scanner(setupFile);
 			while (myReader.hasNextLine()) {
 				String line = myReader.nextLine();
 				if (line.contains("//")) {
 					continue;
-				} else {
+				} 
+		
+				else {
 					String[] result = line.split(", ");
+					System.out.println(result[0]);
 					Character roomSymbol = result[2].charAt(0);
 					Room room = new Room(result[1], roomSymbol);
 					RoomMap.put(roomSymbol, room);
 				}
 			}
 			myReader.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
-	@SuppressWarnings("resource")
-	public void loadLayoutConfig() {
+	public void loadLayoutConfig() throws FileNotFoundException, BadConfigFormatException {
 		// reads in file once to find numRows, numColumns
 		File layoutFile = new File(layoutConfig);
-		try {
 			Scanner myReader = new Scanner(layoutFile);
 			int rows = 0;
 			int firstRowCols = 0;
@@ -116,22 +122,18 @@ public class Board {
 					String[] result = line.split(",");
 					int curRowCols = result.length;
 					if (curRowCols != firstRowCols) {
-						// throw BadConfigFormatException;
+						throw new BadConfigFormatException("Bad Config File found. Inconsistent number of columns.");
 					}
 				}
-
 				rows++;
 			}
 			ROWS = rows;
 			COLS = firstRowCols;
 			myReader.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		
+		
+		// Build grid of empty BoardCells
 		grid = new BoardCell[ROWS][COLS];
-		// Build grid
 		for (int col = 0; col < COLS; col++) {
 			for (int row = 0; row < ROWS; row++) {
 				grid[row][col] = new BoardCell(row, col);
@@ -139,15 +141,18 @@ public class Board {
 		}
 
 		// Reads in file second time to create the board
-		try {
-			Scanner myReader = new Scanner(layoutFile);
+			Scanner myReader2 = new Scanner(layoutFile);
 			int row = 0;
-			while (myReader.hasNextLine()) {
-				String line = myReader.nextLine();
+			while (myReader2.hasNextLine()) {
+				String line = myReader2.nextLine();
 				String[] result = line.split(",");
 				for (int col = 0; col < result.length; col++) {
 					// sets BoardCell symbol for each BoardCell
 					grid[row][col].setCellSymbol(result[col]);
+					// Checks for bad config file
+					if(!RoomMap.containsKey(result[col].charAt(0))) {
+						throw new BadConfigFormatException("Letter found in config file that is not a known room: " + result[col].charAt(0));
+					}
 					// sets cell to "room" if not a walkway or unused square,
 					if (result[col] != "X" || result[col] != "W") {
 						grid[row][col].setIsRoom(true);
@@ -168,7 +173,7 @@ public class Board {
 					// If cell string has length 2 and char 1 is *, then centerCell found
 					if (result[col].length() == 2 && result[col].charAt(1) == '*') {
 						grid[row][col].setIsRoomCenterCell(true);
-						// Set this cell to the Room's labelCell
+						// Set this cell to the Room's centerCell
 						Room room = RoomMap.get(result[col].charAt(0));
 						room.setCenterCell(grid[row][col]);
 					}
@@ -179,10 +184,5 @@ public class Board {
 				}
 				row++;
 			}
-		} catch (FileNotFoundException e) {
-
-		} finally {
-
-		}
-	}
+		} 
 }

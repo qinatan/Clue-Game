@@ -87,18 +87,18 @@ public class Board {
 
 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		File setupFile = new File(setupConfig);
-		
 			Scanner myReader = new Scanner(setupFile);
 			while (myReader.hasNextLine()) {
 				String line = myReader.nextLine();
+				// Check for comments
 				if (line.contains("//")) {
 					continue;
 				} 
-		
+				// If not a comment, split by ", " 
 				else {
 					String[] result = line.split(", ");
 					String resultZero = result[0];
-					if (resultZero.equals("Room ") || resultZero.equals("Space ")) {
+					if (!resultZero.equals("Room") && !resultZero.equals("Space")) {
 						throw new BadConfigFormatException("Bad setup file found");
 					}
 					Character roomSymbol = result[2].charAt(0);

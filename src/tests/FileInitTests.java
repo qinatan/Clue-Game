@@ -62,28 +62,32 @@ public class FileInitTests {
 	// Test a doorway in each direction (RIGHT/LEFT/UP/DOWN), plus
 	// two cells that are not a doorway.
 	// These cells are white on the planning spreadsheet
-	//@Test
+	@Test
 	public void FourDoorDirections() {
-		BoardCell cell = board.getCell(8, 7);
+		BoardCell cell = board.getCell(3, 15);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.LEFT, cell.getDoorDirection());
-		cell = board.getCell(7, 12);
+		cell = board.getCell(4, 6);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.UP, cell.getDoorDirection());
-		cell = board.getCell(4, 8);
+		cell = board.getCell(3, 16);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.RIGHT, cell.getDoorDirection());
-		cell = board.getCell(16, 9);
+		cell = board.getCell(21, 16);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.DOWN, cell.getDoorDirection());
+		
 		// Test that walkways are not doors
-		cell = board.getCell(12, 14);
+		cell = board.getCell(12, 7);
+		assertFalse(cell.isDoorway());
+		
+		cell = board.getCell(12, 8);
 		assertFalse(cell.isDoorway());
 	}
 	
 
 	// Test that we have the correct number of doors
-	//@Test
+	@Test
 	public void testNumberOfDoorways() {
 		int numDoors = 0;
 		for (int row = 0; row < board.getNumRows(); row++)
@@ -92,11 +96,12 @@ public class FileInitTests {
 				if (cell.isDoorway())
 					numDoors++;
 			}
-		Assert.assertEquals(17, numDoors);
+		Assert.assertEquals(12, numDoors);
 	}
 
 	// Test a few room cells to ensure the room initial is correct.
-	//@Test
+	@Test
+	//TODO: this throws an error rn
 	public void testRooms() {
 		// just test a standard room location
 		BoardCell cell = board.getCell( 23, 23);

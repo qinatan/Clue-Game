@@ -166,6 +166,7 @@ public class Board {
 					if (result[col].charAt(0) == 'W') {
 						grid[row][col].setIsDoor(true);
 						// Set door direction
+						//System.out.println(row + " " + col);
 						grid[row][col].setDoorDirection(result[col].charAt(1));
 					} else if (result[col].charAt(1) == '#') {
 						grid[row][col].setIsLabel(true);

@@ -12,7 +12,7 @@ public class BoardCell {
 	private ArrayList<BoardCell> adjList = new ArrayList<BoardCell>();
 	private Boolean isRoom = false;
 	private Boolean isOccupied = false;
-	private Boolean isDoor = false;
+	private Boolean isDoorway = false;
 	private Character cellSymbol;
 	private Boolean isLabel = false;
 	private Boolean isRoomCenterCell = false;
@@ -22,10 +22,12 @@ public class BoardCell {
 		super();
 		this.rowNum = rowNum;
 		this.columnNum = columnNum;
+		this.isDoorway = false ; 
 	}
 
 	public boolean isDoorway() {
-		return isDoor;
+		//System.out.println(cellSymbol) ; 
+		return isDoorway;
 	}
 
 	public DoorDirection getDoorDirection() {
@@ -54,16 +56,17 @@ public class BoardCell {
 	@Override
 	public String toString() {
 		return "BoardCell [doorDirection=" + doorDirection + ", rowNum=" + rowNum + ", columnNum=" + columnNum
-				+ ", adjList=" + adjList + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoor
+				+ ", adjList=" + adjList + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
 				+ "]";
 	}
 
-	public Boolean IsDoor() {
-		return isDoor;
-	}
 
-	public void setIsDoor(Boolean isDoor) {
-		this.isDoor = isDoor;
+
+	public void setIsDoor(Boolean isDoorway) {
+		this.isDoorway = isDoorway;
+		if (isDoorway == true) {
+			//set
+		}
 	}
 
 	public Character getSecretPassage() {

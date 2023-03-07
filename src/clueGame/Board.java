@@ -30,7 +30,7 @@ public class Board {
 
 	// constructor is private to ensure only one can be created
 	private Board() {
-		// super();
+		super();
 	}
 
 	// this method returns the only Board
@@ -45,13 +45,11 @@ public class Board {
 		try {
 			loadSetupConfig();
 		} catch (FileNotFoundException | BadConfigFormatException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try {
 			loadLayoutConfig();
 		} catch (FileNotFoundException | BadConfigFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -88,6 +86,7 @@ public class Board {
 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		File setupFile = new File(setupConfig);
 		Scanner myReader = new Scanner(setupFile);
+		int lineNum = 0; 
 		while (myReader.hasNextLine()) {
 			String line = myReader.nextLine();
 			// Check for comments
@@ -99,12 +98,13 @@ public class Board {
 				String[] result = line.split(", ");
 				String resultZero = result[0];
 				if (!resultZero.equals("Room") && !resultZero.equals("Space")) {
-					throw new BadConfigFormatException("Bad setup file found");
+					throw new BadConfigFormatException("Error in setup file on line: " + lineNum );
 				}
 				Character roomSymbol = result[2].charAt(0);
 				Room room = new Room(result[1], roomSymbol);
 				RoomMap.put(roomSymbol, room);
 			}
+			lineNum++;
 		}
 		myReader.close();
 	}

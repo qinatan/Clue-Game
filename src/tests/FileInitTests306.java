@@ -124,6 +124,7 @@ public class FileInitTests306 {
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
 		assertEquals( room.getName(), "Study" ) ;
+	
 		assertTrue( cell.getSecretPassage() == 'K' );
 		
 		// test a walkway

@@ -64,16 +64,17 @@ public class BoardCell {
 
 	public void setIsDoor(Boolean isDoorway) {
 		this.isDoorway = isDoorway;
-		if (isDoorway == true) {
-			//set
-		}
 	}
 
 	public Character getSecretPassage() {
+		
+		
+		
 		return secretPassage;
 	}
 
 	public void setSecretPassage(Character secretPassage) {
+		System.out.println(secretPassage);
 		this.secretPassage = secretPassage;
 	}
 

@@ -163,6 +163,7 @@ public class Board {
 				}
 
 				if (result[col].length() == 2) {
+					
 					if (result[col].charAt(0) == 'W') {
 						grid[row][col].setIsDoor(true);
 						// Set door direction
@@ -178,6 +179,7 @@ public class Board {
 						// Set this cell to the Room's centerCell
 						Room room = RoomMap.get(result[col].charAt(0));
 						room.setCenterCell(grid[row][col]);
+						
 					} else {
 						grid[row][col].setSecretPassage(result[col].charAt(1));
 					}
@@ -187,6 +189,7 @@ public class Board {
 			}
 			row++;
 		}
+		 
 	}
 
 	public Set<BoardCell> getAdjList(int i, int j) {

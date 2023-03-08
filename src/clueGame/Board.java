@@ -10,21 +10,20 @@ import java.io.*;
 
 /**
  * BoardCell
- * @author michaeleack 
- * @author johnOmalley
- * Date: 3/7/23
- * Collaborators: None
- * Sources: None
+ * 
+ * @author michaeleack
+ * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
  */
 public class Board {
 	/*
-	 * variable and methods used for singleton pattern
-	 * All variable and method names should use lower camelCase except static finals(consts)
-	 * variables should use descriptive names that reveal intent
-	 * most of these should be private unless we have a really good reason
+	 * variable and methods used for singleton pattern All variable and method names
+	 * should use lower camelCase except static finals(consts) variables should use
+	 * descriptive names that reveal intent most of these should be private unless
+	 * we have a really good reason
 	 */
 	private static Board theInstance = new Board();
-	private int COLS; // TODO: we should clean this up, the variables don't work as finals but should be?
+	private int COLS; // TODO: we should clean this up, the variables don't work as finals but should
+						// be?
 	private int ROWS; // TODO: Same thing
 	private BoardCell[][] grid = new BoardCell[ROWS][COLS];
 	private Map<BoardCell, ArrayList<BoardCell>> adjMtx = new HashMap<BoardCell, ArrayList<BoardCell>>();
@@ -33,6 +32,7 @@ public class Board {
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
 	private String setupConfig;
+	
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -92,7 +92,7 @@ public class Board {
 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		File setupFile = new File(setupConfig);
 		Scanner myReader = new Scanner(setupFile);
-		int lineNum = 0; 
+		int lineNum = 0;
 		while (myReader.hasNextLine()) {
 			String line = myReader.nextLine();
 			// Check for comments
@@ -104,7 +104,7 @@ public class Board {
 				String[] result = line.split(", ");
 				String resultZero = result[0];
 				if (!resultZero.equals("Room") && !resultZero.equals("Space")) {
-					throw new BadConfigFormatException("Error in setup file on line: " + lineNum );
+					throw new BadConfigFormatException("Error in setup file on line: " + lineNum);
 				}
 				Character roomSymbol = result[2].charAt(0);
 				Room room = new Room(result[1], roomSymbol);
@@ -168,131 +168,193 @@ public class Board {
 					grid[row][col].setIsRoom(true);
 				}
 
-				if (result[col].length() == 2) {
-					
-					if (result[col].charAt(0) == 'W') {
-						grid[row][col].setIsDoor(true);
-						// Set door direction
-						grid[row][col].setDoorDirection(result[col].charAt(1));
-					} else if (result[col].charAt(1) == '#') {
-						grid[row][col].setIsLabel(true);
-						// Set this cell to the Room's labelCell
-						Room room = roomMap.get(result[col].charAt(0));
-						room.setLabelCell(grid[row][col]);
-					} else if (result[col].charAt(1) == '*') {
-						grid[row][col].setIsRoomCenterCell(true);
-						// Set this cell to the Room's centerCell
-						Room room = roomMap.get(result[col].charAt(0));
-						room.setCenterCell(grid[row][col]);
-						
-					} else {
-						grid[row][col].setSecretPassage(result[col].charAt(1));
-					}
+				setDoorRoomCenter(row, result, col); // Sets if its a door, a room, or a room center cell
 
-				}
-
+				setAdjList(row, result, col); // Sets the adjList for the current Cell
+				
+				adjMtx.put(grid[row][col], grid[row][col].getAdjList()); //Copied from the TestBoard to populate the adjMatrix
 			}
+
 			row++;
 		}
-		 
+
 	}
+
+	// Helper Function to clean up the code
+	private void setDoorRoomCenter(int row, String[] result, int col) {
+		if (result[col].length() == 2) {
+
+			if (result[col].charAt(0) == 'W') {
+				grid[row][col].setIsDoor(true);
+				// Set door direction
+				grid[row][col].setDoorDirection(result[col].charAt(1));
+			} else if (result[col].charAt(1) == '#') {
+				grid[row][col].setIsLabel(true);
+				// Set this cell to the Room's labelCell
+				Room room = roomMap.get(result[col].charAt(0));
+				room.setLabelCell(grid[row][col]);
+			} else if (result[col].charAt(1) == '*') {
+				grid[row][col].setIsRoomCenterCell(true);
+				// Set this cell to the Room's centerCell
+				Room room = roomMap.get(result[col].charAt(0));
+				room.setCenterCell(grid[row][col]);
+
+			} else {
+				grid[row][col].setSecretPassage(result[col].charAt(1));
+			}
+
+		}
+	}
+
+	/*
+	 * private Boolean onlyWalkway () { //I don't know if I need this
+	 * 
+	 * }
+	 */
 	
-	// Helper functions for setAdjList
-	private void addCellRight (BoardCell cell) {
-		cell.addAdjacency(grid[cell.getRowNum()][cell.getColumnNum() + 1]);
-	}
 	
-	private void addCellLeft (BoardCell cell) {
-		cell.addAdjacency(grid[cell.getRowNum()][cell.getColumnNum() - 1]);
+	private void addCell(BoardCell cell, DoorDirection direction) {
+		/*
+		 * switch (direction) { case RIGHT: BoardCell adjCell =
+		 * grid[cell.getRowNum()][cell.getColumnNum() + 1];
+		 * 
+		 * //only walkways and roomcenters get adjacincys if (cell.getCellSymbol() ==
+		 * 'W' || cell.isRoomCenter()) { //isSectect passage boolean should be added and
+		 * then the check for it should be added here if (cell.getCellSymbol() == 'W' &&
+		 * adjCell.getCellSymbol() == 'W') { //Both walkway case
+		 * cell.addAdjacency(adjCell); } else if (cell.isRoomCenter()) { //roomCenter
+		 * case // add all the doors } else { return; }
+		 * 
+		 * if (cell.isDoorway()) { //The roomcenters need to be added } } else { return
+		 * ; //These are not cells that should have adjLists }
+		 * 
+		 * 
+		 * break; case LEFT: BoardCell adjCellLeft =
+		 * grid[cell.getRowNum()][cell.getColumnNum() - 1];
+		 * 
+		 * //only walkways and roomcenters get adjacincys if (cell.getCellSymbol() ==
+		 * 'W' || cell.isRoomCenter()) { //isSectect passage boolean should be added and
+		 * then the check for it should be added here if (cell.getCellSymbol() == 'W' &&
+		 * adjCellLeft.getCellSymbol() == 'W') { //Both walkway case
+		 * cell.addAdjacency(adjCellLeft); } else if (cell.isRoomCenter()) {
+		 * //roomCenter case // add all the doors } else { return; }
+		 * 
+		 * if (cell.isDoorway()) { //The roomcenters need to be added } } else { return
+		 * ; //These are not cells that should have adjLists }
+		 * 
+		 * break; case UP: BoardCell adjCellUp =
+		 * grid[cell.getRowNum()-1][cell.getColumnNum()];
+		 * 
+		 * //only walkways and roomcenters get adjacincys if (cell.getCellSymbol() ==
+		 * 'W' || cell.isRoomCenter()) { //isSectect passage boolean should be added and
+		 * then the check for it should be added here if (cell.getCellSymbol() == 'W' &&
+		 * adjCellUp.getCellSymbol() == 'W') { //Both walkway case
+		 * cell.addAdjacency(adjCellUp); } else if (cell.isRoomCenter()) { //roomCenter
+		 * case // add all the doors } else { return; }
+		 * 
+		 * if (cell.isDoorway()) { //The roomcenters need to be added } } else { return
+		 * ; //These are not cells that should have adjLists }
+		 * 
+		 * break; case DOWN: BoardCell adjCellDown = grid[cell.getRowNum() +
+		 * 1][cell.getColumnNum() ];
+		 * 
+		 * //only walkways and roomcenters get adjacincys if (cell.getCellSymbol() ==
+		 * 'W' || cell.isRoomCenter()) { //isSectect passage boolean should be added and
+		 * then the check for it should be added here if (cell.getCellSymbol() == 'W' &&
+		 * adjCellDown.getCellSymbol() == 'W') { //Both walkway case
+		 * cell.addAdjacency(adjCellDown); } else if (cell.isRoomCenter()) {
+		 * //roomCenter case // add all the doors } else { return; }
+		 * 
+		 * if (cell.isDoorway()) { //The roomcenters need to be added } } else { return
+		 * ; //These are not cells that should have adjLists }
+		 * 
+		 * break; default: return;
+		 * 
+		 * }
+		 */
 	}
-	
-	private void addCellAbove (BoardCell cell) {
-		cell.addAdjacency(grid[cell.getRowNum() - 1][cell.getColumnNum()]);
+
+	private void setAdjList(int row, String[] result, int col) {
+
+		// TODO: Walkways connect to adjacent walkways. ** Need to check if cell is a
+		// walkway before adding to adjList
+		// TODO: Walkways with doors will also connect to the room center the door
+		// points to.
+		// TODO: The cell that represents the Room (i.e. connects to walkway) is the
+		// cell with a second character of ‘*’ (no other cells in a room should have
+		// adjacencies).
+		// TODO: Room center cells ONLY connect to 1) door walkways that enter the room
+		// and 2) another room center cell if there is a secret passage connecting.
+
+		BoardCell currCell = grid[row][col];
+		// Check if on top edge
+		if (row == 0) {
+			// if yes, check if on left edge
+			if (col == 0) {
+
+				addCell(currCell, DoorDirection.RIGHT); //This is probably bad practice but I think it will work
+				addCell(currCell, DoorDirection.DOWN);
+			}
+			// check if on right edge
+			else if (col == COLS) {
+				addCell(currCell, DoorDirection.LEFT);
+				addCell(currCell, DoorDirection.DOWN);
+			}
+			// otherwise, the normal top edge case
+			else if (col != 3 && col != 0) {
+				addCell(currCell, DoorDirection.RIGHT);
+				addCell(currCell, DoorDirection.LEFT);
+				addCell(currCell, DoorDirection.DOWN);
+			}
+		}
+		// check if on bottom edge
+		else if (row == ROWS) {
+			// if yes, check if on left
+			if (col == 0) {
+				addCell(currCell, DoorDirection.UP);
+				addCell(currCell, DoorDirection.RIGHT);
+			}
+			// check if on right edge
+			if (col == ROWS) {
+				addCell(currCell, DoorDirection.UP);
+				addCell(currCell, DoorDirection.LEFT);
+			}
+			// Else normal bottom edge case
+			else if (col != 0) {
+				addCell(currCell, DoorDirection.UP);
+				addCell(currCell, DoorDirection.LEFT);
+				addCell(currCell, DoorDirection.RIGHT);
+			}
+		}
+
+		// Check if on left edge
+		else if (col == 0) {
+			addCell(currCell, DoorDirection.UP);
+			addCell(currCell, DoorDirection.DOWN);
+			addCell(currCell, DoorDirection.RIGHT);
+		}
+
+		// Check if on right edge
+		else if (col == COLS) {
+			addCell(currCell, DoorDirection.UP);
+			addCell(currCell, DoorDirection.DOWN);
+			addCell(currCell, DoorDirection.LEFT);
+		}
+
+		// Else add all surrounding cells to adjList
+		else {
+			addCell(currCell, DoorDirection.UP);
+			addCell(currCell, DoorDirection.DOWN);
+			addCell(currCell, DoorDirection.RIGHT);
+			addCell(currCell, DoorDirection.LEFT);
+		}
 	}
-	
-	private void addCellBelow (BoardCell cell) {
-		cell.addAdjacency(grid[cell.getRowNum() + 1][cell.getColumnNum()]);
-	}
-	
-	private void setAdjList() {
-		// Traverse grid building adjacency list
-		// TODO: Walkways connect to adjacent walkways. ** Need to check if cell is a walkway before adding to adjList
-		// TODO: Walkways with doors will also connect to the room center the door points to.
-		// TODO: The cell that represents the Room (i.e. connects to walkway) is the cell with a second character of ‘*’ (no other cells in a room should have adjacencies).
-		// TODO: Room center cells ONLY connect to 1) door walkways that enter the room and 2) another room center cell if there is a secret passage connecting.
-				for (int col = 0; col < COLS; col++) {
-					for (int row = 0; row < ROWS; row++) {
-						BoardCell currCell = grid[row][col];
-						// Check if on top edge
-						if (row == 0) {
-							// if yes, check if on left edge
-							if (col == 0) {
-								addCellRight(currCell); 
-								addCellBelow(currCell);  
-							}
-							// check if on right edge
-							else if (col == COLS) {
-								addCellLeft(currCell);  
-								addCellBelow(currCell);  
-							}
-							// otherwise, the normal top edge case
-							else if (col != 3 && col != 0){
-								addCellRight(currCell); 
-								addCellLeft(currCell);
-								addCellBelow(currCell);
-							}
-						}
-						// check if on bottom edge
-						else if (row == ROWS) {
-							// if yes, check if on left
-							if(col == 0) {
-								addCellAbove(currCell);
-								addCellRight(currCell);
-							}
-							// check if on right edge
-							if(col == ROWS) {
-								addCellAbove(currCell); // add cell (3,2) to cell (3, 3)'s adjList
-								addCellLeft(currCell); // add cell (2,3) to cell (3,3)'s adjList
-							}
-							// Else normal bottom edge case
-							else if (col != 0) {
-								addCellAbove(currCell);
-								addCellLeft(currCell);
-								addCellRight(currCell);
-							}
-						}
-						
-						// Check if on left edge 
-						else if (col == 0) {
-							addCellAbove(currCell); 
-							addCellBelow(currCell);
-							addCellRight(currCell);
-						}
-						
-						// Check if on right edge 
-						else if (col == COLS) {
-							addCellAbove(currCell);
-							addCellBelow(currCell);
-							addCellLeft(currCell);
-						}
-						
-						// Else add all surrounding cells to adjList
-						else {
-							addCellAbove(currCell);
-							addCellBelow(currCell);
-							addCellRight(currCell);
-							addCellLeft(currCell);
-						}
-					}
-				}
-				
-				// Traverse grid populating AdjMatrix
-				for (int col = 0; col < COLS; col++) {
-					for (int row = 0; row < ROWS; row++) {
-						adjMtx.put(grid[row][col], grid[row][col].getAdjList());
-					}
-				}
-	}
+
+	/*
+	 * // Traverse grid populating AdjMatrix for (int col = 0; col < COLS; col++) {
+	 * for (int row = 0; row < ROWS; row++) { adjMtx.put(grid[row][col],
+	 * grid[row][col].getAdjList()); } }
+	 */
 
 	public Set<BoardCell> getAdjList(int i, int j) {
 		// TODO Change this method. This is incorrect just to make the Junit test not

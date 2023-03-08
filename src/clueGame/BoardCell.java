@@ -120,8 +120,8 @@ public class BoardCell {
 		this.isRoomCenterCell = isRoomCenterCell;
 	}
 
-	public void setOccupied(boolean b) {
-		// TODO Auto-generated method stub
+	public void setOccupied(boolean isOccStatus) {
+		this.isOccupied = isOccStatus ; 
 	}
 	
 	//adds it to the adj list. 

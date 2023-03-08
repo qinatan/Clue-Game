@@ -6,25 +6,30 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import clueGame.BoardCell;
-import clueGame.Room;
-import experiment.TestBoardCell;
-
 import java.io.*;
 
+/**
+ * BoardCell
+ * @author michaeleack @author johnOmalley
+ * Date:
+ * Collaborators
+ * Sources: 
+ */
 public class Board {
 	/*
 	 * variable and methods used for singleton pattern
+	 * All variable and method names should use lower camelCase except static finals(consts)
+	 * variables should use descriptive names that reveal intent
+	 * most of these should be private unless we have a really good reason
 	 */
 	private static Board theInstance = new Board();
-
-	private int COLS;
-	private int ROWS;
+	private int COLS; // TODO: we should clean this up, the variables don't work as finals but should be?
+	private int ROWS; // TODO: Same thing
 	private BoardCell[][] grid = new BoardCell[ROWS][COLS];
 	private Map<BoardCell, ArrayList<BoardCell>> adjMtx = new HashMap<BoardCell, ArrayList<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
-	private Map<Character, Room> RoomMap = new HashMap<Character, Room>();
+	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
 	private String setupConfig;
 
@@ -60,7 +65,7 @@ public class Board {
 	}
 
 	public Room getRoom(char c) {
-		Room room = RoomMap.get(c);
+		Room room = roomMap.get(c);
 		return room;
 	}
 
@@ -102,7 +107,7 @@ public class Board {
 				}
 				Character roomSymbol = result[2].charAt(0);
 				Room room = new Room(result[1], roomSymbol);
-				RoomMap.put(roomSymbol, room);
+				roomMap.put(roomSymbol, room);
 			}
 			lineNum++;
 		}
@@ -152,7 +157,7 @@ public class Board {
 				// sets BoardCell symbol for each BoardCell
 				grid[row][col].setCellSymbol(result[col]);
 				// Checks for bad config file
-				if (!RoomMap.containsKey(result[col].charAt(0))) {
+				if (!roomMap.containsKey(result[col].charAt(0))) {
 					throw new BadConfigFormatException(
 							"Letter found in config file that is not a known room: " + result[col].charAt(0));
 				}
@@ -172,12 +177,12 @@ public class Board {
 					} else if (result[col].charAt(1) == '#') {
 						grid[row][col].setIsLabel(true);
 						// Set this cell to the Room's labelCell
-						Room room = RoomMap.get(result[col].charAt(0));
+						Room room = roomMap.get(result[col].charAt(0));
 						room.setLabelCell(grid[row][col]);
 					} else if (result[col].charAt(1) == '*') {
 						grid[row][col].setIsRoomCenterCell(true);
 						// Set this cell to the Room's centerCell
-						Room room = RoomMap.get(result[col].charAt(0));
+						Room room = roomMap.get(result[col].charAt(0));
 						room.setCenterCell(grid[row][col]);
 						
 					} else {

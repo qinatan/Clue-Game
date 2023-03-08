@@ -2,11 +2,13 @@ package clueGame;
 
 import java.util.ArrayList;
 
+import experiment.TestBoardCell;
+
 /**
  * BoardCell
  * @author michaeleack @author johnOmalley
  * Date:
- * Collaborators
+ * Collaborators:
  * Sources: 
  */
 
@@ -14,6 +16,22 @@ public class BoardCell {
 
 	private DoorDirection doorDirection;
 	private int rowNum;
+	public int getRowNum() {
+		return rowNum;
+	}
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+
+	public int getColumnNum() {
+		return columnNum;
+	}
+
+	public void setColumnNum(int columnNum) {
+		this.columnNum = columnNum;
+	}
+
 	private int columnNum;
 	private ArrayList<BoardCell> adjList = new ArrayList<BoardCell>();
 	private Boolean isRoom = false;
@@ -58,23 +76,11 @@ public class BoardCell {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "BoardCell [doorDirection=" + doorDirection + ", rowNum=" + rowNum + ", columnNum=" + columnNum
-				+ ", adjList=" + adjList + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
-				+ "]";
-	}
-
-
-
 	public void setIsDoor(Boolean isDoorway) {
 		this.isDoorway = isDoorway;
 	}
 
 	public Character getSecretPassage() {
-		
-		
-		
 		return secretPassage;
 	}
 
@@ -116,7 +122,22 @@ public class BoardCell {
 
 	public void setOccupied(boolean b) {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	//adds it to the adj list. 
+	void addAdjacency (BoardCell cell) {
+		adjList.add(cell);
+	}
+	
+	@Override
+	public String toString() {
+		return "BoardCell [doorDirection=" + doorDirection + ", rowNum=" + rowNum + ", columnNum=" + columnNum
+				+ ", adjList=" + adjList + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
+				+ "]";
+	}
+
+	public ArrayList<BoardCell> getAdjList() {
+		return adjList;
 	}
 
 }

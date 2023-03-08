@@ -10,10 +10,11 @@ import java.io.*;
 
 /**
  * BoardCell
- * @author michaeleack @author johnOmalley
- * Date:
- * Collaborators
- * Sources: 
+ * @author michaeleack 
+ * @author johnOmalley
+ * Date: 3/7/23
+ * Collaborators: None
+ * Sources: None
  */
 public class Board {
 	/*
@@ -194,6 +195,103 @@ public class Board {
 			row++;
 		}
 		 
+	}
+	
+	// Helper functions for setAdjList
+	private void addCellRight (BoardCell cell) {
+		cell.addAdjacency(grid[cell.getRowNum()][cell.getColumnNum() + 1]);
+	}
+	
+	private void addCellLeft (BoardCell cell) {
+		cell.addAdjacency(grid[cell.getRowNum()][cell.getColumnNum() - 1]);
+	}
+	
+	private void addCellAbove (BoardCell cell) {
+		cell.addAdjacency(grid[cell.getRowNum() - 1][cell.getColumnNum()]);
+	}
+	
+	private void addCellBelow (BoardCell cell) {
+		cell.addAdjacency(grid[cell.getRowNum() + 1][cell.getColumnNum()]);
+	}
+	
+	private void setAdjList() {
+		// Traverse grid building adjacency list
+		// TODO: Walkways connect to adjacent walkways. ** Need to check if cell is a walkway before adding to adjList
+		// TODO: Walkways with doors will also connect to the room center the door points to.
+		// TODO: The cell that represents the Room (i.e. connects to walkway) is the cell with a second character of ‘*’ (no other cells in a room should have adjacencies).
+		// TODO: Room center cells ONLY connect to 1) door walkways that enter the room and 2) another room center cell if there is a secret passage connecting.
+				for (int col = 0; col < COLS; col++) {
+					for (int row = 0; row < ROWS; row++) {
+						BoardCell currCell = grid[row][col];
+						// Check if on top edge
+						if (row == 0) {
+							// if yes, check if on left edge
+							if (col == 0) {
+								addCellRight(currCell); 
+								addCellBelow(currCell);  
+							}
+							// check if on right edge
+							else if (col == COLS) {
+								addCellLeft(currCell);  
+								addCellBelow(currCell);  
+							}
+							// otherwise, the normal top edge case
+							else if (col != 3 && col != 0){
+								addCellRight(currCell); 
+								addCellLeft(currCell);
+								addCellBelow(currCell);
+							}
+						}
+						// check if on bottom edge
+						else if (row == ROWS) {
+							// if yes, check if on left
+							if(col == 0) {
+								addCellAbove(currCell);
+								addCellRight(currCell);
+							}
+							// check if on right edge
+							if(col == ROWS) {
+								addCellAbove(currCell); // add cell (3,2) to cell (3, 3)'s adjList
+								addCellLeft(currCell); // add cell (2,3) to cell (3,3)'s adjList
+							}
+							// Else normal bottom edge case
+							else if (col != 0) {
+								addCellAbove(currCell);
+								addCellLeft(currCell);
+								addCellRight(currCell);
+							}
+						}
+						
+						// Check if on left edge 
+						else if (col == 0) {
+							addCellAbove(currCell); 
+							addCellBelow(currCell);
+							addCellRight(currCell);
+						}
+						
+						// Check if on right edge 
+						else if (col == COLS) {
+							addCellAbove(currCell);
+							addCellBelow(currCell);
+							addCellLeft(currCell);
+						}
+						
+						// Else add all surrounding cells to adjList
+						else {
+							addCellAbove(currCell);
+							addCellBelow(currCell);
+							addCellRight(currCell);
+							addCellLeft(currCell);
+						}
+					}
+				}
+				
+				// Traverse grid populating AdjMatrix
+				for (int col = 0; col < COLS; col++) {
+					for (int row = 0; row < ROWS; row++) {
+						adjMtx.put(grid[row][col], grid[row][col].getAdjList());
+					}
+				}
 	}
 
 	public Set<BoardCell> getAdjList(int i, int j) {

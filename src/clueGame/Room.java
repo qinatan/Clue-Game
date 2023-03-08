@@ -1,5 +1,14 @@
 package clueGame;
 
+
+/**
+ * BoardCell
+ * @author michaeleack 
+ * @author johnOmalley
+ * Date: 3/7/23
+ * Collaborators:
+ * Sources: 
+ */
 public class Room {
 	private String Name;
 	private char Symbol;
@@ -12,11 +21,6 @@ public class Room {
 
 	public void setLabelCell(BoardCell labelCell) {
 		this.labelCell = labelCell;
-	}
-
-	@Override
-	public String toString() {
-		return Name;
 	}
 
 	public Room(String name, char symbol) {
@@ -39,6 +43,12 @@ public class Room {
 
 	public char getSymbol() {
 		return Symbol;
+	}
+	
+
+	@Override
+	public String toString() {
+		return Name;
 	}
 
 }

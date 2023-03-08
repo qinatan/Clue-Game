@@ -79,7 +79,6 @@ public class BoardCell {
 	}
 
 	public void setSecretPassage(Character secretPassage) {
-		System.out.println(secretPassage);
 		this.secretPassage = secretPassage;
 	}
 

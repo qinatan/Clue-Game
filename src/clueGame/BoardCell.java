@@ -2,13 +2,19 @@ package clueGame;
 
 import java.util.ArrayList;
 
-//import experiment.BoardCell;
+/**
+ * BoardCell
+ * @author michaeleack @author johnOmalley
+ * Date:
+ * Collaborators
+ * Sources: 
+ */
 
 public class BoardCell {
 
 	private DoorDirection doorDirection;
-	public int rowNum;
-	public int columnNum;
+	private int rowNum;
+	private int columnNum;
 	private ArrayList<BoardCell> adjList = new ArrayList<BoardCell>();
 	private Boolean isRoom = false;
 	private Boolean isOccupied = false;
@@ -26,7 +32,6 @@ public class BoardCell {
 	}
 
 	public boolean isDoorway() {
-		//System.out.println(cellSymbol) ; 
 		return isDoorway;
 	}
 

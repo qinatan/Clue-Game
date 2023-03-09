@@ -43,6 +43,7 @@ public class BoardCell {
 	private Boolean isLabel = false;
 	private Boolean isRoomCenterCell = false;
 	private Character secretPassage = null;
+	
 
 	public BoardCell(int rowNum, int columnNum) {
 		super();
@@ -103,10 +104,10 @@ public class BoardCell {
 	}
 
 	public void setCellSymbol(String cellSymbol) {
-		System.out.println(this.toString()) ; 
+		//System.out.println(this.toString()) ; 
 
 		this.cellSymbol = cellSymbol.charAt(0);
-		System.out.println(this.cellSymbol);
+		//System.out.println(this.cellSymbol);
 	}
 
 	public Boolean isLabel() {
@@ -137,11 +138,11 @@ public class BoardCell {
 	
 	@Override
 	public String toString() {
-		return "rowNum: "+ rowNum + "columnNum: " + columnNum ; 
+		//return "rowNum: "+ rowNum + "columnNum: " + columnNum ; 
 		
-		//return "BoardCell [doorDirection=" + doorDirection + ", rowNum=" + rowNum + ", columnNum=" + columnNum
-		//		+ ", adjList=" + adjList + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
-		//		+ "]";
+		return "BoardCell [rowNum=" + rowNum + ", columnNum=" + columnNum
+				 + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
+				+ "]";
 	}
 
 	public Set<BoardCell> getAdjList() {

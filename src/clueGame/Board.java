@@ -25,8 +25,8 @@ public class Board {
 	private int COLS; // TODO: we should clean this up, the variables don't work as finals but should
 						// be?
 	private int ROWS; // TODO: Same thing
-	private BoardCell[][] grid ;
-	//private BoardCell[][] grid = new BoardCell[ROWS][COLS];
+	private BoardCell[][] grid;
+	// private BoardCell[][] grid = new BoardCell[ROWS][COLS];
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
@@ -71,11 +71,11 @@ public class Board {
 	}
 
 	public Room getRoom(BoardCell cell) {
-		
+
 		Character symbol = cell.getCellSymbol();
-		System.out.println(cell.toString() );
-		//System.out.println(cell.is() );
-		System.out.println(symbol );
+		// System.out.println(cell.toString() );
+		// System.out.println(cell.is() );
+		// System.out.println(symbol );
 		Room room = getRoom(symbol);
 		return room;
 	}
@@ -143,14 +143,14 @@ public class Board {
 
 		ROWS = rows;
 		COLS = firstRowCols;
-		//System.out.println(COLS);
-		//System.out.println(ROWS);
+		// System.out.println(COLS);
+		// System.out.println(ROWS);
 		myReader.close();
 
 		// Build grid of empty BoardCells
 		grid = new BoardCell[ROWS][COLS];
-		for (int col = 0; col < COLS  ; col++) {
-			for (int row = 0; row < ROWS  ; row++) {
+		for (int col = 0; col < COLS; col++) {
+			for (int row = 0; row < ROWS; row++) {
 				grid[row][col] = new BoardCell(row, col);
 			}
 		}
@@ -163,7 +163,8 @@ public class Board {
 			String[] result = line.split(",");
 			for (int col = 0; col < COLS ; col++) {
 				// sets BoardCell symbol for each BoardCell
-				//System.out.println(row + " " + col);
+				// System.out.println(result[col]);
+
 				grid[row][col].setCellSymbol(result[col]);
 				// Checks for bad config file
 				if (!roomMap.containsKey(result[col].charAt(0))) {
@@ -173,23 +174,23 @@ public class Board {
 
 				// sets cell to "room" if not a walkway or unused square,
 				if (!result[col].equals("X") && !result[col].equals("W")) {
+					System.out.println(result[col]);
 					grid[row][col].setIsRoom(true);
 				} else {
-				//	System.out.println("XXXXX");
+					// System.out.println("XXXXX");
 				}
 
 				setDoorRoomCenter(row, result, col); // Sets if its a door, a room, or a room center cell
-				
-				setAdjList(row, result, col); // Sets the adjList for the current Cell
 
-				//adjMtx.put(grid[row][col], grid[row][col].getAdjList()); // Copied from the TestBoard to populate the
-																			// adjMatrix
 			}
 
 			row++;
 		}
-		for (int i = 0; i < COLS -1; i++) {
-			for (int j = 0; j < ROWS -1; j++) {
+
+		for (int i = 0; i < COLS; i++) {
+			for (int j = 0; j < ROWS -1 ; j++) {
+				System.out.println(i + " + "+j);
+				setAdjList(i, j); // Sets the adjList for the current Cell
 				adjMtx.put(grid[j][i], grid[j][i].getAdjList());
 			}
 		}
@@ -198,7 +199,11 @@ public class Board {
 	// Helper Function to clean up the code
 	// Sets
 	private void setDoorRoomCenter(int row, String[] result, int col) {
+
 		if (result[col].length() == 2) {
+
+			// System.out.println(result[col]);
+			// System.out.println(row + " " + col);
 
 			if (result[col].charAt(0) == 'W') {
 				grid[row][col].setIsDoor(true);
@@ -223,15 +228,13 @@ public class Board {
 	}
 
 	private void addCell(BoardCell cell, DoorDirection direction) {
-		
-		
+
 		switch (direction) {
 		case RIGHT:
 			BoardCell adjCell = grid[cell.getRowNum()][cell.getColumnNum() + 1];
-			
-	 
+
 			cell.addAdjacency(adjCell);
-			
+
 			break;
 		case LEFT:
 			BoardCell adjCell1 = grid[cell.getRowNum()][cell.getColumnNum() - 1];
@@ -246,40 +249,41 @@ public class Board {
 			cell.addAdjacency(adjCell3);
 			break;
 		default:
-			
+
 			break;
 
 		}
 
 	}
 
-	private void setAdjList(int row, String[] result, int col) {
-		
+	private void setAdjList(int row, int col) {
+
 		BoardCell currCell = grid[row][col];
 
-		if (currCell.isRoom() || (currCell.getCellSymbol() == 'X')) {
-			
+		if ((currCell.getCellSymbol() == 'X')) {
+
 			return;
 		}
 
 		// Takes in a doorway cell and adds the center of the room to the doors adjList
 		if (currCell.isDoorway()) {
-			
+
 			switch (currCell.getDoorDirection()) {
 			case RIGHT:
 				BoardCell roomCell = grid[currCell.getRowNum()][currCell.getColumnNum() + 1];
+				System.out.println(roomCell.getCellSymbol());
 				Room currRoom = roomMap.get(roomCell.getCellSymbol());
 
 				currCell.addAdjacency(currRoom.getCenterCell());
 				currRoom.getCenterCell().addAdjacency(currCell);
-				
+
 				if (currRoom.isHasSecretPassage()) {
-					Room nextRoom = currRoom.getPassageRoom(); 
-					
+					Room nextRoom = currRoom.getPassageRoom();
+
 					nextRoom.getCenterCell().addAdjacency(currCell);
-					
+
 				}
-				
+
 				break;
 			case LEFT:
 				BoardCell roomCell1 = grid[currCell.getRowNum()][currCell.getColumnNum() - 1];
@@ -287,27 +291,27 @@ public class Board {
 
 				currCell.addAdjacency(currRoom1.getCenterCell());
 				currRoom1.getCenterCell().addAdjacency(currCell);
-				
+
 				if (currRoom1.isHasSecretPassage()) {
-					Room nextRoom = currRoom1.getPassageRoom(); 
-					
+					Room nextRoom = currRoom1.getPassageRoom();
+
 					nextRoom.getCenterCell().addAdjacency(currCell);
-					
+
 				}
-				
+
 				break;
 			case UP:
-				BoardCell roomCell2 = grid[currCell.getRowNum() -1 ][currCell.getColumnNum() ];
+				BoardCell roomCell2 = grid[currCell.getRowNum() - 1][currCell.getColumnNum()];
 				Room currRoom2 = roomMap.get(roomCell2.getCellSymbol());
 
 				currCell.addAdjacency(currRoom2.getCenterCell());
 				currRoom2.getCenterCell().addAdjacency(currCell);
-				
+
 				if (currRoom2.isHasSecretPassage()) {
-					Room nextRoom = currRoom2.getPassageRoom(); 
-					
+					Room nextRoom = currRoom2.getPassageRoom();
+
 					nextRoom.getCenterCell().addAdjacency(currCell);
-					
+
 				}
 				break;
 			case DOWN:
@@ -316,25 +320,23 @@ public class Board {
 
 				currCell.addAdjacency(currRoom3.getCenterCell());
 				currRoom3.getCenterCell().addAdjacency(currCell);
-				
+
 				if (currRoom3.isHasSecretPassage()) {
-					Room nextRoom = currRoom3.getPassageRoom(); 
-					
+					Room nextRoom = currRoom3.getPassageRoom();
+
 					nextRoom.getCenterCell().addAdjacency(currCell);
-					
+
 				}
 				break;
 			default:
-				return ; 
+				return;
 			}
-
 
 		}
 
-
 		// Check if on top edge
 		if (row == 0) {
-			
+
 			// if yes, check if on left edge
 			if (col == 0) {
 
@@ -342,26 +344,26 @@ public class Board {
 				addCell(currCell, DoorDirection.DOWN);
 			}
 			// check if on right edge
-			else if (col == COLS -1) {
+			else if (col == COLS - 1) {
 				addCell(currCell, DoorDirection.LEFT);
 				addCell(currCell, DoorDirection.DOWN);
 			}
 			// otherwise, the normal top edge case
-			else if (col != COLS -1 && col != 0) {
+			else if (col != COLS - 1 && col != 0) {
 				addCell(currCell, DoorDirection.RIGHT);
 				addCell(currCell, DoorDirection.LEFT);
 				addCell(currCell, DoorDirection.DOWN);
 			}
 		}
 		// check if on bottom edge
-		else if (row == ROWS -1) {
+		else if (row == ROWS - 1) {
 			// if yes, check if on left
 			if (col == 0) {
 				addCell(currCell, DoorDirection.UP);
 				addCell(currCell, DoorDirection.RIGHT);
 			}
 			// check if on right edge
-			if (col == ROWS -1) {
+			if (col == ROWS - 1) {
 				addCell(currCell, DoorDirection.UP);
 				addCell(currCell, DoorDirection.LEFT);
 			}
@@ -381,8 +383,8 @@ public class Board {
 		}
 
 		// Check if on right edge
-		else if (col == COLS -1) {
-			//System.out.println(currCell.toString());
+		else if (col == COLS - 1) {
+			// System.out.println(currCell.toString());
 			addCell(currCell, DoorDirection.UP);
 			addCell(currCell, DoorDirection.DOWN);
 			addCell(currCell, DoorDirection.LEFT);
@@ -390,10 +392,10 @@ public class Board {
 
 		// Else add all surrounding cells to adjList
 		else {
-			
+
 			addCell(currCell, DoorDirection.UP);
 			addCell(currCell, DoorDirection.DOWN);
-			
+
 			addCell(currCell, DoorDirection.RIGHT);
 			addCell(currCell, DoorDirection.LEFT);
 		}
@@ -408,8 +410,8 @@ public class Board {
 	public Set<BoardCell> getAdjList(int i, int j) {
 		// TODO Change this method. This is incorrect just to make the Junit test not
 		// have errors
-		BoardCell tempCell = grid[i][j]; 
-		
+		BoardCell tempCell = grid[i][j];
+
 		return tempCell.getAdjList();
 	}
 

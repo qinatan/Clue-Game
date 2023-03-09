@@ -12,7 +12,8 @@ import java.io.*;
  * BoardCell
  * 
  * @author michaeleack
- * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
+ * @author johnOmalley 
+ * Date: 3/7/23 Collaborators: None Sources: None
  */
 public class Board {
 	/*
@@ -23,10 +24,8 @@ public class Board {
 	 */
 	private static Board theInstance = new Board();
 	private int COLS; // TODO: we should clean this up, the variables don't work as finals but should
-						// be?
 	private int ROWS; // TODO: Same thing
 	private BoardCell[][] grid ;
-	//private BoardCell[][] grid = new BoardCell[ROWS][COLS];
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
@@ -71,7 +70,6 @@ public class Board {
 	}
 
 	public Room getRoom(BoardCell cell) {
-
 		Character symbol = cell.getCellSymbol();
 		Room room = getRoom(symbol);
 		return room;
@@ -90,6 +88,7 @@ public class Board {
 		return BoardCell;
 	}
 
+	// Reads in setUp Config file, creating the Room Objects, & populating the roomMap
 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		File setupFile = new File(setupConfig);
 		Scanner myReader = new Scanner(setupFile);
@@ -107,8 +106,12 @@ public class Board {
 				if (!resultZero.equals("Room") && !resultZero.equals("Space")) {
 					throw new BadConfigFormatException("Error in setup file on line: " + lineNum);
 				}
+				// Populates roomMap
 				Character roomSymbol = result[2].charAt(0);
+				// Creates a new room for each line of setup file 
 				Room room = new Room(result[1], roomSymbol);
+				
+				// Adds each room to roomMap
 				roomMap.put(roomSymbol, room);
 			}
 			lineNum++;
@@ -132,6 +135,7 @@ public class Board {
 				String[] result = line.split(",");
 				int curRowCols = result.length;
 				if (curRowCols != firstRowCols) {
+					myReader.close();
 					throw new BadConfigFormatException("Bad Config File found. Inconsistent number of columns.");
 				}
 			}
@@ -167,10 +171,8 @@ public class Board {
 							"Letter found in config file that is not a known room: " + result[col].charAt(0));
 				}
 
-				
-
-				gridCellClassifier(row, result, col); // Sets if its a door, a room, or a room center cell
-
+				// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell, isSecretPassageway, isRoomLabel
+				gridCellClassifier(row, result, col);
 			}
 
 			row++;
@@ -185,10 +187,9 @@ public class Board {
 	}
 
 	
-	// Takes in all cells on grid, and sets their appropriate properties
+	// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell, isSecretPassageway
 	// e.g. Takes in a room cell, sets isRoom = true
 	private void gridCellClassifier(int row, String[] result, int col) {
-		
 		// sets cell to "room" if not a walkway or unused square,
 		if (!result[col].equals("X") && !result[col].equals("W")) {
 			grid[row][col].setIsRoom(true);
@@ -220,10 +221,15 @@ public class Board {
 			// Secret Passageway found
 			else {
 				grid[row][col].setSecretPassage(result[col].charAt(1));
+				Room room = roomMap.get(result[col].charAt(1));
+				room.setHasSecretPassage(true);
+				// Sets the rooms passage room to the destination of the secret Passage 
+				room.setPassageRoom(roomMap.get(grid[row][col].getSecretPassage()));
 			}
 
 		}
 	}
+	
 	// Helper function for setAdjList
 	// Processes Walkways ONLY 
 	private void addWalkwayAdj(BoardCell cell, Direction direction) {
@@ -231,24 +237,25 @@ public class Board {
 		switch (direction) {
 		case RIGHT:
 			BoardCell adjCell = grid[cell.getRowNum()][cell.getColumnNum() + 1];
-
 			cell.addAdjacency(adjCell);
-
 			break;
+			
 		case LEFT:
 			BoardCell adjCell1 = grid[cell.getRowNum()][cell.getColumnNum() - 1];
 			cell.addAdjacency(adjCell1);
 			break;
+			
 		case UP:
 			BoardCell adjCell2 = grid[cell.getRowNum() - 1][cell.getColumnNum()];
 			cell.addAdjacency(adjCell2);
 			break;
+			
 		case DOWN:
 			BoardCell adjCell3 = grid[cell.getRowNum() + 1][cell.getColumnNum()];
 			cell.addAdjacency(adjCell3);
 			break;
+			
 		default:
-
 			break;
 
 		}
@@ -256,150 +263,124 @@ public class Board {
 	}
 
 	private void setAdjList(int row, int col) {
-		try {
-		BoardCell currCell = grid[row][col];
 		
-
+		// Checks if it's an unused cell
+		BoardCell currCell = grid[row][col];
 		if ((currCell.getCellSymbol() == 'X')) {
-
 			return;
 		}
 
 		// Takes in a doorway cell and adds the center of the room to the doors adjList
+		// Also adds the doorway to the centerCells adjList
 		if (currCell.isDoorway()) {
 
 			switch (currCell.getDoorDirection()) {
 			case RIGHT:
 				BoardCell roomCell = grid[currCell.getRowNum()][currCell.getColumnNum() + 1];
 				Room currRoom = roomMap.get(roomCell.getCellSymbol());
-
 				currCell.addAdjacency(currRoom.getCenterCell());
 				currRoom.getCenterCell().addAdjacency(currCell);
-
-				if (currRoom.isHasSecretPassage()) {
-					Room nextRoom = currRoom.getPassageRoom();
-
-					nextRoom.getCenterCell().addAdjacency(currCell);
-
-				}
 
 				break;
 			case LEFT:
 				BoardCell roomCell1 = grid[currCell.getRowNum()][currCell.getColumnNum() - 1];
 				Room currRoom1 = roomMap.get(roomCell1.getCellSymbol());
-
 				currCell.addAdjacency(currRoom1.getCenterCell());
 				currRoom1.getCenterCell().addAdjacency(currCell);
-
-				if (currRoom1.isHasSecretPassage()) {
-					Room nextRoom = currRoom1.getPassageRoom();
-
-					nextRoom.getCenterCell().addAdjacency(currCell);
-
-				}
 
 				break;
 			case UP:
 				BoardCell roomCell2 = grid[currCell.getRowNum() - 1][currCell.getColumnNum()];
 				Room currRoom2 = roomMap.get(roomCell2.getCellSymbol());
-
 				currCell.addAdjacency(currRoom2.getCenterCell());
 				currRoom2.getCenterCell().addAdjacency(currCell);
 
-				if (currRoom2.isHasSecretPassage()) {
-					Room nextRoom = currRoom2.getPassageRoom();
-
-					nextRoom.getCenterCell().addAdjacency(currCell);
-
-				}
 				break;
 			case DOWN:
 				BoardCell roomCell3 = grid[currCell.getRowNum() + 1][currCell.getColumnNum()];
 				Room currRoom3 = roomMap.get(roomCell3.getCellSymbol());
-
 				currCell.addAdjacency(currRoom3.getCenterCell());
 				currRoom3.getCenterCell().addAdjacency(currCell);
-
-				if (currRoom3.isHasSecretPassage()) {
-					Room nextRoom = currRoom3.getPassageRoom();
-
-					nextRoom.getCenterCell().addAdjacency(currCell);
-
-				}
+				
 				break;
 			default:
 				return;
 			}
 
 		}
-
-		// Check if on top edge
-		if (row == 0) {
-
-			// if yes, check if on left edge
-			if (col == 0) {
-
-				addWalkwayAdj(currCell, Direction.RIGHT); // This is probably bad practice but I think it will work
-				addWalkwayAdj(currCell, Direction.DOWN);
+		
+		// Add secretPassage destination to center cell's adjList
+		if (currCell.isRoomCenter()) {
+			Room currRoom = roomMap.get(currCell.getCellSymbol());
+			if (currRoom.isHasSecretPassage()) {
+				Room nextRoom = currRoom.getPassageRoom();
+				currCell.addAdjacency(nextRoom.centerCell);
+		}
+		
+		if (!currCell.isRoom()) {
+			// Check if on top edge
+			if (row == 0) {
+	
+				// if yes, check if on left edge
+				if (col == 0) {
+					addWalkwayAdj(currCell, Direction.RIGHT); // This is probably bad practice but I think it will work
+					addWalkwayAdj(currCell, Direction.DOWN);
+				}
+				// check if on right edge
+				else if (col == COLS - 1) {
+					addWalkwayAdj(currCell, Direction.LEFT);
+					addWalkwayAdj(currCell, Direction.DOWN);
+				}
+				// otherwise, the normal top edge case
+				else if (col != COLS - 1 && col != 0) {
+					addWalkwayAdj(currCell, Direction.RIGHT);
+					addWalkwayAdj(currCell, Direction.LEFT);
+					addWalkwayAdj(currCell, Direction.DOWN);
+				}
 			}
-			// check if on right edge
+			// check if on bottom edge
+			else if (row == ROWS - 1) {
+				// if yes, check if on left
+				if (col == 0) {
+					addWalkwayAdj(currCell, Direction.UP);
+					addWalkwayAdj(currCell, Direction.RIGHT);
+				}
+				// check if on right edge
+				if (col == ROWS - 1) {
+					addWalkwayAdj(currCell, Direction.UP);
+					addWalkwayAdj(currCell, Direction.LEFT);
+				}
+				// Else normal bottom edge case
+				else if (col != 0) {
+					addWalkwayAdj(currCell, Direction.UP);
+					addWalkwayAdj(currCell, Direction.LEFT);
+					addWalkwayAdj(currCell, Direction.RIGHT);
+				}
+			}
+	
+			// Check if on left edge
+			else if (col == 0) {
+				addWalkwayAdj(currCell, Direction.UP);
+				addWalkwayAdj(currCell, Direction.DOWN);
+				addWalkwayAdj(currCell, Direction.RIGHT);
+			}
+	
+			// Check if on right edge
 			else if (col == COLS - 1) {
-				addWalkwayAdj(currCell, Direction.LEFT);
+				addWalkwayAdj(currCell, Direction.UP);
 				addWalkwayAdj(currCell, Direction.DOWN);
-			}
-			// otherwise, the normal top edge case
-			else if (col != COLS - 1 && col != 0) {
-				addWalkwayAdj(currCell, Direction.RIGHT);
 				addWalkwayAdj(currCell, Direction.LEFT);
+			}
+	
+			// Else add all surrounding cells to adjList
+			else {
+	
+				addWalkwayAdj(currCell, Direction.UP);
 				addWalkwayAdj(currCell, Direction.DOWN);
-			}
-		}
-		// check if on bottom edge
-		else if (row == ROWS - 1) {
-			// if yes, check if on left
-			if (col == 0) {
-				addWalkwayAdj(currCell, Direction.UP);
 				addWalkwayAdj(currCell, Direction.RIGHT);
-			}
-			// check if on right edge
-			if (col == ROWS - 1) {
-				addWalkwayAdj(currCell, Direction.UP);
 				addWalkwayAdj(currCell, Direction.LEFT);
 			}
-			// Else normal bottom edge case
-			else if (col != 0) {
-				addWalkwayAdj(currCell, Direction.UP);
-				addWalkwayAdj(currCell, Direction.LEFT);
-				addWalkwayAdj(currCell, Direction.RIGHT);
-			}
 		}
-
-		// Check if on left edge
-		else if (col == 0) {
-			addWalkwayAdj(currCell, Direction.UP);
-			addWalkwayAdj(currCell, Direction.DOWN);
-			addWalkwayAdj(currCell, Direction.RIGHT);
-		}
-
-		// Check if on right edge
-		else if (col == COLS - 1) {
-			addWalkwayAdj(currCell, Direction.UP);
-			addWalkwayAdj(currCell, Direction.DOWN);
-			addWalkwayAdj(currCell, Direction.LEFT);
-		}
-
-		// Else add all surrounding cells to adjList
-		else {
-
-			addWalkwayAdj(currCell, Direction.UP);
-			addWalkwayAdj(currCell, Direction.DOWN);
-
-			addWalkwayAdj(currCell, Direction.RIGHT);
-			addWalkwayAdj(currCell, Direction.LEFT);
-		}
-		} catch (Exception e) {
-			System.out.println("Row = " + row + " Col = " + col);
-			System.out.println(e);
 		}
 	}
 

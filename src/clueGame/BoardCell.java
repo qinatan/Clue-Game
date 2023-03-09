@@ -104,10 +104,7 @@ public class BoardCell {
 	}
 
 	public void setCellSymbol(String cellSymbol) {
-		//System.out.println(this.toString()) ; 
-
 		this.cellSymbol = cellSymbol.charAt(0);
-		//System.out.println(this.cellSymbol);
 	}
 
 	public Boolean isLabel() {
@@ -132,7 +129,6 @@ public class BoardCell {
 	
 	//adds it to the adj list. 
 	void addAdjacency (BoardCell cell) {
-		//System.out.println("here") ;
 		adjList.add(cell);
 	}
 	
@@ -142,7 +138,7 @@ public class BoardCell {
 		
 		return "BoardCell [rowNum=" + rowNum + ", columnNum=" + columnNum
 				 + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
-				+ "]";
+				+ ", secretPassage= " + secretPassage + "]";
 	}
 
 	public Set<BoardCell> getAdjList() {

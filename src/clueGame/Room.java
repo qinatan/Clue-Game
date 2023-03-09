@@ -18,9 +18,6 @@ public class Room {
 	private Room passageRoom ; 
 	
 	
-	
-	
-
 	public Room getPassageRoom() {
 		return passageRoom;
 	}
@@ -38,8 +35,6 @@ public class Room {
 	}
 	
 	
-	
-
 	public void setCenterCell(BoardCell centerCell) {
 		this.centerCell = centerCell;
 	}

@@ -216,7 +216,7 @@ public class Board {
 	}
 
 	// Processes Walkways ONLY 
-	private void addCell(BoardCell cell, Direction direction) {
+	private void addWalkwayAdj(BoardCell cell, Direction direction) {
 
 		switch (direction) {
 		case RIGHT:
@@ -329,63 +329,63 @@ public class Board {
 			// if yes, check if on left edge
 			if (col == 0) {
 
-				addCell(currCell, Direction.RIGHT); // This is probably bad practice but I think it will work
-				addCell(currCell, Direction.DOWN);
+				addWalkwayAdj(currCell, Direction.RIGHT); // This is probably bad practice but I think it will work
+				addWalkwayAdj(currCell, Direction.DOWN);
 			}
 			// check if on right edge
 			else if (col == COLS - 1) {
-				addCell(currCell, Direction.LEFT);
-				addCell(currCell, Direction.DOWN);
+				addWalkwayAdj(currCell, Direction.LEFT);
+				addWalkwayAdj(currCell, Direction.DOWN);
 			}
 			// otherwise, the normal top edge case
 			else if (col != COLS - 1 && col != 0) {
-				addCell(currCell, Direction.RIGHT);
-				addCell(currCell, Direction.LEFT);
-				addCell(currCell, Direction.DOWN);
+				addWalkwayAdj(currCell, Direction.RIGHT);
+				addWalkwayAdj(currCell, Direction.LEFT);
+				addWalkwayAdj(currCell, Direction.DOWN);
 			}
 		}
 		// check if on bottom edge
 		else if (row == ROWS - 1) {
 			// if yes, check if on left
 			if (col == 0) {
-				addCell(currCell, Direction.UP);
-				addCell(currCell, Direction.RIGHT);
+				addWalkwayAdj(currCell, Direction.UP);
+				addWalkwayAdj(currCell, Direction.RIGHT);
 			}
 			// check if on right edge
 			if (col == ROWS - 1) {
-				addCell(currCell, Direction.UP);
-				addCell(currCell, Direction.LEFT);
+				addWalkwayAdj(currCell, Direction.UP);
+				addWalkwayAdj(currCell, Direction.LEFT);
 			}
 			// Else normal bottom edge case
 			else if (col != 0) {
-				addCell(currCell, Direction.UP);
-				addCell(currCell, Direction.LEFT);
-				addCell(currCell, Direction.RIGHT);
+				addWalkwayAdj(currCell, Direction.UP);
+				addWalkwayAdj(currCell, Direction.LEFT);
+				addWalkwayAdj(currCell, Direction.RIGHT);
 			}
 		}
 
 		// Check if on left edge
 		else if (col == 0) {
-			addCell(currCell, Direction.UP);
-			addCell(currCell, Direction.DOWN);
-			addCell(currCell, Direction.RIGHT);
+			addWalkwayAdj(currCell, Direction.UP);
+			addWalkwayAdj(currCell, Direction.DOWN);
+			addWalkwayAdj(currCell, Direction.RIGHT);
 		}
 
 		// Check if on right edge
 		else if (col == COLS - 1) {
-			addCell(currCell, Direction.UP);
-			addCell(currCell, Direction.DOWN);
-			addCell(currCell, Direction.LEFT);
+			addWalkwayAdj(currCell, Direction.UP);
+			addWalkwayAdj(currCell, Direction.DOWN);
+			addWalkwayAdj(currCell, Direction.LEFT);
 		}
 
 		// Else add all surrounding cells to adjList
 		else {
 
-			addCell(currCell, Direction.UP);
-			addCell(currCell, Direction.DOWN);
+			addWalkwayAdj(currCell, Direction.UP);
+			addWalkwayAdj(currCell, Direction.DOWN);
 
-			addCell(currCell, Direction.RIGHT);
-			addCell(currCell, Direction.LEFT);
+			addWalkwayAdj(currCell, Direction.RIGHT);
+			addWalkwayAdj(currCell, Direction.LEFT);
 		}
 		} catch (Exception e) {
 			System.out.println("Row = " + row + " Col = " + col);

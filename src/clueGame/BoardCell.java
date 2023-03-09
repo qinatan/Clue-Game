@@ -103,7 +103,10 @@ public class BoardCell {
 	}
 
 	public void setCellSymbol(String cellSymbol) {
+		System.out.println(this.toString()) ; 
+
 		this.cellSymbol = cellSymbol.charAt(0);
+		System.out.println(this.cellSymbol);
 	}
 
 	public Boolean isLabel() {

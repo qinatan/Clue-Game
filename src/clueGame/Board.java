@@ -25,7 +25,8 @@ public class Board {
 	private int COLS; // TODO: we should clean this up, the variables don't work as finals but should
 						// be?
 	private int ROWS; // TODO: Same thing
-	private BoardCell[][] grid = new BoardCell[ROWS][COLS];
+	private BoardCell[][] grid ;
+	//private BoardCell[][] grid = new BoardCell[ROWS][COLS];
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
@@ -70,7 +71,11 @@ public class Board {
 	}
 
 	public Room getRoom(BoardCell cell) {
+		
 		Character symbol = cell.getCellSymbol();
+		System.out.println(cell.toString() );
+		//System.out.println(cell.is() );
+		System.out.println(symbol );
 		Room room = getRoom(symbol);
 		return room;
 	}
@@ -138,14 +143,14 @@ public class Board {
 
 		ROWS = rows;
 		COLS = firstRowCols;
-		System.out.println(COLS);
-		System.out.println(ROWS);
+		//System.out.println(COLS);
+		//System.out.println(ROWS);
 		myReader.close();
 
 		// Build grid of empty BoardCells
 		grid = new BoardCell[ROWS][COLS];
-		for (int col = 0; col < COLS; col++) {
-			for (int row = 0; row < ROWS; row++) {
+		for (int col = 0; col < COLS  ; col++) {
+			for (int row = 0; row < ROWS  ; row++) {
 				grid[row][col] = new BoardCell(row, col);
 			}
 		}
@@ -156,8 +161,9 @@ public class Board {
 		while (myReader2.hasNextLine()) {
 			String line = myReader2.nextLine();
 			String[] result = line.split(",");
-			for (int col = 0; col < result.length; col++) {
+			for (int col = 0; col < COLS ; col++) {
 				// sets BoardCell symbol for each BoardCell
+				//System.out.println(row + " " + col);
 				grid[row][col].setCellSymbol(result[col]);
 				// Checks for bad config file
 				if (!roomMap.containsKey(result[col].charAt(0))) {
@@ -182,8 +188,8 @@ public class Board {
 
 			row++;
 		}
-		for (int i = 0; i < COLS; i++) {
-			for (int j = 0; j < ROWS; j++) {
+		for (int i = 0; i < COLS -1; i++) {
+			for (int j = 0; j < ROWS -1; j++) {
 				adjMtx.put(grid[j][i], grid[j][i].getAdjList());
 			}
 		}
@@ -336,26 +342,26 @@ public class Board {
 				addCell(currCell, DoorDirection.DOWN);
 			}
 			// check if on right edge
-			else if (col == COLS) {
+			else if (col == COLS -1) {
 				addCell(currCell, DoorDirection.LEFT);
 				addCell(currCell, DoorDirection.DOWN);
 			}
 			// otherwise, the normal top edge case
-			else if (col != COLS && col != 0) {
+			else if (col != COLS -1 && col != 0) {
 				addCell(currCell, DoorDirection.RIGHT);
 				addCell(currCell, DoorDirection.LEFT);
 				addCell(currCell, DoorDirection.DOWN);
 			}
 		}
 		// check if on bottom edge
-		else if (row == ROWS) {
+		else if (row == ROWS -1) {
 			// if yes, check if on left
 			if (col == 0) {
 				addCell(currCell, DoorDirection.UP);
 				addCell(currCell, DoorDirection.RIGHT);
 			}
 			// check if on right edge
-			if (col == ROWS) {
+			if (col == ROWS -1) {
 				addCell(currCell, DoorDirection.UP);
 				addCell(currCell, DoorDirection.LEFT);
 			}
@@ -375,7 +381,7 @@ public class Board {
 		}
 
 		// Check if on right edge
-		else if (col == COLS) {
+		else if (col == COLS -1) {
 			//System.out.println(currCell.toString());
 			addCell(currCell, DoorDirection.UP);
 			addCell(currCell, DoorDirection.DOWN);

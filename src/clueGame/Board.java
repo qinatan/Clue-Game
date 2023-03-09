@@ -167,12 +167,9 @@ public class Board {
 							"Letter found in config file that is not a known room: " + result[col].charAt(0));
 				}
 
-				// sets cell to "room" if not a walkway or unused square,
-				if (!result[col].equals("X") && !result[col].equals("W")) {
-					grid[row][col].setIsRoom(true);
-				} 
+				
 
-				addRoomCellAdj(row, result, col); // Sets if its a door, a room, or a room center cell
+				gridCellClassifier(row, result, col); // Sets if its a door, a room, or a room center cell
 
 			}
 
@@ -187,34 +184,47 @@ public class Board {
 		}
 	}
 
-	// Helper Function to clean up the code
-	// Sets
-	private void addRoomCellAdj(int row, String[] result, int col) {
-
+	
+	// Takes in all cells on grid, and sets their appropriate properties
+	// e.g. Takes in a room cell, sets isRoom = true
+	private void gridCellClassifier(int row, String[] result, int col) {
+		
+		// sets cell to "room" if not a walkway or unused square,
+		if (!result[col].equals("X") && !result[col].equals("W")) {
+			grid[row][col].setIsRoom(true);
+		} 
+		
+		// Door, Secret Passage, Room Center Cell, Room Label
 		if (result[col].length() == 2) {
-
+			// Doorway found
 			if (result[col].charAt(0) == 'W') {
 				grid[row][col].setIsDoor(true);
 				// Set door direction
 				grid[row][col].setDoorDirection(result[col].charAt(1));
-			} else if (result[col].charAt(1) == '#') {
+			} 
+			// Room Label found
+			else if (result[col].charAt(1) == '#') {
 				grid[row][col].setIsLabel(true);
 				// Set this cell to the Room's labelCell
 				Room room = roomMap.get(result[col].charAt(0));
 				room.setLabelCell(grid[row][col]);
-			} else if (result[col].charAt(1) == '*') {
+			} 
+			// Center Cell Label Found
+			else if (result[col].charAt(1) == '*') {
 				grid[row][col].setIsRoomCenterCell(true);
 				// Set this cell to the Room's centerCell
 				Room room = roomMap.get(result[col].charAt(0));
 				room.setCenterCell(grid[row][col]);
 
-			} else {
+			} 
+			// Secret Passageway found
+			else {
 				grid[row][col].setSecretPassage(result[col].charAt(1));
 			}
 
 		}
 	}
-
+	// Helper function for setAdjList
 	// Processes Walkways ONLY 
 	private void addWalkwayAdj(BoardCell cell, Direction direction) {
 

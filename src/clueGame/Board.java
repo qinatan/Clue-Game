@@ -179,8 +179,8 @@ public class Board {
 			row++;
 		}
 
-		for (int i = 0; i < ROWS - 1; i++) {
-			for (int j = 0; j < COLS -1 ; j++) {
+		for (int i = 0; i < ROWS -1; i++) {
+			for (int j = 0; j < COLS -1; j++) {
 				setAdjList(i, j); // Sets the adjList for the current Cell
 				adjMtx.put(grid[i][j], grid[i][j].getAdjList());
 			}
@@ -215,7 +215,8 @@ public class Board {
 		}
 	}
 
-	private void addCell(BoardCell cell, DoorDirection direction) {
+	// Processes Walkways ONLY 
+	private void addCell(BoardCell cell, Direction direction) {
 
 		switch (direction) {
 		case RIGHT:
@@ -328,63 +329,63 @@ public class Board {
 			// if yes, check if on left edge
 			if (col == 0) {
 
-				addCell(currCell, DoorDirection.RIGHT); // This is probably bad practice but I think it will work
-				addCell(currCell, DoorDirection.DOWN);
+				addCell(currCell, Direction.RIGHT); // This is probably bad practice but I think it will work
+				addCell(currCell, Direction.DOWN);
 			}
 			// check if on right edge
 			else if (col == COLS - 1) {
-				addCell(currCell, DoorDirection.LEFT);
-				addCell(currCell, DoorDirection.DOWN);
+				addCell(currCell, Direction.LEFT);
+				addCell(currCell, Direction.DOWN);
 			}
 			// otherwise, the normal top edge case
 			else if (col != COLS - 1 && col != 0) {
-				addCell(currCell, DoorDirection.RIGHT);
-				addCell(currCell, DoorDirection.LEFT);
-				addCell(currCell, DoorDirection.DOWN);
+				addCell(currCell, Direction.RIGHT);
+				addCell(currCell, Direction.LEFT);
+				addCell(currCell, Direction.DOWN);
 			}
 		}
 		// check if on bottom edge
 		else if (row == ROWS - 1) {
 			// if yes, check if on left
 			if (col == 0) {
-				addCell(currCell, DoorDirection.UP);
-				addCell(currCell, DoorDirection.RIGHT);
+				addCell(currCell, Direction.UP);
+				addCell(currCell, Direction.RIGHT);
 			}
 			// check if on right edge
 			if (col == ROWS - 1) {
-				addCell(currCell, DoorDirection.UP);
-				addCell(currCell, DoorDirection.LEFT);
+				addCell(currCell, Direction.UP);
+				addCell(currCell, Direction.LEFT);
 			}
 			// Else normal bottom edge case
 			else if (col != 0) {
-				addCell(currCell, DoorDirection.UP);
-				addCell(currCell, DoorDirection.LEFT);
-				addCell(currCell, DoorDirection.RIGHT);
+				addCell(currCell, Direction.UP);
+				addCell(currCell, Direction.LEFT);
+				addCell(currCell, Direction.RIGHT);
 			}
 		}
 
 		// Check if on left edge
 		else if (col == 0) {
-			addCell(currCell, DoorDirection.UP);
-			addCell(currCell, DoorDirection.DOWN);
-			addCell(currCell, DoorDirection.RIGHT);
+			addCell(currCell, Direction.UP);
+			addCell(currCell, Direction.DOWN);
+			addCell(currCell, Direction.RIGHT);
 		}
 
 		// Check if on right edge
 		else if (col == COLS - 1) {
-			addCell(currCell, DoorDirection.UP);
-			addCell(currCell, DoorDirection.DOWN);
-			addCell(currCell, DoorDirection.LEFT);
+			addCell(currCell, Direction.UP);
+			addCell(currCell, Direction.DOWN);
+			addCell(currCell, Direction.LEFT);
 		}
 
 		// Else add all surrounding cells to adjList
 		else {
 
-			addCell(currCell, DoorDirection.UP);
-			addCell(currCell, DoorDirection.DOWN);
+			addCell(currCell, Direction.UP);
+			addCell(currCell, Direction.DOWN);
 
-			addCell(currCell, DoorDirection.RIGHT);
-			addCell(currCell, DoorDirection.LEFT);
+			addCell(currCell, Direction.RIGHT);
+			addCell(currCell, Direction.LEFT);
 		}
 		} catch (Exception e) {
 			System.out.println("Row = " + row + " Col = " + col);

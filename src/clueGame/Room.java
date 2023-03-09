@@ -14,6 +14,31 @@ public class Room {
 	private char Symbol;
 	BoardCell labelCell;
 	BoardCell centerCell;
+	private boolean hasSecretPassage ; 
+	private Room passageRoom ; 
+	
+	
+	
+	
+
+	public Room getPassageRoom() {
+		return passageRoom;
+	}
+
+	public void setPassageRoom(Room passageRoom) {
+		this.passageRoom = passageRoom;
+	}
+
+	public boolean isHasSecretPassage() {
+		return hasSecretPassage;
+	}
+
+	public void setHasSecretPassage(boolean hasSecretPassage) {
+		this.hasSecretPassage = hasSecretPassage;
+	}
+	
+	
+	
 
 	public void setCenterCell(BoardCell centerCell) {
 		this.centerCell = centerCell;

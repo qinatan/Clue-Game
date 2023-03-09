@@ -1,6 +1,8 @@
 package clueGame;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import experiment.TestBoardCell;
 
@@ -33,7 +35,7 @@ public class BoardCell {
 	}
 
 	private int columnNum;
-	private ArrayList<BoardCell> adjList = new ArrayList<BoardCell>();
+	private Set<BoardCell> adjList = new HashSet<BoardCell>();
 	private Boolean isRoom = false;
 	private Boolean isOccupied = false;
 	private Boolean isDoorway = false;
@@ -88,7 +90,7 @@ public class BoardCell {
 		this.secretPassage = secretPassage;
 	}
 
-	public Boolean IsRoom() {
+	public Boolean isRoom() {
 		return isRoom;
 	}
 
@@ -126,17 +128,20 @@ public class BoardCell {
 	
 	//adds it to the adj list. 
 	void addAdjacency (BoardCell cell) {
+		//System.out.println("here") ;
 		adjList.add(cell);
 	}
 	
 	@Override
 	public String toString() {
-		return "BoardCell [doorDirection=" + doorDirection + ", rowNum=" + rowNum + ", columnNum=" + columnNum
-				+ ", adjList=" + adjList + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
-				+ "]";
+		return "rowNum: "+ rowNum + "columnNum: " + columnNum ; 
+		
+		//return "BoardCell [doorDirection=" + doorDirection + ", rowNum=" + rowNum + ", columnNum=" + columnNum
+		//		+ ", adjList=" + adjList + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
+		//		+ "]";
 	}
 
-	public ArrayList<BoardCell> getAdjList() {
+	public Set<BoardCell> getAdjList() {
 		return adjList;
 	}
 

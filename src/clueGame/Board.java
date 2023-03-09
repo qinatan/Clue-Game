@@ -26,13 +26,12 @@ public class Board {
 						// be?
 	private int ROWS; // TODO: Same thing
 	private BoardCell[][] grid = new BoardCell[ROWS][COLS];
-	private Map<BoardCell, ArrayList<BoardCell>> adjMtx = new HashMap<BoardCell, ArrayList<BoardCell>>();
+	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
 	private String setupConfig;
-	
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -136,8 +135,11 @@ public class Board {
 			}
 			rows++;
 		}
+
 		ROWS = rows;
 		COLS = firstRowCols;
+		System.out.println(COLS);
+		System.out.println(ROWS);
 		myReader.close();
 
 		// Build grid of empty BoardCells
@@ -164,23 +166,31 @@ public class Board {
 				}
 
 				// sets cell to "room" if not a walkway or unused square,
-				if (result[col] != "X" && result[col] != "W") {
+				if (!result[col].equals("X") && !result[col].equals("W")) {
 					grid[row][col].setIsRoom(true);
+				} else {
+				//	System.out.println("XXXXX");
 				}
 
 				setDoorRoomCenter(row, result, col); // Sets if its a door, a room, or a room center cell
-
-				setAdjList(row, result, col); // Sets the adjList for the current Cell
 				
-				adjMtx.put(grid[row][col], grid[row][col].getAdjList()); //Copied from the TestBoard to populate the adjMatrix
+				setAdjList(row, result, col); // Sets the adjList for the current Cell
+
+				//adjMtx.put(grid[row][col], grid[row][col].getAdjList()); // Copied from the TestBoard to populate the
+																			// adjMatrix
 			}
 
 			row++;
 		}
-
+		for (int i = 0; i < COLS; i++) {
+			for (int j = 0; j < ROWS; j++) {
+				adjMtx.put(grid[j][i], grid[j][i].getAdjList());
+			}
+		}
 	}
 
 	// Helper Function to clean up the code
+	// Sets
 	private void setDoorRoomCenter(int row, String[] result, int col) {
 		if (result[col].length() == 2) {
 
@@ -206,93 +216,123 @@ public class Board {
 		}
 	}
 
-	/*
-	 * private Boolean onlyWalkway () { //I don't know if I need this
-	 * 
-	 * }
-	 */
-	
-	
 	private void addCell(BoardCell cell, DoorDirection direction) {
-		/*
-		 * switch (direction) { case RIGHT: BoardCell adjCell =
-		 * grid[cell.getRowNum()][cell.getColumnNum() + 1];
-		 * 
-		 * //only walkways and roomcenters get adjacincys if (cell.getCellSymbol() ==
-		 * 'W' || cell.isRoomCenter()) { //isSectect passage boolean should be added and
-		 * then the check for it should be added here if (cell.getCellSymbol() == 'W' &&
-		 * adjCell.getCellSymbol() == 'W') { //Both walkway case
-		 * cell.addAdjacency(adjCell); } else if (cell.isRoomCenter()) { //roomCenter
-		 * case // add all the doors } else { return; }
-		 * 
-		 * if (cell.isDoorway()) { //The roomcenters need to be added } } else { return
-		 * ; //These are not cells that should have adjLists }
-		 * 
-		 * 
-		 * break; case LEFT: BoardCell adjCellLeft =
-		 * grid[cell.getRowNum()][cell.getColumnNum() - 1];
-		 * 
-		 * //only walkways and roomcenters get adjacincys if (cell.getCellSymbol() ==
-		 * 'W' || cell.isRoomCenter()) { //isSectect passage boolean should be added and
-		 * then the check for it should be added here if (cell.getCellSymbol() == 'W' &&
-		 * adjCellLeft.getCellSymbol() == 'W') { //Both walkway case
-		 * cell.addAdjacency(adjCellLeft); } else if (cell.isRoomCenter()) {
-		 * //roomCenter case // add all the doors } else { return; }
-		 * 
-		 * if (cell.isDoorway()) { //The roomcenters need to be added } } else { return
-		 * ; //These are not cells that should have adjLists }
-		 * 
-		 * break; case UP: BoardCell adjCellUp =
-		 * grid[cell.getRowNum()-1][cell.getColumnNum()];
-		 * 
-		 * //only walkways and roomcenters get adjacincys if (cell.getCellSymbol() ==
-		 * 'W' || cell.isRoomCenter()) { //isSectect passage boolean should be added and
-		 * then the check for it should be added here if (cell.getCellSymbol() == 'W' &&
-		 * adjCellUp.getCellSymbol() == 'W') { //Both walkway case
-		 * cell.addAdjacency(adjCellUp); } else if (cell.isRoomCenter()) { //roomCenter
-		 * case // add all the doors } else { return; }
-		 * 
-		 * if (cell.isDoorway()) { //The roomcenters need to be added } } else { return
-		 * ; //These are not cells that should have adjLists }
-		 * 
-		 * break; case DOWN: BoardCell adjCellDown = grid[cell.getRowNum() +
-		 * 1][cell.getColumnNum() ];
-		 * 
-		 * //only walkways and roomcenters get adjacincys if (cell.getCellSymbol() ==
-		 * 'W' || cell.isRoomCenter()) { //isSectect passage boolean should be added and
-		 * then the check for it should be added here if (cell.getCellSymbol() == 'W' &&
-		 * adjCellDown.getCellSymbol() == 'W') { //Both walkway case
-		 * cell.addAdjacency(adjCellDown); } else if (cell.isRoomCenter()) {
-		 * //roomCenter case // add all the doors } else { return; }
-		 * 
-		 * if (cell.isDoorway()) { //The roomcenters need to be added } } else { return
-		 * ; //These are not cells that should have adjLists }
-		 * 
-		 * break; default: return;
-		 * 
-		 * }
-		 */
+		
+		
+		switch (direction) {
+		case RIGHT:
+			BoardCell adjCell = grid[cell.getRowNum()][cell.getColumnNum() + 1];
+			
+	 
+			cell.addAdjacency(adjCell);
+			
+			break;
+		case LEFT:
+			BoardCell adjCell1 = grid[cell.getRowNum()][cell.getColumnNum() - 1];
+			cell.addAdjacency(adjCell1);
+			break;
+		case UP:
+			BoardCell adjCell2 = grid[cell.getRowNum() - 1][cell.getColumnNum()];
+			cell.addAdjacency(adjCell2);
+			break;
+		case DOWN:
+			BoardCell adjCell3 = grid[cell.getRowNum() + 1][cell.getColumnNum()];
+			cell.addAdjacency(adjCell3);
+			break;
+		default:
+			
+			break;
+
+		}
+
 	}
 
 	private void setAdjList(int row, String[] result, int col) {
-
-		// TODO: Walkways connect to adjacent walkways. ** Need to check if cell is a
-		// walkway before adding to adjList
-		// TODO: Walkways with doors will also connect to the room center the door
-		// points to.
-		// TODO: The cell that represents the Room (i.e. connects to walkway) is the
-		// cell with a second character of ‘*’ (no other cells in a room should have
-		// adjacencies).
-		// TODO: Room center cells ONLY connect to 1) door walkways that enter the room
-		// and 2) another room center cell if there is a secret passage connecting.
-
+		
 		BoardCell currCell = grid[row][col];
+
+		if (currCell.isRoom() || (currCell.getCellSymbol() == 'X')) {
+			
+			return;
+		}
+
+		// Takes in a doorway cell and adds the center of the room to the doors adjList
+		if (currCell.isDoorway()) {
+			
+			switch (currCell.getDoorDirection()) {
+			case RIGHT:
+				BoardCell roomCell = grid[currCell.getRowNum()][currCell.getColumnNum() + 1];
+				Room currRoom = roomMap.get(roomCell.getCellSymbol());
+
+				currCell.addAdjacency(currRoom.getCenterCell());
+				currRoom.getCenterCell().addAdjacency(currCell);
+				
+				if (currRoom.isHasSecretPassage()) {
+					Room nextRoom = currRoom.getPassageRoom(); 
+					
+					nextRoom.getCenterCell().addAdjacency(currCell);
+					
+				}
+				
+				break;
+			case LEFT:
+				BoardCell roomCell1 = grid[currCell.getRowNum()][currCell.getColumnNum() - 1];
+				Room currRoom1 = roomMap.get(roomCell1.getCellSymbol());
+
+				currCell.addAdjacency(currRoom1.getCenterCell());
+				currRoom1.getCenterCell().addAdjacency(currCell);
+				
+				if (currRoom1.isHasSecretPassage()) {
+					Room nextRoom = currRoom1.getPassageRoom(); 
+					
+					nextRoom.getCenterCell().addAdjacency(currCell);
+					
+				}
+				
+				break;
+			case UP:
+				BoardCell roomCell2 = grid[currCell.getRowNum() -1 ][currCell.getColumnNum() ];
+				Room currRoom2 = roomMap.get(roomCell2.getCellSymbol());
+
+				currCell.addAdjacency(currRoom2.getCenterCell());
+				currRoom2.getCenterCell().addAdjacency(currCell);
+				
+				if (currRoom2.isHasSecretPassage()) {
+					Room nextRoom = currRoom2.getPassageRoom(); 
+					
+					nextRoom.getCenterCell().addAdjacency(currCell);
+					
+				}
+				break;
+			case DOWN:
+				BoardCell roomCell3 = grid[currCell.getRowNum() + 1][currCell.getColumnNum()];
+				Room currRoom3 = roomMap.get(roomCell3.getCellSymbol());
+
+				currCell.addAdjacency(currRoom3.getCenterCell());
+				currRoom3.getCenterCell().addAdjacency(currCell);
+				
+				if (currRoom3.isHasSecretPassage()) {
+					Room nextRoom = currRoom3.getPassageRoom(); 
+					
+					nextRoom.getCenterCell().addAdjacency(currCell);
+					
+				}
+				break;
+			default:
+				return ; 
+			}
+
+
+		}
+
+
 		// Check if on top edge
 		if (row == 0) {
+			
 			// if yes, check if on left edge
 			if (col == 0) {
 
-				addCell(currCell, DoorDirection.RIGHT); //This is probably bad practice but I think it will work
+				addCell(currCell, DoorDirection.RIGHT); // This is probably bad practice but I think it will work
 				addCell(currCell, DoorDirection.DOWN);
 			}
 			// check if on right edge
@@ -301,7 +341,7 @@ public class Board {
 				addCell(currCell, DoorDirection.DOWN);
 			}
 			// otherwise, the normal top edge case
-			else if (col != 3 && col != 0) {
+			else if (col != COLS && col != 0) {
 				addCell(currCell, DoorDirection.RIGHT);
 				addCell(currCell, DoorDirection.LEFT);
 				addCell(currCell, DoorDirection.DOWN);
@@ -336,6 +376,7 @@ public class Board {
 
 		// Check if on right edge
 		else if (col == COLS) {
+			//System.out.println(currCell.toString());
 			addCell(currCell, DoorDirection.UP);
 			addCell(currCell, DoorDirection.DOWN);
 			addCell(currCell, DoorDirection.LEFT);
@@ -343,8 +384,10 @@ public class Board {
 
 		// Else add all surrounding cells to adjList
 		else {
+			
 			addCell(currCell, DoorDirection.UP);
 			addCell(currCell, DoorDirection.DOWN);
+			
 			addCell(currCell, DoorDirection.RIGHT);
 			addCell(currCell, DoorDirection.LEFT);
 		}
@@ -359,9 +402,9 @@ public class Board {
 	public Set<BoardCell> getAdjList(int i, int j) {
 		// TODO Change this method. This is incorrect just to make the Junit test not
 		// have errors
-
-		targetsSet.add(getCell(i, j));
-		return targetsSet;
+		BoardCell tempCell = grid[i][j]; 
+		
+		return tempCell.getAdjList();
 	}
 
 	public Set<BoardCell> getTargets() {

@@ -172,7 +172,7 @@ public class Board {
 					grid[row][col].setIsRoom(true);
 				} 
 
-				setDoorRoomCenter(row, result, col); // Sets if its a door, a room, or a room center cell
+				addRoomCellAdj(row, result, col); // Sets if its a door, a room, or a room center cell
 
 			}
 
@@ -189,7 +189,7 @@ public class Board {
 
 	// Helper Function to clean up the code
 	// Sets
-	private void setDoorRoomCenter(int row, String[] result, int col) {
+	private void addRoomCellAdj(int row, String[] result, int col) {
 
 		if (result[col].length() == 2) {
 

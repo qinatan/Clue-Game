@@ -15,15 +15,19 @@ public class Room {
 	BoardCell labelCell;
 	BoardCell centerCell;
 	private boolean hasSecretPassage ; 
-	private Room passageRoom ; 
+	private Character passageRoom ; 
 	
 	
-	public Room getPassageRoom() {
+	public Character getPassageRoom() {
 		return passageRoom;
 	}
 
-	public void setPassageRoom(Room passageRoom) {
+	public void setPassageRoom(Character passageRoom) {
 		this.passageRoom = passageRoom;
+	}
+	
+	public void setPassageRoom(char charAt) {
+		passageRoom = charAt;
 	}
 
 	public boolean isHasSecretPassage() {
@@ -68,7 +72,8 @@ public class Room {
 
 	@Override
 	public String toString() {
-		return Name;
+		String string = "Name = " + Name + "passageRoom= " + passageRoom.toString();
+		return string;
 	}
 
 }

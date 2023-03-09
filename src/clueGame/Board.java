@@ -218,13 +218,15 @@ public class Board {
 				room.setCenterCell(grid[row][col]);
 
 			} 
-			// Secret Passageway found
+			// Secret Passageway found. Add secretPassageway Destination Char to Room object
 			else {
+				// Sets current cell's passageway variable
 				grid[row][col].setSecretPassage(result[col].charAt(1));
-				Room room = roomMap.get(result[col].charAt(1));
-				room.setHasSecretPassage(true);
+				// Sets current rooms passageway variable
+				Room currRoom = roomMap.get(result[col].charAt(0));
+				currRoom.setHasSecretPassage(true);
 				// Sets the rooms passage room to the destination of the secret Passage 
-				room.setPassageRoom(roomMap.get(grid[row][col].getSecretPassage()));
+				currRoom.setPassageRoom(result[col].charAt(1));
 			}
 
 		}
@@ -313,8 +315,8 @@ public class Board {
 		if (currCell.isRoomCenter()) {
 			Room currRoom = roomMap.get(currCell.getCellSymbol());
 			if (currRoom.isHasSecretPassage()) {
-				Room nextRoom = currRoom.getPassageRoom();
-				currCell.addAdjacency(nextRoom.centerCell);
+				Character nextRoomChar = currRoom.getPassageRoom();
+				currCell.addAdjacency(roomMap.get(nextRoomChar).centerCell);
 		}
 		
 		if (!currCell.isRoom()) {
@@ -389,7 +391,6 @@ public class Board {
 	 * for (int row = 0; row < ROWS; row++) { adjMtx.put(grid[row][col],
 	 * grid[row][col].getAdjList()); } }
 	 */
-
 	public Set<BoardCell> getAdjList(int i, int j) {
 		// TODO Change this method. This is incorrect just to make the Junit test not
 		// have errors
@@ -408,7 +409,6 @@ public class Board {
 	}
 
 	public void calcTargets(BoardCell cell, int i) {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -1,10 +1,10 @@
 package clueGame;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 
+@SuppressWarnings("serial")
 public class BadConfigFormatException extends Exception {
 	public BadConfigFormatException (String errorMessage) {
 		super(errorMessage);

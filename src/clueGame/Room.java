@@ -1,22 +1,50 @@
 package clueGame;
 
+
+/**
+ * BoardCell
+ * @author michaeleack 
+ * @author johnOmalley
+ * Date: 3/7/23
+ * Collaborators:
+ * Sources: 
+ */
 public class Room {
 	private String Name;
 	private char Symbol;
-	BoardCell labelCell;
-	BoardCell centerCell;
+	private BoardCell labelCell;
+	private BoardCell centerCell;
+	private boolean hasSecretPassage ; 
+	private Character passageRoom ; 
+	
+	
+	public Character getPassageRoom() {
+		return passageRoom;
+	}
 
+	public void setPassageRoom(Character passageRoom) {
+		this.passageRoom = passageRoom;
+	}
+	
+	public void setPassageRoom(char charAt) {
+		passageRoom = charAt;
+	}
+
+	public boolean isHasSecretPassage() {
+		return hasSecretPassage;
+	}
+
+	public void setHasSecretPassage(boolean hasSecretPassage) {
+		this.hasSecretPassage = hasSecretPassage;
+	}
+	
+	
 	public void setCenterCell(BoardCell centerCell) {
 		this.centerCell = centerCell;
 	}
 
 	public void setLabelCell(BoardCell labelCell) {
 		this.labelCell = labelCell;
-	}
-
-	@Override
-	public String toString() {
-		return Name;
 	}
 
 	public Room(String name, char symbol) {
@@ -39,6 +67,13 @@ public class Room {
 
 	public char getSymbol() {
 		return Symbol;
+	}
+	
+
+	@Override
+	public String toString() {
+		String string = "Name = " + Name + "passageRoom= " + passageRoom.toString();
+		return string;
 	}
 
 }

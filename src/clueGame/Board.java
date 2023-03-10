@@ -6,25 +6,24 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import clueGame.BoardCell;
-import clueGame.Room;
-import experiment.TestBoardCell;
 
 import java.io.*;
 
+/**
+ * BoardCell
+ * 
+ * @author michaeleack
+ * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
+ */
 public class Board {
-	/*
-	 * variable and methods used for singleton pattern
-	 */
 	private static Board theInstance = new Board();
-
-	private int COLS;
-	private int ROWS;
-	private BoardCell[][] grid = new BoardCell[ROWS][COLS];
-	private Map<BoardCell, ArrayList<BoardCell>> adjMtx = new HashMap<BoardCell, ArrayList<BoardCell>>();
+	private int COLS; 
+	private int ROWS; 
+	private BoardCell[][] grid;
+	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
-	private Map<Character, Room> RoomMap = new HashMap<Character, Room>();
+	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
 	private String setupConfig;
 
@@ -60,7 +59,7 @@ public class Board {
 	}
 
 	public Room getRoom(char c) {
-		Room room = RoomMap.get(c);
+		Room room = roomMap.get(c);
 		return room;
 	}
 
@@ -83,10 +82,12 @@ public class Board {
 		return BoardCell;
 	}
 
+	// Reads in setUp Config file, creating the Room Objects, & populating the
+	// roomMap
 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		File setupFile = new File(setupConfig);
 		Scanner myReader = new Scanner(setupFile);
-		int lineNum = 0; 
+		int lineNum = 0;
 		while (myReader.hasNextLine()) {
 			String line = myReader.nextLine();
 			// Check for comments
@@ -98,17 +99,32 @@ public class Board {
 				String[] result = line.split(", ");
 				String resultZero = result[0];
 				if (!resultZero.equals("Room") && !resultZero.equals("Space")) {
-					throw new BadConfigFormatException("Error in setup file on line: " + lineNum );
+					myReader.close();
+					throw new BadConfigFormatException("Error in setup file on line: " + lineNum);
 				}
+				// Populates roomMap
 				Character roomSymbol = result[2].charAt(0);
+				// Creates a new room for each line of setup file
 				Room room = new Room(result[1], roomSymbol);
-				RoomMap.put(roomSymbol, room);
+
+				// Adds each room to roomMap
+				roomMap.put(roomSymbol, room);
 			}
 			lineNum++;
 		}
 		myReader.close();
 	}
 
+	/**
+	 * loadLayoutConfig() Performs 4 Major Functions: 1. Reads in the layout file to
+	 * determine board size 2. Reads in the layout file to build the grid of
+	 * boardCell objects 3. Runs each cell through the gridCellClassified function
+	 * to set boardCell specific variables 4. Creates the adjacency list for each
+	 * cell based on the boardCell variables
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws BadConfigFormatException
+	 */
 	public void loadLayoutConfig() throws FileNotFoundException, BadConfigFormatException {
 		// reads in file once to find numRows, numColumns
 		File layoutFile = new File(layoutConfig);
@@ -125,6 +141,7 @@ public class Board {
 				String[] result = line.split(",");
 				int curRowCols = result.length;
 				if (curRowCols != firstRowCols) {
+					myReader.close();
 					throw new BadConfigFormatException("Bad Config File found. Inconsistent number of columns.");
 				}
 			}
@@ -132,9 +149,10 @@ public class Board {
 		}
 		ROWS = rows;
 		COLS = firstRowCols;
+
 		myReader.close();
 
-		// Build grid of empty BoardCells
+		// Initializes a grid[ROWS][COLS] of empty boardCells
 		grid = new BoardCell[ROWS][COLS];
 		for (int col = 0; col < COLS; col++) {
 			for (int row = 0; row < ROWS; row++) {
@@ -148,70 +166,280 @@ public class Board {
 		while (myReader2.hasNextLine()) {
 			String line = myReader2.nextLine();
 			String[] result = line.split(",");
-			for (int col = 0; col < result.length; col++) {
-				// sets BoardCell symbol for each BoardCell
+			for (int col = 0; col < COLS; col++) {
 				grid[row][col].setCellSymbol(result[col]);
 				// Checks for bad config file
-				if (!RoomMap.containsKey(result[col].charAt(0))) {
+				if (!roomMap.containsKey(result[col].charAt(0))) {
+					myReader2.close();
 					throw new BadConfigFormatException(
 							"Letter found in config file that is not a known room: " + result[col].charAt(0));
 				}
 
-				// sets cell to "room" if not a walkway or unused square,
-				if (result[col] != "X" && result[col] != "W") {
-					grid[row][col].setIsRoom(true);
-				}
-
-				if (result[col].length() == 2) {
-					
-					if (result[col].charAt(0) == 'W') {
-						grid[row][col].setIsDoor(true);
-						// Set door direction
-						//System.out.println(row + " " + col);
-						grid[row][col].setDoorDirection(result[col].charAt(1));
-					} else if (result[col].charAt(1) == '#') {
-						grid[row][col].setIsLabel(true);
-						// Set this cell to the Room's labelCell
-						Room room = RoomMap.get(result[col].charAt(0));
-						room.setLabelCell(grid[row][col]);
-					} else if (result[col].charAt(1) == '*') {
-						grid[row][col].setIsRoomCenterCell(true);
-						// Set this cell to the Room's centerCell
-						Room room = RoomMap.get(result[col].charAt(0));
-						room.setCenterCell(grid[row][col]);
-						
-					} else {
-						grid[row][col].setSecretPassage(result[col].charAt(1));
-					}
-
-				}
-
+				// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
+				// isSecretPassageway, isRoomLabel
+				gridCellClassifier(row, result, col);
 			}
+
 			row++;
 		}
-		 
+		myReader2.close();
+
+		// Creates adjacency matrix for the entire board
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				setAdjList(i, j); // Sets the adjList for the current Cell
+				adjMtx.put(grid[i][j], grid[i][j].getAdjList());
+			}
+		}
+	}
+
+	// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
+	// isSecretPassageway
+	// e.g. Takes in a room cell, sets isRoom = true
+	private void gridCellClassifier(int row, String[] result, int col) {
+		// sets cell to "room" if not a walkway or unused square,
+		if (!result[col].equals("X") && result[col].charAt(0) != 'W') {
+			grid[row][col].setIsRoom(true);
+		}
+
+		// Door, Secret Passage, Room Center Cell, Room Label
+		if (result[col].length() == 2) {
+			// Doorway found
+			if (result[col].charAt(0) == 'W') {
+				grid[row][col].setIsDoor(true);
+				// Set door direction
+				grid[row][col].setDoorDirection(result[col].charAt(1));
+			}
+			// Room Label found
+			else if (result[col].charAt(1) == '#') {
+				grid[row][col].setIsLabel(true);
+				// Set this cell to the Room's labelCell
+				Room room = roomMap.get(result[col].charAt(0));
+				room.setLabelCell(grid[row][col]);
+			}
+			// Center Cell Label Found
+			else if (result[col].charAt(1) == '*') {
+				grid[row][col].setIsRoomCenterCell(true);
+				// Set this cell to the Room's centerCell
+				Room room = roomMap.get(result[col].charAt(0));
+				room.setCenterCell(grid[row][col]);
+
+			}
+			// Secret Passageway found. Add secretPassageway Destination Char to Room object
+			else {
+				// Sets current cell's passageway variable
+				grid[row][col].setSecretPassage(result[col].charAt(1));
+				// Sets current rooms passageway variable
+				Room currRoom = roomMap.get(result[col].charAt(0));
+				currRoom.setHasSecretPassage(true);
+				// Sets the rooms passage room to the destination of the secret Passage
+				currRoom.setPassageRoom(result[col].charAt(1));
+			}
+
+		}
+	}
+
+	// Helper function for setAdjList
+	// Processes Walkways ONLY
+	private void addWalkwayAdj(BoardCell cell, Direction direction) {
+
+		switch (direction) {
+		case RIGHT:
+			BoardCell adjCell = grid[cell.getRowNum()][cell.getColumnNum() + 1];
+
+			if (!adjCell.isRoom() && adjCell.getCellSymbol() != 'X') {
+				cell.addAdjacency(adjCell);
+			}
+			break;
+
+		case LEFT:
+			BoardCell adjCell1 = grid[cell.getRowNum()][cell.getColumnNum() - 1];
+			if (!adjCell1.isRoom() && adjCell1.getCellSymbol() != 'X') {
+				cell.addAdjacency(adjCell1);
+			}
+			break;
+
+		case UP:
+			BoardCell adjCell2 = grid[cell.getRowNum() - 1][cell.getColumnNum()];
+			if (!adjCell2.isRoom() && !adjCell2.getCellSymbol().equals('X')) {
+				cell.addAdjacency(adjCell2);
+			}
+			break;
+
+		case DOWN:
+			BoardCell adjCell3 = grid[cell.getRowNum() + 1][cell.getColumnNum()];
+			if (!adjCell3.isRoom() && adjCell3.getCellSymbol() != 'X') {
+				cell.addAdjacency(adjCell3);
+			}
+			break;
+
+		default:
+			break;
+
+		}
+
+	}
+
+	private void setAdjList(int row, int col) {
+
+		// If unused cell: Do not create adjList for it
+		BoardCell currCell = grid[row][col];
+		if ((currCell.getCellSymbol() == 'X')) {
+			return;
+		}
+
+		// If doorway cell: adds the center of the room to the doors adjList
+		// Also adds the doorway to the centerCells adjList
+		if (currCell.isDoorway()) {
+
+			switch (currCell.getDoorDirection()) {
+			case RIGHT:
+
+				BoardCell roomCell = grid[currCell.getRowNum()][currCell.getColumnNum() + 1];
+				Room currRoom = roomMap.get(roomCell.getCellSymbol());
+				currCell.addAdjacency(currRoom.getCenterCell());
+				currRoom.getCenterCell().addAdjacency(currCell);
+
+				break;
+			case LEFT:
+				BoardCell roomCell1 = grid[currCell.getRowNum()][currCell.getColumnNum() - 1];
+				Room currRoom1 = roomMap.get(roomCell1.getCellSymbol());
+				currCell.addAdjacency(currRoom1.getCenterCell());
+				currRoom1.getCenterCell().addAdjacency(currCell);
+
+				break;
+			case UP:
+				BoardCell roomCell2 = grid[currCell.getRowNum() - 1][currCell.getColumnNum()];
+				Room currRoom2 = roomMap.get(roomCell2.getCellSymbol());
+				currCell.addAdjacency(currRoom2.getCenterCell());
+				currRoom2.getCenterCell().addAdjacency(currCell);
+
+				break;
+			case DOWN:
+				BoardCell roomCell3 = grid[currCell.getRowNum() + 1][currCell.getColumnNum()];
+				Room currRoom3 = roomMap.get(roomCell3.getCellSymbol());
+				currCell.addAdjacency(currRoom3.getCenterCell());
+				currRoom3.getCenterCell().addAdjacency(currCell);
+
+				break;
+			default:
+				return;
+			}
+		}
+
+		// Add secretPassage destination to center cell's adjList
+		if (currCell.isRoomCenter()) {
+			Room currRoom = roomMap.get(currCell.getCellSymbol());
+			if (currRoom.isHasSecretPassage()) {
+				Character nextRoomChar = currRoom.getPassageRoom();
+				currCell.addAdjacency(roomMap.get(nextRoomChar).getCenterCell());
+			}
+		}
+
+		if (!currCell.isRoom()) {
+			// Check if on top edge
+			if (row == 0) {
+
+				// if yes, check if on left edge
+				if (col == 0) {
+					addWalkwayAdj(currCell, Direction.RIGHT); // This is probably bad practice but I think it will
+																// work
+					addWalkwayAdj(currCell, Direction.DOWN);
+				}
+				// check if on right edge
+				else if (col == COLS - 1) {
+					addWalkwayAdj(currCell, Direction.LEFT);
+					addWalkwayAdj(currCell, Direction.DOWN);
+				}
+				// otherwise, the normal top edge case
+				else if (col != COLS - 1 && col != 0) {
+					addWalkwayAdj(currCell, Direction.RIGHT);
+					addWalkwayAdj(currCell, Direction.LEFT);
+					addWalkwayAdj(currCell, Direction.DOWN);
+				}
+			}
+			// check if on bottom edge
+			else if (row == ROWS - 1) {
+				// if yes, check if on left
+				if (col == 0) {
+					addWalkwayAdj(currCell, Direction.UP);
+					addWalkwayAdj(currCell, Direction.RIGHT);
+				}
+				// check if on right edge
+				if (col == ROWS - 1) {
+					addWalkwayAdj(currCell, Direction.UP);
+					addWalkwayAdj(currCell, Direction.LEFT);
+				}
+				// Else normal bottom edge case
+				else if (col != 0) {
+					addWalkwayAdj(currCell, Direction.UP);
+					addWalkwayAdj(currCell, Direction.LEFT);
+					addWalkwayAdj(currCell, Direction.RIGHT);
+				}
+			}
+
+			// Check if on left edge
+			else if (col == 0) {
+				addWalkwayAdj(currCell, Direction.UP);
+				addWalkwayAdj(currCell, Direction.DOWN);
+				addWalkwayAdj(currCell, Direction.RIGHT);
+			}
+
+			// Check if on right edge
+			else if (col == COLS - 1) {
+				addWalkwayAdj(currCell, Direction.UP);
+				addWalkwayAdj(currCell, Direction.DOWN);
+				addWalkwayAdj(currCell, Direction.LEFT);
+			}
+
+			// Else add all surrounding cells to adjList
+			else {
+				addWalkwayAdj(currCell, Direction.UP);
+				addWalkwayAdj(currCell, Direction.DOWN);
+				addWalkwayAdj(currCell, Direction.RIGHT);
+				addWalkwayAdj(currCell, Direction.LEFT);
+			}
+		}
+
 	}
 
 	public Set<BoardCell> getAdjList(int i, int j) {
-		// TODO Change this method. This is incorrect just to make the Junit test not
-		// have errors
-
-		targetsSet.add(getCell(i, j));
-		return targetsSet;
+		BoardCell tempCell = grid[i][j];
+		return tempCell.getAdjList();
 	}
 
 	public Set<BoardCell> getTargets() {
-		// TODO Change this method. This is incorrect just to make the Junit test not
-		// have errors
-		int i = 1;
-		int j = 1;
-		targetsSet.add(getCell(i, j));
 		return targetsSet;
 	}
 
-	public void calcTargets(BoardCell cell, int i) {
-		// TODO Auto-generated method stub
+	public void calcTargets(BoardCell cell, int pathLength) {
+		visitedList.clear();
+		targetsSet.clear();
+		visitedList.add(cell);
+		findAllTargets(cell, pathLength);
 
 	}
 
+	public void findAllTargets(BoardCell startCell, int pathLength) {
+		for (BoardCell adjCell : startCell.getAdjList()) {
+			if (visitedList.contains(adjCell) || adjCell.isOccupied()) {
+				continue;
+			}
+			visitedList.add(adjCell);
+			if (pathLength == 1) {
+				if (!adjCell.isOccupied()) {
+					targetsSet.add(adjCell);
+					visitedList.remove(adjCell);
+				}
+			} else {
+				if (adjCell.isRoomCenter()) {
+					targetsSet.add(adjCell);
+					visitedList.remove(adjCell);
+				} else {
+					findAllTargets(adjCell, pathLength - 1);
+					visitedList.remove(adjCell);
+				}
+			}
+		}
+	}
 }

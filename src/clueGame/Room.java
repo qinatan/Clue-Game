@@ -12,8 +12,8 @@ package clueGame;
 public class Room {
 	private String Name;
 	private char Symbol;
-	BoardCell labelCell;
-	BoardCell centerCell;
+	private BoardCell labelCell;
+	private BoardCell centerCell;
 	private boolean hasSecretPassage ; 
 	private Character passageRoom ; 
 	

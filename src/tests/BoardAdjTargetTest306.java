@@ -3,13 +3,9 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Iterator;
 import java.util.Set;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import clueGame.Board;
 import clueGame.BoardCell;
 
@@ -83,8 +79,6 @@ public class BoardAdjTargetTest306 {
 	public void testAdjacencyWalkways() {
 		// Test on bottom edge of board, just one walkway piece
 		Set<BoardCell> testList = board.getAdjList(24, 14);
-		// System.out.println(testList);
-		// System.out.println(board.getCell(24, 14).getCellSymbol());
 		assertEquals(1, testList.size());
 		assertTrue(testList.contains(board.getCell(23, 14)));
 
@@ -260,15 +254,9 @@ public class BoardAdjTargetTest306 {
 	public void testTargetsOccupied() {
 		// test a roll of 4 blocked 2 down
 		board.getCell(15, 7).setOccupied(true);
-		// System.out.println(board.getCell(15, 7));
 		board.calcTargets(board.getCell(13, 7), 4);
 		board.getCell(15, 7).setOccupied(false);
 		Set<BoardCell> targets = board.getTargets();
-
-		Iterator iter = targets.iterator();
-		while (iter.hasNext()) {
-			// System.out.println(iter.next());
-		}
 
 		assertEquals(13, targets.size());
 		assertTrue(targets.contains(board.getCell(14, 2)));

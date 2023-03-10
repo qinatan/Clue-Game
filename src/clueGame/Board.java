@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import experiment.TestBoardCell;
-
 import java.io.*;
 
 /**
@@ -18,19 +16,12 @@ import java.io.*;
  * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
  */
 public class Board {
-	/*
-	 * variable and methods used for singleton pattern All variable and method names
-	 * should use lower camelCase except static finals(consts) variables should use
-	 * descriptive names that reveal intent most of these should be private unless
-	 * we have a really good reason
-	 */
 	private static Board theInstance = new Board();
-	private int COLS; // TODO: we should clean this up, the variables don't work as finals but should
-	private int ROWS; // TODO: Same thing
+	private int COLS; 
+	private int ROWS; 
 	private BoardCell[][] grid;
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
-
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
@@ -108,6 +99,7 @@ public class Board {
 				String[] result = line.split(", ");
 				String resultZero = result[0];
 				if (!resultZero.equals("Room") && !resultZero.equals("Space")) {
+					myReader.close();
 					throw new BadConfigFormatException("Error in setup file on line: " + lineNum);
 				}
 				// Populates roomMap
@@ -123,6 +115,16 @@ public class Board {
 		myReader.close();
 	}
 
+	/**
+	 * loadLayoutConfig() Performs 4 Major Functions: 1. Reads in the layout file to
+	 * determine board size 2. Reads in the layout file to build the grid of
+	 * boardCell objects 3. Runs each cell through the gridCellClassified function
+	 * to set boardCell specific variables 4. Creates the adjacency list for each
+	 * cell based on the boardCell variables
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws BadConfigFormatException
+	 */
 	public void loadLayoutConfig() throws FileNotFoundException, BadConfigFormatException {
 		// reads in file once to find numRows, numColumns
 		File layoutFile = new File(layoutConfig);
@@ -145,13 +147,12 @@ public class Board {
 			}
 			rows++;
 		}
-
 		ROWS = rows;
 		COLS = firstRowCols;
 
 		myReader.close();
 
-		// Build grid of empty BoardCells
+		// Initializes a grid[ROWS][COLS] of empty boardCells
 		grid = new BoardCell[ROWS][COLS];
 		for (int col = 0; col < COLS; col++) {
 			for (int row = 0; row < ROWS; row++) {
@@ -166,11 +167,10 @@ public class Board {
 			String line = myReader2.nextLine();
 			String[] result = line.split(",");
 			for (int col = 0; col < COLS; col++) {
-				// sets BoardCell symbol for each BoardCell
-
 				grid[row][col].setCellSymbol(result[col]);
 				// Checks for bad config file
 				if (!roomMap.containsKey(result[col].charAt(0))) {
+					myReader2.close();
 					throw new BadConfigFormatException(
 							"Letter found in config file that is not a known room: " + result[col].charAt(0));
 				}
@@ -182,10 +182,11 @@ public class Board {
 
 			row++;
 		}
+		myReader2.close();
 
+		// Creates adjacency matrix for the entire board
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
-
 				setAdjList(i, j); // Sets the adjList for the current Cell
 				adjMtx.put(grid[i][j], grid[i][j].getAdjList());
 			}
@@ -197,9 +198,7 @@ public class Board {
 	// e.g. Takes in a room cell, sets isRoom = true
 	private void gridCellClassifier(int row, String[] result, int col) {
 		// sets cell to "room" if not a walkway or unused square,
-		// System.out.println(result[col].charAt(0)) ;
 		if (!result[col].equals("X") && result[col].charAt(0) != 'W') {
-			// System.out.println(row + " " + col);
 			grid[row][col].setIsRoom(true);
 		}
 
@@ -251,7 +250,6 @@ public class Board {
 			if (!adjCell.isRoom() && adjCell.getCellSymbol() != 'X') {
 				cell.addAdjacency(adjCell);
 			}
-
 			break;
 
 		case LEFT:
@@ -263,12 +261,6 @@ public class Board {
 
 		case UP:
 			BoardCell adjCell2 = grid[cell.getRowNum() - 1][cell.getColumnNum()];
-			// System.out.println(cell.getRowNum() + " " + cell.getColumnNum());
-			// System.out.println(adjCell2.getRowNum() + " " + adjCell2.getColumnNum() + " "
-			// +
-
-			// adjCell2.getCellSymbol());
-
 			if (!adjCell2.isRoom() && !adjCell2.getCellSymbol().equals('X')) {
 				cell.addAdjacency(adjCell2);
 			}
@@ -290,13 +282,13 @@ public class Board {
 
 	private void setAdjList(int row, int col) {
 
-		// Checks if it's an unused cell
+		// If unused cell: Do not create adjList for it
 		BoardCell currCell = grid[row][col];
 		if ((currCell.getCellSymbol() == 'X')) {
 			return;
 		}
 
-		// Takes in a doorway cell and adds the center of the room to the doors adjList
+		// If doorway cell: adds the center of the room to the doors adjList
 		// Also adds the doorway to the centerCells adjList
 		if (currCell.isDoorway()) {
 
@@ -333,7 +325,6 @@ public class Board {
 			default:
 				return;
 			}
-
 		}
 
 		// Add secretPassage destination to center cell's adjList
@@ -341,13 +332,11 @@ public class Board {
 			Room currRoom = roomMap.get(currCell.getCellSymbol());
 			if (currRoom.isHasSecretPassage()) {
 				Character nextRoomChar = currRoom.getPassageRoom();
-				currCell.addAdjacency(roomMap.get(nextRoomChar).centerCell);
+				currCell.addAdjacency(roomMap.get(nextRoomChar).getCenterCell());
 			}
 		}
 
 		if (!currCell.isRoom()) {
-
-			// System.out.println(currCell.getRowNum() + currCell.getColumnNum());
 			// Check if on top edge
 			if (row == 0) {
 
@@ -405,7 +394,6 @@ public class Board {
 
 			// Else add all surrounding cells to adjList
 			else {
-
 				addWalkwayAdj(currCell, Direction.UP);
 				addWalkwayAdj(currCell, Direction.DOWN);
 				addWalkwayAdj(currCell, Direction.RIGHT);
@@ -415,16 +403,8 @@ public class Board {
 
 	}
 
-	/*
-	 * // Traverse grid populating AdjMatrix for (int col = 0; col < COLS; col++) {
-	 * for (int row = 0; row < ROWS; row++) { adjMtx.put(grid[row][col],
-	 * grid[row][col].getAdjList()); } }
-	 */
 	public Set<BoardCell> getAdjList(int i, int j) {
-		// TODO Change this method. This is incorrect just to make the Junit test not
-		// have errors
 		BoardCell tempCell = grid[i][j];
-
 		return tempCell.getAdjList();
 	}
 
@@ -435,14 +415,12 @@ public class Board {
 	public void calcTargets(BoardCell cell, int pathLength) {
 		visitedList.clear();
 		targetsSet.clear();
-		// Add start location to visited list
 		visitedList.add(cell);
 		findAllTargets(cell, pathLength);
 
 	}
 
 	public void findAllTargets(BoardCell startCell, int pathLength) {
-		// for each adjCell in adjCells
 		for (BoardCell adjCell : startCell.getAdjList()) {
 			if (visitedList.contains(adjCell) || adjCell.isOccupied()) {
 				continue;
@@ -457,13 +435,11 @@ public class Board {
 				if (adjCell.isRoomCenter()) {
 					targetsSet.add(adjCell);
 					visitedList.remove(adjCell);
-				}
-				else {
+				} else {
 					findAllTargets(adjCell, pathLength - 1);
 					visitedList.remove(adjCell);
 				}
 			}
 		}
 	}
-
 }

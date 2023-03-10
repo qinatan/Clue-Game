@@ -1,15 +1,10 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 import experiment.TestBoard;
 import experiment.TestBoardCell;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 

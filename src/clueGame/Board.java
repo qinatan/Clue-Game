@@ -449,8 +449,10 @@ public class Board {
 			}
 			visitedList.add(adjCell);
 			if (pathLength == 1) {
-				targetsSet.add(adjCell);
-				visitedList.remove(adjCell);
+				if (!adjCell.isRoom() && !adjCell.isOccupied()) {
+					targetsSet.add(adjCell);
+					visitedList.remove(adjCell);
+				}
 			} else {
 				findAllTargets(adjCell, pathLength - 1);
 				visitedList.remove(adjCell);

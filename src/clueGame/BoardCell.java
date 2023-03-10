@@ -128,8 +128,7 @@ public class BoardCell {
 	}
 	
 	public boolean isOccupied() {
-		// TODO Auto-generated method stub
-		return false;
+		return isOccupied;
 	}
 	
 	//adds it to the adj list. 

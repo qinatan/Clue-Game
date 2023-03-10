@@ -124,7 +124,12 @@ public class BoardCell {
 	}
 
 	public void setOccupied(boolean isOccStatus) {
-		this.isOccupied = isOccStatus ; 
+		if (this.isRoomCenterCell) {
+			this.isOccupied = false;
+		}
+		else {
+			this.isOccupied = isOccStatus ; 
+		}
 	}
 	
 	public boolean isOccupied() {

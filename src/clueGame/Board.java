@@ -444,18 +444,24 @@ public class Board {
 	public void findAllTargets(BoardCell startCell, int pathLength) {
 		// for each adjCell in adjCells
 		for (BoardCell adjCell : startCell.getAdjList()) {
-			if (visitedList.contains(adjCell) || adjCell.isRoom() || adjCell.isOccupied()) {
+			if (visitedList.contains(adjCell) || adjCell.isOccupied()) {
 				continue;
 			}
 			visitedList.add(adjCell);
 			if (pathLength == 1) {
-				if (!adjCell.isRoom() && !adjCell.isOccupied()) {
+				if (!adjCell.isOccupied()) {
 					targetsSet.add(adjCell);
 					visitedList.remove(adjCell);
 				}
 			} else {
-				findAllTargets(adjCell, pathLength - 1);
-				visitedList.remove(adjCell);
+				if (adjCell.isRoomCenter()) {
+					targetsSet.add(adjCell);
+					visitedList.remove(adjCell);
+				}
+				else {
+					findAllTargets(adjCell, pathLength - 1);
+					visitedList.remove(adjCell);
+				}
 			}
 		}
 	}

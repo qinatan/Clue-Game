@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+
+import experiment.TestBoardCell;
+
 import java.io.*;
 
 /**
@@ -27,6 +30,7 @@ public class Board {
 	private BoardCell[][] grid;
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
+
 	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
@@ -181,7 +185,7 @@ public class Board {
 
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {
-				
+
 				setAdjList(i, j); // Sets the adjList for the current Cell
 				adjMtx.put(grid[i][j], grid[i][j].getAdjList());
 			}
@@ -259,10 +263,11 @@ public class Board {
 
 		case UP:
 			BoardCell adjCell2 = grid[cell.getRowNum() - 1][cell.getColumnNum()];
-			//System.out.println(cell.getRowNum() + " " + cell.getColumnNum());
-			//System.out.println(adjCell2.getRowNum() + " " + adjCell2.getColumnNum() + " " +
+			// System.out.println(cell.getRowNum() + " " + cell.getColumnNum());
+			// System.out.println(adjCell2.getRowNum() + " " + adjCell2.getColumnNum() + " "
+			// +
 
-			//		adjCell2.getCellSymbol());
+			// adjCell2.getCellSymbol());
 
 			if (!adjCell2.isRoom() && !adjCell2.getCellSymbol().equals('X')) {
 				cell.addAdjacency(adjCell2);
@@ -424,16 +429,33 @@ public class Board {
 	}
 
 	public Set<BoardCell> getTargets() {
-		// TODO Change this method. This is incorrect just to make the Junit test not
-		// have errors
-		int i = 1;
-		int j = 1;
-		targetsSet.add(getCell(i, j));
 		return targetsSet;
 	}
 
-	public void calcTargets(BoardCell cell, int i) {
+	public void calcTargets(BoardCell cell, int pathLength) {
+		visitedList.clear();
+		targetsSet.clear();
+		// Add start location to visited list
+		visitedList.add(cell);
+		findAllTargets(cell, pathLength);
 
+	}
+
+	public void findAllTargets(BoardCell startCell, int pathLength) {
+		// for each adjCell in adjCells
+		for (BoardCell adjCell : startCell.getAdjList()) {
+			if (visitedList.contains(adjCell) || adjCell.isRoom() || adjCell.isOccupied()) {
+				continue;
+			}
+			visitedList.add(adjCell);
+			if (pathLength == 1) {
+				targetsSet.add(adjCell);
+				visitedList.remove(adjCell);
+			} else {
+				findAllTargets(adjCell, pathLength - 1);
+				visitedList.remove(adjCell);
+			}
+		}
 	}
 
 }

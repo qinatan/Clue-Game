@@ -127,6 +127,11 @@ public class BoardCell {
 		this.isOccupied = isOccStatus ; 
 	}
 	
+	public boolean isOccupied() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 	//adds it to the adj list. 
 	void addAdjacency (BoardCell cell) {
 		adjList.add(cell);
@@ -144,5 +149,9 @@ public class BoardCell {
 	public Set<BoardCell> getAdjList() {
 		return adjList;
 	}
+
+
+	
+
 
 }

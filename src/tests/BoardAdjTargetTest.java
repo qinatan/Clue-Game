@@ -51,14 +51,14 @@ public class BoardAdjTargetTest {
 	@Test
 	public void testAdjacencyDoor() {
 		Set<BoardCell> testList = board.getAdjList(21, 5);
-		assertEquals(2, testList.size());
+		assertEquals(4, testList.size());
 		assertTrue(testList.contains(board.getCell(24, 2)));
 		assertTrue(testList.contains(board.getCell(20, 5)));
 		assertTrue(testList.contains(board.getCell(22, 5)));
 		assertTrue(testList.contains(board.getCell(21, 6)));
 
 		testList = board.getAdjList(21, 10);
-		assertEquals(3, testList.size());
+		assertEquals(4, testList.size());
 		assertTrue(testList.contains(board.getCell(24, 10)));
 		assertTrue(testList.contains(board.getCell(21, 9)));
 		assertTrue(testList.contains(board.getCell(21, 11)));

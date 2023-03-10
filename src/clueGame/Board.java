@@ -179,8 +179,9 @@ public class Board {
 			row++;
 		}
 
-		for (int i = 0; i < ROWS - 1; i++) {
-			for (int j = 0; j < COLS - 1; j++) {
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				
 				setAdjList(i, j); // Sets the adjList for the current Cell
 				adjMtx.put(grid[i][j], grid[i][j].getAdjList());
 			}
@@ -258,7 +259,12 @@ public class Board {
 
 		case UP:
 			BoardCell adjCell2 = grid[cell.getRowNum() - 1][cell.getColumnNum()];
-			if (!adjCell2.isRoom() && adjCell2.getCellSymbol() != 'X') {
+			//System.out.println(cell.getRowNum() + " " + cell.getColumnNum());
+			//System.out.println(adjCell2.getRowNum() + " " + adjCell2.getColumnNum() + " " +
+
+			//		adjCell2.getCellSymbol());
+
+			if (!adjCell2.isRoom() && !adjCell2.getCellSymbol().equals('X')) {
 				cell.addAdjacency(adjCell2);
 			}
 			break;

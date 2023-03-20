@@ -17,8 +17,8 @@ import java.io.*;
  */
 public class Board {
 	private static Board theInstance = new Board();
-	private int COLS; 
-	private int ROWS; 
+	private int cols; 
+	private int rows; 
 	private BoardCell[][] grid;
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
@@ -70,11 +70,11 @@ public class Board {
 	}
 
 	public int getNumRows() {
-		return ROWS;
+		return rows;
 	}
 
 	public int getNumColumns() {
-		return COLS;
+		return cols;
 	}
 
 	public BoardCell getCell(int row, int col) {
@@ -129,7 +129,7 @@ public class Board {
 		// reads in file once to find numRows, numColumns
 		File layoutFile = new File(layoutConfig);
 		Scanner myReader = new Scanner(layoutFile);
-		int rows = 0;
+		int numRows = 0;
 		int firstRowCols = 0;
 		while (myReader.hasNextLine()) {
 			if (firstRowCols == 0) {
@@ -145,17 +145,17 @@ public class Board {
 					throw new BadConfigFormatException("Bad Config File found. Inconsistent number of columns.");
 				}
 			}
-			rows++;
+			numRows++;
 		}
-		ROWS = rows;
-		COLS = firstRowCols;
+		rows = numRows;
+		cols = firstRowCols;
 
 		myReader.close();
 
 		// Initializes a grid[ROWS][COLS] of empty boardCells
-		grid = new BoardCell[ROWS][COLS];
-		for (int col = 0; col < COLS; col++) {
-			for (int row = 0; row < ROWS; row++) {
+		grid = new BoardCell[rows][cols];
+		for (int col = 0; col < cols; col++) {
+			for (int row = 0; row < rows; row++) {
 				grid[row][col] = new BoardCell(row, col);
 			}
 		}
@@ -166,7 +166,7 @@ public class Board {
 		while (myReader2.hasNextLine()) {
 			String line = myReader2.nextLine();
 			String[] result = line.split(",");
-			for (int col = 0; col < COLS; col++) {
+			for (int col = 0; col < cols; col++) {
 				grid[row][col].setCellSymbol(result[col]);
 				// Checks for bad config file
 				if (!roomMap.containsKey(result[col].charAt(0))) {
@@ -185,8 +185,8 @@ public class Board {
 		myReader2.close();
 
 		// Creates adjacency matrix for the entire board
-		for (int i = 0; i < ROWS; i++) {
-			for (int j = 0; j < COLS; j++) {
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
 				setAdjList(i, j); // Sets the adjList for the current Cell
 				adjMtx.put(grid[i][j], grid[i][j].getAdjList());
 			}
@@ -347,26 +347,26 @@ public class Board {
 					addWalkwayAdj(currCell, Direction.DOWN);
 				}
 				// check if on right edge
-				else if (col == COLS - 1) {
+				else if (col == cols - 1) {
 					addWalkwayAdj(currCell, Direction.LEFT);
 					addWalkwayAdj(currCell, Direction.DOWN);
 				}
 				// otherwise, the normal top edge case
-				else if (col != COLS - 1 && col != 0) {
+				else if (col != cols - 1 && col != 0) {
 					addWalkwayAdj(currCell, Direction.RIGHT);
 					addWalkwayAdj(currCell, Direction.LEFT);
 					addWalkwayAdj(currCell, Direction.DOWN);
 				}
 			}
 			// check if on bottom edge
-			else if (row == ROWS - 1) {
+			else if (row == rows - 1) {
 				// if yes, check if on left
 				if (col == 0) {
 					addWalkwayAdj(currCell, Direction.UP);
 					addWalkwayAdj(currCell, Direction.RIGHT);
 				}
 				// check if on right edge
-				if (col == ROWS - 1) {
+				if (col == rows - 1) {
 					addWalkwayAdj(currCell, Direction.UP);
 					addWalkwayAdj(currCell, Direction.LEFT);
 				}
@@ -386,7 +386,7 @@ public class Board {
 			}
 
 			// Check if on right edge
-			else if (col == COLS - 1) {
+			else if (col == cols - 1) {
 				addWalkwayAdj(currCell, Direction.UP);
 				addWalkwayAdj(currCell, Direction.DOWN);
 				addWalkwayAdj(currCell, Direction.LEFT);

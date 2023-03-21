@@ -135,13 +135,11 @@ public class Board {
 		int numRows = 0;
 		int firstRowCols = 0;
 		while (myReader.hasNextLine()) {
+			String line = myReader.nextLine();
+			String[] result = line.split(",");
 			if (firstRowCols == 0) {
-				String line = myReader.nextLine();
-				String[] result = line.split(",");
 				firstRowCols = result.length;
 			} else {
-				String line = myReader.nextLine();
-				String[] result = line.split(",");
 				int curRowCols = result.length;
 				if (curRowCols != firstRowCols) {
 					myReader.close();

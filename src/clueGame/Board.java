@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-
 import java.io.*;
 
 /**
@@ -16,7 +15,7 @@ import java.io.*;
  * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
  */
 public class Board {
-	private static Board theInstance = new Board();
+	private static Board boardInstance = new Board();
 	private int cols; 
 	private int rows; 
 	private BoardCell[][] grid;
@@ -26,6 +25,9 @@ public class Board {
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
 	private String setupConfig;
+	private final static int TYPE = 0;
+	private final static int ROOMNAME = 1; 
+	private final static int ROOMSYMBOL = 2;
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -34,7 +36,7 @@ public class Board {
 
 	// this method returns the only Board
 	public static Board getInstance() {
-		return theInstance;
+		return boardInstance;
 	}
 
 	/*
@@ -43,7 +45,7 @@ public class Board {
 	public void initialize() {
 		try {
 			loadSetupConfig();
-		} catch (FileNotFoundException | BadConfigFormatException e1) {
+		} catch (BadConfigFormatException | IOException e1) {
 			e1.printStackTrace();
 		}
 		try {
@@ -84,7 +86,7 @@ public class Board {
 
 	// Reads in setUp Config file, creating the Room Objects, & populating the
 	// roomMap
-	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
+	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException, IOException {
 		File setupFile = new File(setupConfig);
 		Scanner myReader = new Scanner(setupFile);
 		int lineNum = 0;
@@ -97,23 +99,24 @@ public class Board {
 			// If not a comment, split by ", "
 			else {
 				String[] result = line.split(", ");
-				String resultZero = result[0];
-				if (!resultZero.equals("Room") && !resultZero.equals("Space")) {
+				String itemType = result[TYPE];
+				if (!itemType.equals("Room") && !itemType.equals("Space")) {
 					myReader.close();
 					throw new BadConfigFormatException("Error in setup file on line: " + lineNum);
 				}
 				// Populates roomMap
-				Character roomSymbol = result[2].charAt(0);
+				Character roomSymbol = result[ROOMSYMBOL].charAt(0);
 				// Creates a new room for each line of setup file
-				Room room = new Room(result[1], roomSymbol);
+				Room room = new Room(result[ROOMNAME], roomSymbol);
 
 				// Adds each room to roomMap
 				roomMap.put(roomSymbol, room);
 			}
 			lineNum++;
 		}
-		myReader.close();
+			myReader.close();
 	}
+
 
 	/**
 	 * loadLayoutConfig() Performs 4 Major Functions: 1. Reads in the layout file to
@@ -152,7 +155,7 @@ public class Board {
 
 		myReader.close();
 
-		// Initializes a grid[ROWS][COLS] of empty boardCells
+		// Initializes a grid[rows][cols] of empty boardCells
 		grid = new BoardCell[rows][cols];
 		for (int col = 0; col < cols; col++) {
 			for (int row = 0; row < rows; row++) {

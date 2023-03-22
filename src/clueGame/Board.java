@@ -178,7 +178,7 @@ public class Board {
 
 				// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 				// isSecretPassageway, isRoomLabel
-				gridCellClassifier(row, result, col);
+				gridCellClassifier(row, col, result);
 			}
 
 			row++;
@@ -188,7 +188,7 @@ public class Board {
 		// Creates adjacency matrix for the entire board
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				setAdjList(i, j); // Sets the adjList for the current Cell
+				calculateCellAdj(i, j); // Sets the adjList for the current Cell
 				adjMtx.put(grid[i][j], grid[i][j].getAdjList());
 			}
 		}
@@ -197,7 +197,7 @@ public class Board {
 	// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 	// isSecretPassageway
 	// e.g. Takes in a room cell, sets isRoom = true
-	private void gridCellClassifier(int row, String[] result, int col) {
+	private void gridCellClassifier(int row, int col, String[] result) {
 		// sets cell to "room" if not a walkway or unused square,
 		if (!result[col].equals("X") && result[col].charAt(0) != 'W') {
 			grid[row][col].setIsRoom(true);
@@ -281,7 +281,7 @@ public class Board {
 
 	}
 
-	private void setAdjList(int row, int col) {
+	private void calculateCellAdj(int row, int col) {
 
 		// If unused cell: Do not create adjList for it
 		BoardCell currCell = grid[row][col];

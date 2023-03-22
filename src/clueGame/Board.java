@@ -129,38 +129,26 @@ public class Board {
 	 * @throws BadConfigFormatException
 	 */
 	public void loadLayoutConfig() throws FileNotFoundException, BadConfigFormatException {
-		// reads in file once to find numRows, numColumns
-		File layoutFile = new File(layoutConfig);
-		Scanner myReader = new Scanner(layoutFile);
-		int numRows = 0;
-		int firstRowCols = 0;
-		while (myReader.hasNextLine()) {
-			String line = myReader.nextLine();
-			String[] result = line.split(",");
-			if (firstRowCols == 0) {
-				firstRowCols = result.length;
-			} else {
-				int curRowCols = result.length;
-				if (curRowCols != firstRowCols) {
-					myReader.close();
-					throw new BadConfigFormatException("Bad Config File found. Inconsistent number of columns.");
-				}
-			}
-			numRows++;
-		}
-		rows = numRows;
-		cols = firstRowCols;
+		File layoutFile = gridSizeCalculator();
 
-		myReader.close();
+		gridInitializer();
 
-		// Initializes a grid[rows][cols] of empty boardCells
-		grid = new BoardCell[rows][cols];
-		for (int col = 0; col < cols; col++) {
-			for (int row = 0; row < rows; row++) {
-				grid[row][col] = new BoardCell(row, col);
+		boardInitializer(layoutFile);
+
+		adjMatrixIntializer();
+	}
+
+	private void adjMatrixIntializer() {
+		// Creates adjacency matrix for the entire board
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				calculateCellAdj(i, j); // Sets the adjList for the current Cell
+				adjMtx.put(grid[i][j], grid[i][j].getAdjList());
 			}
 		}
+	}
 
+	private void boardInitializer(File layoutFile) throws FileNotFoundException, BadConfigFormatException {
 		// Reads in file second time to create the board
 		Scanner myReader2 = new Scanner(layoutFile);
 		int row = 0;
@@ -184,14 +172,43 @@ public class Board {
 			row++;
 		}
 		myReader2.close();
+	}
 
-		// Creates adjacency matrix for the entire board
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				calculateCellAdj(i, j); // Sets the adjList for the current Cell
-				adjMtx.put(grid[i][j], grid[i][j].getAdjList());
+	private void gridInitializer() {
+		// Initializes a grid[rows][cols] of empty boardCells
+		grid = new BoardCell[rows][cols];
+		for (int col = 0; col < cols; col++) {
+			for (int row = 0; row < rows; row++) {
+				grid[row][col] = new BoardCell(row, col);
 			}
 		}
+	}
+
+	private File gridSizeCalculator() throws FileNotFoundException, BadConfigFormatException {
+		// reads in file once to find numRows, numColumns
+		File layoutFile = new File(layoutConfig);
+		Scanner myReader = new Scanner(layoutFile);
+		int numRows = 0;
+		int firstRowCols = 0;
+		while (myReader.hasNextLine()) {
+			String line = myReader.nextLine();
+			String[] result = line.split(",");
+			if (firstRowCols == 0) {
+				firstRowCols = result.length;
+			} else {
+				int curRowCols = result.length;
+				if (curRowCols != firstRowCols) {
+					myReader.close();
+					throw new BadConfigFormatException("Bad Config File found. Inconsistent number of columns.");
+				}
+			}
+			numRows++;
+		}
+		rows = numRows;
+		cols = firstRowCols;
+
+		myReader.close();
+		return layoutFile;
 	}
 
 	// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
@@ -243,7 +260,6 @@ public class Board {
 	// Helper function for setAdjList
 	// Processes Walkways ONLY
 	private void addWalkwayAdj(BoardCell cell, Direction direction) {
-
 		switch (direction) {
 		case RIGHT:
 			BoardCell adjCell = grid[cell.getRowNum()][cell.getColumnNum() + 1];
@@ -295,7 +311,6 @@ public class Board {
 
 			switch (currCell.getDoorDirection()) {
 			case RIGHT:
-
 				BoardCell roomCell = grid[currCell.getRowNum()][currCell.getColumnNum() + 1];
 				Room currRoom = roomMap.get(roomCell.getCellSymbol());
 				currCell.addAdjacency(currRoom.getCenterCell());

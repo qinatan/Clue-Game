@@ -20,8 +20,8 @@ public class Board {
 	private int rows;
 	private BoardCell[][] grid;
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
-	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
-	private Set<BoardCell> targetsSet = new HashSet<BoardCell>();
+	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
+	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private String layoutConfig;
 	private String setupConfig;
@@ -214,18 +214,16 @@ public class Board {
 	 * checks if the second character is an arrow to a door location
 	 */
 	private boolean isDoorArrow(char arrow) {
-		if (arrow == '<' || arrow == '>' ||arrow == '^' ||arrow == 'v' ) {
-			return true ; 
-		}
-		else {
-			return false ; 
+		if (arrow == '<' || arrow == '>' || arrow == '^' || arrow == 'v') {
+			return true;
+		} else {
+			return false;
 		}
 	}
-	
+
 	/*
 	 * Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
-	 * isSecretPassageway.
-	 * e.g. Takes in a room cell, sets isRoom = true
+	 * isSecretPassageway. e.g. Takes in a room cell, sets isRoom = true
 	 * 
 	 */
 	private void gridCellClassifier(int row, int col, String[] result) {
@@ -277,7 +275,6 @@ public class Board {
 		switch (direction) {
 		case RIGHT:
 			BoardCell adjCell = grid[cell.getRowNum()][cell.getColumnNum() + 1];
-
 			isValidAdj(cell, adjCell);
 			break;
 
@@ -304,8 +301,8 @@ public class Board {
 	}
 
 	/*
-	 * Helper function to check if the cells adj can be added to
-	 * if it can be added to it is added to. If not it returns. 
+	 * Helper function to check if the cells adj can be added to if it can be added
+	 * to it is added to. If not it returns.
 	 */
 	private void isValidAdj(BoardCell cell, BoardCell adjCell) {
 		if (!adjCell.isRoom() && adjCell.getCellSymbol() != 'X') {
@@ -441,35 +438,35 @@ public class Board {
 	}
 
 	public Set<BoardCell> getTargets() {
-		return targetsSet;
+		return targets;
 	}
 
 	public void calcTargets(BoardCell cell, int pathLength) {
-		visitedList.clear();
-		targetsSet.clear();
-		visitedList.add(cell);
+		visited.clear();
+		targets.clear();
+		visited.add(cell);
 		findAllTargets(cell, pathLength);
 
 	}
 
 	public void findAllTargets(BoardCell startCell, int pathLength) {
 		for (BoardCell adjCell : startCell.getAdjList()) {
-			if (visitedList.contains(adjCell) || adjCell.isOccupied()) {
+			if (visited.contains(adjCell) || adjCell.isOccupied()) {
 				continue;
 			}
-			visitedList.add(adjCell);
+			visited.add(adjCell);
 			if (pathLength == 1) {
 				if (!adjCell.isOccupied()) {
-					targetsSet.add(adjCell);
-					visitedList.remove(adjCell);
+					targets.add(adjCell);
+					visited.remove(adjCell);
 				}
 			} else {
 				if (adjCell.isRoomCenter()) {
-					targetsSet.add(adjCell);
-					visitedList.remove(adjCell);
+					targets.add(adjCell);
+					visited.remove(adjCell);
 				} else {
 					findAllTargets(adjCell, pathLength - 1);
-					visitedList.remove(adjCell);
+					visited.remove(adjCell);
 				}
 			}
 		}

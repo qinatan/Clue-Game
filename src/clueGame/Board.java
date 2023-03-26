@@ -16,8 +16,8 @@ import java.io.*;
  */
 public class Board {
 	private static Board boardInstance = new Board();
-	private int cols; 
-	private int rows; 
+	private int cols;
+	private int rows;
 	private BoardCell[][] grid;
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visitedList = new ArrayList<BoardCell>();
@@ -26,7 +26,7 @@ public class Board {
 	private String layoutConfig;
 	private String setupConfig;
 	private final static int TYPE = 0;
-	private final static int ROOMNAME = 1; 
+	private final static int ROOMNAME = 1;
 	private final static int ROOMSYMBOL = 2;
 
 	// constructor is private to ensure only one can be created
@@ -114,9 +114,8 @@ public class Board {
 			}
 			lineNum++;
 		}
-			myReader.close();
+		myReader.close();
 	}
-
 
 	/**
 	 * loadLayoutConfig() Performs 4 Major Functions: 1. Reads in the layout file to
@@ -211,9 +210,24 @@ public class Board {
 		return layoutFile;
 	}
 
-	// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
-	// isSecretPassageway
-	// e.g. Takes in a room cell, sets isRoom = true
+	/*
+	 * checks if the second character is an arrow to a door location
+	 */
+	private boolean isDoorArrow(char arrow) {
+		if (arrow == '<' || arrow == '>' ||arrow == '^' ||arrow == 'v' ) {
+			return true ; 
+		}
+		else {
+			return false ; 
+		}
+	}
+	
+	/*
+	 * Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
+	 * isSecretPassageway.
+	 * e.g. Takes in a room cell, sets isRoom = true
+	 * 
+	 */
 	private void gridCellClassifier(int row, int col, String[] result) {
 		// sets cell to "room" if not a walkway or unused square,
 		if (!result[col].equals("X") && result[col].charAt(0) != 'W') {
@@ -222,8 +236,8 @@ public class Board {
 
 		// Door, Secret Passage, Room Center Cell, Room Label
 		if (result[col].length() == 2) {
-			// Doorway found
-			if (result[col].charAt(0) == 'W') {
+			// Doorway found and the next character is an arrow to the doors location
+			if (result[col].charAt(0) == 'W' && isDoorArrow(result[col].charAt(1))) {
 				grid[row][col].setIsDoor(true);
 				// Set door direction
 				grid[row][col].setDoorDirection(result[col].charAt(1));

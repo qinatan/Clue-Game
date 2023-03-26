@@ -278,30 +278,22 @@ public class Board {
 		case RIGHT:
 			BoardCell adjCell = grid[cell.getRowNum()][cell.getColumnNum() + 1];
 
-			if (!adjCell.isRoom() && adjCell.getCellSymbol() != 'X') {
-				cell.addAdjacency(adjCell);
-			}
+			isValidAdj(cell, adjCell);
 			break;
 
 		case LEFT:
 			BoardCell adjCell1 = grid[cell.getRowNum()][cell.getColumnNum() - 1];
-			if (!adjCell1.isRoom() && adjCell1.getCellSymbol() != 'X') {
-				cell.addAdjacency(adjCell1);
-			}
+			isValidAdj(cell, adjCell1);
 			break;
 
 		case UP:
 			BoardCell adjCell2 = grid[cell.getRowNum() - 1][cell.getColumnNum()];
-			if (!adjCell2.isRoom() && !adjCell2.getCellSymbol().equals('X')) {
-				cell.addAdjacency(adjCell2);
-			}
+			isValidAdj(cell, adjCell2);
 			break;
 
 		case DOWN:
 			BoardCell adjCell3 = grid[cell.getRowNum() + 1][cell.getColumnNum()];
-			if (!adjCell3.isRoom() && adjCell3.getCellSymbol() != 'X') {
-				cell.addAdjacency(adjCell3);
-			}
+			isValidAdj(cell, adjCell3);
 			break;
 
 		default:
@@ -309,6 +301,16 @@ public class Board {
 
 		}
 
+	}
+
+	/*
+	 * Helper function to check if the cells adj can be added to
+	 * if it can be added to it is added to. If not it returns. 
+	 */
+	private void isValidAdj(BoardCell cell, BoardCell adjCell) {
+		if (!adjCell.isRoom() && adjCell.getCellSymbol() != 'X') {
+			cell.addAdjacency(adjCell);
+		}
 	}
 
 	private void calculateCellAdj(int row, int col) {

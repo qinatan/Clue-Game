@@ -3,15 +3,14 @@ import java.awt.Color;
 public abstract class Player {
 	private String name;
 	private Color playerColor; // Maybe we can change this to type "color" and implement a color enum
-	private int startRow, startCol;
+	private int row, col;
 	private BoardCell playerLocation; //????
 	
-	public Player(String playerName, String playerColor, int row, int col)
+	public Player(String playerName, String playerColor, String row, String col)
 	{
 	 this.name = playerName; 
-	 this.startRow = row; 
-	 this.startCol = col; 
-	 this.playerLocation = Board.getInstance().getCellLocation(row, col); 
+	 this.row = (int)row.charAt(0); 
+	 this.col = (int)col.charAt(0); 
 	 
 	 switch(playerColor) {
 	 case "Red": this.playerColor = new Color(255, 0, 0); 

@@ -23,6 +23,9 @@ public class Board {
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
+	private ArrayList<Card> peopleCards = new ArrayList<Card>(); //?? do we need to put cards to different catagories??
+	private ArrayList<Card> roomCards = new ArrayList<Card>(); //??  how to store card when a new card is created???
+	private ArrayList<Card> weaponCards = new ArrayList<Card>(); //??
 	private String layoutConfig;
 	private String setupConfig;
 	private final static int TYPE = 0;
@@ -95,28 +98,47 @@ public class Board {
 		while (myReader.hasNextLine()) {
 			String line = myReader.nextLine();
 			// Check for comments
-			if (line.contains("//") || line.contains("Weapon") || line.contains("Player")) {
+			if (line.contains("//")) {
 				continue;
 			}
+			
 			// If not a comment, split by ", "
-			else {
-				String[] result = line.split(", ");
-				String itemType = result[TYPE];
-
-				Character roomSymbol = result[SYMBOL].charAt(0);
-				// Creates a new room for each line of setup file
-				Room room = new Room(result[NAME], roomSymbol);
-				// Adds each room to roomMap
-
-				// Populates roomMap
-				roomMap.put(roomSymbol, room);
-
+			String[] result = line.split(", ");
+			String itemType = result[TYPE];
+			
+			//create a new card for each object 
+			Card newCard = new Card(result[NAME], result[TYPE]); 	
+			
+			if (itemType.contains("Room") || itemType.contains("Space")) {
+			Character roomSymbol = result[SYMBOL].charAt(0);
+			// Creates a new room for each line of setup file
+			Room room = new Room(result[NAME], roomSymbol);
+			// Adds each room to roomMap
+			roomMap.put(roomSymbol, room);
+			
+			}
+			
+			else if (itemType.contains("Player"))
+			{
+				peopleCards.add(newCard);
+				//human player
+				if (result[NAME].contains("Chihiro Ogino"))
+				{
+					Player newPlayer = new humanPlayer (result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+				}
+				else 
+				{ //computer players
+					Player newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+				}
+			}
+			else
+			{
+			 // what to do with weapons???
 			}
 			lineNum++;
 		}
 		myReader.close();
 	}
-
 	/**
 	 * loadLayoutConfig() Performs 4 Major Functions: 1. Reads in the layout file to
 	 * determine board size 2. Reads in the layout file to build the grid of
@@ -472,7 +494,5 @@ public class Board {
 		}
 	}
 
-	public BoardCell getCellLocation(int row, int col) {
-		return grid[row][col];
-	}
+	
 }

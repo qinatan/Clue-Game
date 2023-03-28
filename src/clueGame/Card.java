@@ -17,7 +17,7 @@ public class Card {
 		}
 					
 	}
-		
+	
 	//setters 
 	public void setCardName(String cardName)
 	{
@@ -37,6 +37,7 @@ public class Card {
 	{
 		return cardType; 
 	}
+
 	
 	
 	public boolean equals(Card target){

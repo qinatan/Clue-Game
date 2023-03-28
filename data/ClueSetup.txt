@@ -12,3 +12,17 @@ Room, Basement, A
 // Other spaces on board 
 Space, Unused, X
 Space, Walkway, W
+//Weapons
+Weapon, Dog Bone
+Weapon, Broken DVD 
+Weapon, Wrench
+Weapon, Venus Fly Trap
+Weapon, Dumbbell
+Weapon, Extension Cord
+//Players
+Player, Chihiro Ogino, Red, 0, 7
+Player, Yubaba, Pink, 0, 16
+Player, Zeniba, Green, 5, 0
+Player, No-Face, Black, 20, 0
+Player, Boh, Blue, 26, 7
+Player, River Spirit, Yellow, 21, 21 

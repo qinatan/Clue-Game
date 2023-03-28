@@ -102,8 +102,16 @@ public class Board {
 			else {
 				String[] result = line.split(", ");
 				String itemType = result[TYPE];
+				String itemName = result[NAME]; 
+				String symbol = result[SYMBOL]; 
+				int row = (int)result[ROW].charAt(0);
+				int col = (int)result[COLUMN].charAt(0); 
 				
-				// Populates roomMap
+				//create new card??
+				
+				
+				
+				// Populat roomMap
 				Character roomSymbol = result[SYMBOL].charAt(0);
 				// Creates a new room for each line of setup file
 				Room room = new Room(result[NAME], roomSymbol);

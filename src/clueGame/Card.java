@@ -4,11 +4,20 @@ public class Card {
 	private String cardName; 
 	private CardType cardType; 
 	//constructor 
-	public Card(String cardName, CardType cardType)
+	public Card(String cardName, String cardType)
 	{
-		this.cardName = cardName; 
-		this.cardType = cardType; 
+		this.cardName = cardName;
+		switch(cardType) {
+		case "Room": this.cardType = CardType.ROOM; 
+					break; 
+		case "Weapon": this.cardType = CardType.WEAPON; 
+					break; 
+		case "Player": this.cardType = CardType.PERSON;
+					break; 
+		}
+					
 	}
+		
 	//setters 
 	public void setCardName(String cardName)
 	{

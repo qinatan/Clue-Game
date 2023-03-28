@@ -26,8 +26,10 @@ public class Board {
 	private String layoutConfig;
 	private String setupConfig;
 	private final static int TYPE = 0;
-	private final static int ROOMNAME = 1;
-	private final static int ROOMSYMBOL = 2;
+	private final static int NAME = 1; 
+	private final static int SYMBOL = 2;
+	private final static int ROW = 3; 
+	private final static int COLUMN = 4; 
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -100,14 +102,11 @@ public class Board {
 			else {
 				String[] result = line.split(", ");
 				String itemType = result[TYPE];
-				if (!itemType.equals("Room") && !itemType.equals("Space")) {
-					myReader.close();
-					throw new BadConfigFormatException("Error in setup file on line: " + lineNum);
-				}
+				
 				// Populates roomMap
-				Character roomSymbol = result[ROOMSYMBOL].charAt(0);
+				Character roomSymbol = result[SYMBOL].charAt(0);
 				// Creates a new room for each line of setup file
-				Room room = new Room(result[ROOMNAME], roomSymbol);
+				Room room = new Room(result[NAME], roomSymbol);
 
 				// Adds each room to roomMap
 				roomMap.put(roomSymbol, room);
@@ -116,6 +115,8 @@ public class Board {
 		}
 		myReader.close();
 	}
+	
+	
 
 	/**
 	 * loadLayoutConfig() Performs 4 Major Functions: 1. Reads in the layout file to
@@ -470,5 +471,10 @@ public class Board {
 				}
 			}
 		}
+	} 
+	
+	public BoardCell getCellLocation(int row, int col)
+	{
+		return grid[row][col]; 
 	}
 }

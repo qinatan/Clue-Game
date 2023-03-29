@@ -28,7 +28,7 @@ public class GameSetupTests {
 		assertEquals(6, Board.getNumPlayers());
 	}
 	
-	// We should have 21 cards in the deck initially
+	// We should have 21 cards in the deck initially (6 players + 6 weapons + 9 rooms)
 	@Test
 	public void testDeckSize() {
 		assertEquals(21, Board.getNumCards());

@@ -9,11 +9,11 @@ public class Card {
 	{
 		this.cardName = cardName;
 		switch(type) {
-		case "RooM": this.cardType = CardType.ROOM; 
+		case "Room": this.cardType = CardType.ROOM; 
 					break; 
 		case "Weapon": this.cardType = CardType.WEAPON; 
 					break; 
-		case "Person": this.cardType = CardType.PERSON;
+		case "Player": this.cardType = CardType.PERSON;
 					break; 
 		}
 					
@@ -44,6 +44,13 @@ public class Card {
 	
 	public boolean equals(Card target){
 		return false; 
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Card [cardName=" + cardName + ", cardType=" + cardType + "]";
 	}
 
 }

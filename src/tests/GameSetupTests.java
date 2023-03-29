@@ -35,7 +35,7 @@ public class GameSetupTests {
 	@Test
 	public void testNumberRooms()
 	{
-		System.out.println(board.getNumRooms());
+		
 		assertEquals(9, board.getNumRooms()); 
 	}
 	
@@ -52,19 +52,20 @@ public class GameSetupTests {
 	}
 	
 	// Solution contains 1 room, 1 player, 1 weapon
-	//@Test
+	@Test
 	public void testSolution() {
+		board.createSolution();
 		assertEquals(CardType.ROOM, Board.getSolution().getRoom().getCardType());
 		assertEquals(CardType.WEAPON, Board.getSolution().getWeapon().getCardType());
 		assertEquals(CardType.PERSON, Board.getSolution().getPerson().getCardType());
 	}
 	
 	// Are all cards dealt?
-	//@Test
+	@Test
 	public void testDealt()
 	{
 		board.dealtCard();// call dealt function
-		assertEquals(0, board.getNumCards()); 
+		assertEquals(0, board.getDealtDeckSize()); 
 	}
 	
 	// Do all players have roughly the same number of cards?
@@ -79,5 +80,6 @@ public class GameSetupTests {
 	}
 	
 	// same card should not be given to >1 player
+	
 
 }

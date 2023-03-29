@@ -1,28 +1,29 @@
 package clueGame;
 
 public class Solution {
-	private Card Room = new Card("Room", "Room"); // Testing purposes only 
-	private Card Weapon = new Card("Weapon", "Weapon"); // Testing purposes only ;
-	private Card Person = new Card("Person", "Person"); // Testing purposes only 
+	private Card Room; // Testing purposes only 
+	private Card Weapon;// Testing purposes only ;
+	private Card Person;  // Testing purposes only 
 	
 	public Solution(Card solutionPerson, Card solutionRoom , Card solutionWeapon)
 	{
-		Room = solutionRoom;  
-		Weapon = solutionWeapon; 
-		Person = solutionPerson; 
+		this.Room = solutionRoom;  
+		this.Weapon = solutionWeapon; 
+		this.Person = solutionPerson; 
+		
 	}
 	public Card getRoom() {
-		return Room;
+		return this.Room;
 	}
 
 
 	public Card getWeapon() {
-		return Weapon;
+		return this.Weapon;
 	}
 
 
 	public Card getPerson() {
-		return Person;
+		return this.Person;
 	}
 	
 	

@@ -1,6 +1,6 @@
 package clueGame;
 
-
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +25,8 @@ public class Board {
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private Set<Card> cardDeck = new HashSet<Card>();  //store all cards 
+	private ArrayList<Card> fullDeck = new ArrayList<Card>();  //store all cards 
+	private ArrayList<Card> dealtDeck = new ArrayList<Card>(); 
 	private ArrayList<Card> peopleDeck = new ArrayList<Card>();
 	private ArrayList<Card> roomDeck = new ArrayList<Card>(); 
 	private ArrayList<Card> weaponDeck = new ArrayList<Card>();
@@ -37,7 +38,7 @@ public class Board {
 	private final static int SYMBOL = 2;
 	private final static int ROW = 3;
 	private final static int COLUMN = 4;
-	private static Solution solution;  // Only initializing for test purposes
+	private static Solution solution; // Only initializing for test purposes
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -116,7 +117,7 @@ public class Board {
 			if (!itemType.contains("Space"))
 			{
 				newCard = new Card(result[NAME], result[TYPE]); 
-				cardDeck.add(newCard); 
+				fullDeck.add(newCard); 
 			}
 			
 			if (itemType.contains("Room") || itemType.contains("Space")) {
@@ -517,20 +518,29 @@ public class Board {
 		int randomRoom = random.nextInt(roomDeck.size()); 
 		int randomWeapon = random.nextInt(weaponDeck.size()); 
 		this.solution = new Solution (peopleDeck.get(randomPerson), roomDeck.get(randomRoom), weaponDeck.get(randomWeapon));
-		peopleDeck.remove(randomPerson); 
-		roomDeck.remove(randomRoom); 
-		weaponDeck.remove(randomWeapon); 
-		//update cardStack after removing solutionCard 
-		cardDeck.addAll(peopleDeck); 
-		cardDeck.addAll(roomDeck); 
-		cardDeck.addAll(weaponDeck); 
+		
+		//update dealtStack after removing solution cards 
+		dealtDeck.addAll(fullDeck); 
+		dealtDeck.remove(peopleDeck.get(randomPerson));
+		dealtDeck.remove(roomDeck.get(randomRoom));
+		dealtDeck.remove(weaponDeck.get(randomWeapon));
 	}
 	
 	public void dealtCard()
 	{
+		//shuffle card 
+		Collections.shuffle(dealtDeck); 
+		int numPlayer = getNumPlayers();
+		for (int i = 0; i < numPlayer; i++)
+		{
+			playerList.get(i).updateHand(dealtDeck.remove(0));
+			playerList.get(i).updateHand(dealtDeck.remove(0));
+			playerList.get(i).updateHand(dealtDeck.remove(0));
+		}
 		
 	}
 	// *********************** Methods for unit testing purposes only *************///
+	
 	public int getNumPlayers() {
 		return peopleDeck.size(); 
 	}
@@ -544,7 +554,7 @@ public class Board {
 		return weaponDeck.size(); 
 	}
 	public  int getNumCards() {
-		return cardDeck.size(); 
+		return fullDeck.size(); 
 	}
 	
 	public Player getPlayer(int index)
@@ -553,6 +563,10 @@ public class Board {
 	}
 	public static Solution getSolution() {
 		return solution;
+	}
+	public int getDealtDeckSize()
+	{
+		return dealtDeck.size(); 
 	}
 
 	

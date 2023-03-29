@@ -35,6 +35,7 @@ public class FileInitTests {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		// Initialize will load BOTH config files
 		board.initialize();
+		
 	}
 
 	@Test

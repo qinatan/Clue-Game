@@ -1,17 +1,21 @@
 package clueGame;
 import java.awt.Color;
+import java.util.HashSet;
+import java.util.Set;
 public abstract class Player {
 	private String name;
 	private Color playerColor; // Maybe we can change this to type "color" and implement a color enum
+	private String color; 
 	private int row, col;
-	private BoardCell playerLocation; //????
+	protected Set <Card> hand = new HashSet<Card>(); 
+	
 	
 	public Player(String playerName, String playerColor, String row, String col)
 	{
 	 this.name = playerName; 
 	 this.row = (int)row.charAt(0); 
 	 this.col = (int)col.charAt(0); 
-	 
+	 this.color = playerColor; 
 	 switch(playerColor) {
 	 case "Red": this.playerColor = new Color(255, 0, 0); 
 	 			 break;
@@ -38,9 +42,10 @@ public abstract class Player {
 		return this.playerColor; 
 	}
 	
-	public BoardCell getPlayerLocation()
+	public Set<Card> getHand()
 	{
-		return playerLocation; 
+		return hand; 
 	}
+	
 	public void updateHand (Card card) {}; // abstract method
 }

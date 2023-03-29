@@ -1,9 +1,11 @@
 package clueGame;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.io.*;
@@ -23,19 +25,19 @@ public class Board {
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private ArrayList<Card> peopleCards = new ArrayList<Card>(); //?? do we need to put cards to different catagories??
-	private ArrayList<Card> roomCards = new ArrayList<Card>(); //??  how to store card when a new card is created???
-	private ArrayList<Card> weaponCards = new ArrayList<Card>(); //??
+	private Set<Card> cardDeck = new HashSet<Card>();  //store all cards 
+	private ArrayList<Card> peopleDeck = new ArrayList<Card>();
+	private ArrayList<Card> roomDeck = new ArrayList<Card>(); 
+	private ArrayList<Card> weaponDeck = new ArrayList<Card>();
+	private ArrayList<Player> playerList = new ArrayList<Player>(); 
 	private String layoutConfig;
 	private String setupConfig;
-	private static int numPlayers = 0; 
-	private static int numCards = 0; 
 	private final static int TYPE = 0;
 	private final static int NAME = 1;
 	private final static int SYMBOL = 2;
 	private final static int ROW = 3;
 	private final static int COLUMN = 4;
-	private static Solution solution = new Solution(); // Only initializing for test purposes
+	private static Solution solution;  // Only initializing for test purposes
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -108,9 +110,14 @@ public class Board {
 			// If not a comment, split by ", "
 			String[] result = line.split(", ");
 			String itemType = result[TYPE];
+			Card newCard = null; 
 			
-			//create a new card for each object 
-			//Card newCard = new Card(result[NAME], result[TYPE]); 	** I commented this out to get tests to compile
+			//create a new card for each object except "Space" 
+			if (!itemType.contains("Space"))
+			{
+				newCard = new Card(result[NAME], result[TYPE]); 
+				cardDeck.add(newCard); 
+			}
 			
 			if (itemType.contains("Room") || itemType.contains("Space")) {
 			Character roomSymbol = result[SYMBOL].charAt(0);
@@ -118,25 +125,31 @@ public class Board {
 			Room room = new Room(result[NAME], roomSymbol);
 			// Adds each room to roomMap
 			roomMap.put(roomSymbol, room);
-			
+			if (newCard != null)
+				{
+				roomDeck.add(newCard); 
+				}
 			}
 			
 			else if (itemType.contains("Player"))
 			{
-				//peopleCards.add(newCard);
+				peopleDeck.add(newCard);
+				Player newPlayer = null; 
 				//human player
 				if (result[NAME].contains("Chihiro Ogino"))
 				{
-					Player newPlayer = new humanPlayer (result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+					 newPlayer = new humanPlayer (result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+					
 				}
 				else 
 				{ //computer players
-					Player newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+					newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
 				}
+					playerList.add(newPlayer); 
 			}
 			else
 			{
-			 // what to do with weapons???
+				weaponDeck.add(newCard); 
 			}
 			lineNum++;
 		}
@@ -497,15 +510,47 @@ public class Board {
 		}
 	}
 	
-	// *********************** Methods for unit testing purposes only *************///
-	public static int getNumPlayers() {
-		return numPlayers; 
+	public void createSolution()
+	{
+		Random random = new Random(); 
+		int randomPerson = random.nextInt(peopleDeck.size()); 
+		int randomRoom = random.nextInt(roomDeck.size()); 
+		int randomWeapon = random.nextInt(weaponDeck.size()); 
+		this.solution = new Solution (peopleDeck.get(randomPerson), roomDeck.get(randomRoom), weaponDeck.get(randomWeapon));
+		peopleDeck.remove(randomPerson); 
+		roomDeck.remove(randomRoom); 
+		weaponDeck.remove(randomWeapon); 
+		//update cardStack after removing solutionCard 
+		cardDeck.addAll(peopleDeck); 
+		cardDeck.addAll(roomDeck); 
+		cardDeck.addAll(weaponDeck); 
 	}
 	
-	public static int getNumCards() {
-		return numCards;
+	public void dealtCard()
+	{
+		
 	}
-
+	// *********************** Methods for unit testing purposes only *************///
+	public int getNumPlayers() {
+		return peopleDeck.size(); 
+	}
+	
+	public int getNumRooms()
+	{
+		return roomDeck.size(); 
+	}
+	public int getNumWeapons()
+	{
+		return weaponDeck.size(); 
+	}
+	public  int getNumCards() {
+		return cardDeck.size(); 
+	}
+	
+	public Player getPlayer(int index)
+	{
+		return playerList.get(index); 
+	}
 	public static Solution getSolution() {
 		return solution;
 	}

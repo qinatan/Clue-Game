@@ -5,19 +5,20 @@ public class Card {
 	private CardType cardType; 
 	//constructor 
 	
-	public Card(String cardName, CardType cardType)
+	public Card(String cardName, String type)
 	{
 		this.cardName = cardName;
-		switch(cardType) {
-		case ROOM: this.cardType = CardType.ROOM; 
+		switch(type) {
+		case "RooM": this.cardType = CardType.ROOM; 
 					break; 
-		case WEAPON: this.cardType = CardType.WEAPON; 
+		case "Weapon": this.cardType = CardType.WEAPON; 
 					break; 
-		case PERSON: this.cardType = CardType.PERSON;
+		case "Person": this.cardType = CardType.PERSON;
 					break; 
 		}
 					
 	}
+
 
 	
 	//setters 
@@ -41,9 +42,8 @@ public class Card {
 	}
 
 	
-	
 	public boolean equals(Card target){
-		return false;
-	};
+		return false; 
+	}
 
 }

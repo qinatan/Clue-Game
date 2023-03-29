@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 
 import clueGame.Board;
+import clueGame.CardType;
 
 public class GameSetupTests {
 	private static Board board;
@@ -23,12 +24,23 @@ public class GameSetupTests {
 	
 	// Test for how many player objects.. There should always be 6 players
 	@Test
-	void testNumberPlayers() {
-		assertEquals(2, Board.getNumPlayers());
+	public void testNumberPlayers() {
+		assertEquals(6, Board.getNumPlayers());
 	}
-	// test for how many cards in deck
 	
-	// test for a workable solution
+	// We should have 21 cards in the deck initially
+	@Test
+	public void testDeckSize() {
+		assertEquals(21, Board.getNumCards());
+	}
+	
+	// Solution contains 1 room, 1 player, 1 weapon
+	@Test
+	public void testSolution() {
+		assertEquals(CardType.ROOM, Board.getSolution().getRoom().getCardType());
+		assertEquals(CardType.WEAPON, Board.getSolution().getWeapon().getCardType());
+		assertEquals(CardType.PERSON, Board.getSolution().getPerson().getCardType());
+	}
 	
 	// Are all cards dealt?
 	

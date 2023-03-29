@@ -28,6 +28,7 @@ public class Board {
 	private ArrayList<Card> weaponCards = new ArrayList<Card>(); //??
 	private String layoutConfig;
 	private String setupConfig;
+	private static int numPlayers; 
 	private final static int TYPE = 0;
 	private final static int NAME = 1;
 	private final static int SYMBOL = 2;
@@ -492,6 +493,11 @@ public class Board {
 				}
 			}
 		}
+	}
+	
+	// *********************** Methods for unit testing purposes only *************///
+	public static int getNumPlayers() {
+		return numPlayers; 
 	}
 
 	

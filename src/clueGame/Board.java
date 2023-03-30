@@ -150,15 +150,12 @@ public class Board {
 				Player newPlayer = null;
 				// human player
 				if (result[NAME].contains("Chihiro Ogino")) {
-					System.out.println("human player created") ; 
 					newPlayer = new humanPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
 
 				} else { // computer players
 					newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
-					System.out.println("computer player created") ; 
 				}
 				playerList.add(newPlayer);
-				System.out.println(newPlayer.getPlayerName()) ;
 			} else if (itemType.contains("Weapon")){
 				weaponDeck.add(newCard);
 			}
@@ -555,9 +552,6 @@ public class Board {
 			playerList.get(i).updateHand(dealtDeck.remove(0));
 			playerList.get(i).updateHand(dealtDeck.remove(0));
 			playerList.get(i).updateHand(dealtDeck.remove(0));
-			
-			System.out.println(playerList.get(i)) ;
-			playerList.get(i).printHand();
 		}
 		
 
@@ -566,7 +560,6 @@ public class Board {
 	public static Solution getSolution() {
 		return solution;
 	}
-
 	// ************** Methods for unit testing purposes only *************//
 	public int getNumPlayers() {
 		return peopleDeck.size();

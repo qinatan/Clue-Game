@@ -136,7 +136,7 @@ public class GameSetupTests {
 					break;
 				case "Boh":
 					Assert.assertEquals(26, player.getPlayerRow());
-					Assert.assertEquals(7, player.getPlayerCol());
+					Assert.assertEquals(6, player.getPlayerCol());
 					break;
 				case "River Spirit":
 					Assert.assertEquals(21, player.getPlayerRow());

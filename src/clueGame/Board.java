@@ -25,7 +25,7 @@ public class Board {
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private ArrayList<Card> fullDeck ; // store all cards
+	private ArrayList<Card> fullDeck ;
 	private ArrayList<Card> dealtDeck ;
 	private ArrayList<Card> peopleDeck ;
 	private ArrayList<Card> roomDeck ;
@@ -54,9 +54,8 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize() {
-		
 		playerList = new ArrayList<Player>();
-		fullDeck = new ArrayList<Card>(); // store all cards
+		fullDeck = new ArrayList<Card>(); 
 		dealtDeck = new ArrayList<Card>();
 		peopleDeck = new ArrayList<Card>();
 		roomDeck = new ArrayList<Card>();
@@ -150,6 +149,7 @@ public class Board {
 				Player newPlayer = null;
 				// human player
 				if (result[NAME].contains("Chihiro Ogino")) {
+					//System.out.println(result[ROW].getClass().getSimpleName());
 					newPlayer = new humanPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
 
 				} else { // computer players
@@ -269,14 +269,7 @@ public class Board {
 		}
 	}
 
-	/*
-	 * initial function to setup and deal with the cards
-	 */
-	private void setGame() {
 
-		createSolution();
-		dealCards();
-	}
 	
 	/*
 	 * Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
@@ -527,6 +520,14 @@ public class Board {
 				}
 			}
 		}
+	}
+	
+	/*
+	 * initial function to setup and deal with the cards
+	 */
+	private void setGame() {
+		createSolution();
+		dealCards();
 	}
 
 	public void createSolution() {

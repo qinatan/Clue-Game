@@ -24,4 +24,4 @@ Player, Yubaba, Pink, 0, 16
 Player, Zeniba, Green, 5, 0
 Player, No-Face, Black, 20, 0
 Player, Boh, Blue, 26, 7
-Player, River Spirit, Yellow, 21, 21 
+Player, River Spirit, Yellow, 21, 21

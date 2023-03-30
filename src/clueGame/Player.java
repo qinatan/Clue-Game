@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 public abstract class Player {
 	private String name;
-	private Color playerColor; // Maybe we can change this to type "color" and implement a color enum
+	private Color playerColor; 
 	private String color; 
 	private int row, col;
 	protected ArrayList <Card> hand = new ArrayList<Card>(); 
@@ -15,9 +15,8 @@ public abstract class Player {
 	public Player(String playerName, String playerColor, String row, String col)
 	{
 	 this.name = playerName; 
-	 this.row = (int)row.charAt(0); 
-	 System.out.println(this.row);
-	 this.col = (int)col.charAt(0); 
+	 this.row = Integer.parseInt(row);
+	 this.col = Integer.parseInt(col);
 	 this.color = playerColor; 
 	 switch(playerColor) {
 	 case "Red": this.playerColor = new Color(255, 0, 0); 
@@ -36,12 +35,10 @@ public abstract class Player {
 	}
 	
 	//getters 
-	public String getPlayerName()
-	{
+	public String getPlayerName() {
 		return this.name; 
 	}
-	public Color getPlayerColor()
-	{
+	public Color getPlayerColor() {
 		return this.playerColor; 
 	}
 	
@@ -49,13 +46,13 @@ public abstract class Player {
 		return color;
 	}
 	
-	public ArrayList<Card> getHand()
-	{
+	public ArrayList<Card> getHand() {
 		return hand; 
 	}
 	
+	// abstract method
 	public void updateHand (Card card) {
-	}; // abstract method
+	}; 
 	
 	public void printHand() {
 		for (int i = 0 ; i < hand.size(); i ++) {

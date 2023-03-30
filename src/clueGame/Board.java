@@ -547,11 +547,10 @@ public class Board {
 	public void dealCards() {
 		// shuffle card
 		Collections.shuffle(dealtDeck);
-		int numPlayer = getNumPlayerCards();
-		for (int i = 0; i < numPlayer; i++) {
-			playerList.get(i).updateHand(dealtDeck.remove(0));
-			playerList.get(i).updateHand(dealtDeck.remove(0));
-			playerList.get(i).updateHand(dealtDeck.remove(0));
+		while (!dealtDeck.isEmpty()) {
+			for (Player player: playerList) {
+				player.updateHand(dealtDeck.remove(0));
+			}
 		}
 		
 
@@ -605,6 +604,10 @@ public class Board {
 			}
 		}
 		return numComputerPlayers ;
+	}
+	
+	public ArrayList<Player> getPlayerList() {
+		return playerList;
 	}
 
 }

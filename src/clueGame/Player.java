@@ -16,6 +16,7 @@ public abstract class Player {
 	{
 	 this.name = playerName; 
 	 this.row = (int)row.charAt(0); 
+	 System.out.println(this.row);
 	 this.col = (int)col.charAt(0); 
 	 this.color = playerColor; 
 	 switch(playerColor) {
@@ -44,6 +45,10 @@ public abstract class Player {
 		return this.playerColor; 
 	}
 	
+	public String getPlayerColorString() {
+		return color;
+	}
+	
 	public ArrayList<Card> getHand()
 	{
 		return hand; 
@@ -56,5 +61,13 @@ public abstract class Player {
 		for (int i = 0 ; i < hand.size(); i ++) {
 			System.out.println(hand.get(i)) ;
 		}
+	}
+	
+	public int getPlayerRow() {
+		return row;
+	}
+	
+	public int getPlayerCol() {
+		return col;
 	}
 }

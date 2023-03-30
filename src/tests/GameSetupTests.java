@@ -29,36 +29,32 @@ public class GameSetupTests {
 	}
 
 	// Test for how many player objects.. There should always be 6 players
+	// 5 Computer players
+	// 1 Human player
 	@Test
 	public void testNumberPlayers() {
-		Assert.assertEquals(6, board.getNumPlayers());
+		int numHumanPlayers = board.getNumHumanPlayers();
+		int numCompPlayers = board.getNumCompPlayers();
+		int totalPlayers = numHumanPlayers + numCompPlayers;
 		Assert.assertEquals(1, board.getNumHumanPlayers());
 		Assert.assertEquals(5, board.getNumCompPlayers());
-
+		Assert.assertEquals(6, totalPlayers);
 	}
-
-	@Test
-	public void testNumberRooms() {
-
-		Assert.assertEquals(9, board.getNumRooms());
-	}
-
-	@Test
-	public void testNumberWeapons() {
-		Assert.assertEquals(6, board.getNumWeapons());
-	}
+	
 
 	// We should have 21 cards in the deck initially (6 players + 6 weapons + 9
 	// rooms)
 	@Test
-	public void testDeckSize() {
+	public void testCards() {
 		Assert.assertEquals(21, board.getNumCards());
+		Assert.assertEquals(6, board.getNumWeaponCards());
+		Assert.assertEquals(9, board.getNumRoomCards());
+		Assert.assertEquals(6, board.getNumPlayerCards());
 	}
 
 	// Solution contains 1 room, 1 player, 1 weapon
 	@Test
 	public void testSolution() {
-	
 		Assert.assertEquals(CardType.ROOM, Board.getSolution().getRoom().getCardType());
 		Assert.assertEquals(CardType.WEAPON, Board.getSolution().getWeapon().getCardType());
 		Assert.assertEquals(CardType.PERSON, Board.getSolution().getPerson().getCardType());
@@ -67,16 +63,15 @@ public class GameSetupTests {
 	// Test for if all the cards are dealt
 	@Test
 	public void testDealt() {
-		// board.dealCards();// call dealt function
 		Assert.assertEquals(0, board.getDealtDeckSize());
 	}
 
 	// Testing if every player has the same number of cards
 	@Test
 	public void testSameNumber() {
-		int numPlayer = board.getNumPlayers();
+		int numPlayer = board.getNumPlayerCards();
 		for (int i = 0; i < numPlayer; i++) {
-			Assert.assertEquals(3, board.getPlayer(i).getHand().size());
+			Assert.assertEquals(3, board.getPlayer(i).getHand().size(), 1);
 		}
 	}
 
@@ -87,9 +82,9 @@ public class GameSetupTests {
 		Card testCard = board.getPlayer(0).getHand().get(0);
 		boolean passTest = true;
 		int thisCard = 0;
-		int numPlayer = board.getNumPlayers();
+		int numPlayer = board.getNumPlayerCards();
 
-		if (board.getNumPlayers() == 0) {
+		if (board.getNumPlayerCards() == 0) {
 			Assert.fail("Numplayers equals zero");
 		}
 

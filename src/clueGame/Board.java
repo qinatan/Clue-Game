@@ -547,7 +547,7 @@ public class Board {
 	public void dealCards() {
 		// shuffle card
 		Collections.shuffle(dealtDeck);
-		int numPlayer = getNumPlayers();
+		int numPlayer = getNumPlayerCards();
 		for (int i = 0; i < numPlayer; i++) {
 			playerList.get(i).updateHand(dealtDeck.remove(0));
 			playerList.get(i).updateHand(dealtDeck.remove(0));
@@ -561,15 +561,15 @@ public class Board {
 		return solution;
 	}
 	// ************** Methods for unit testing purposes only *************//
-	public int getNumPlayers() {
+	public int getNumPlayerCards() {
 		return peopleDeck.size();
 	}
 
-	public int getNumRooms() {
+	public int getNumRoomCards() {
 		return roomDeck.size();
 	}
 
-	public int getNumWeapons() {
+	public int getNumWeaponCards() {
 		return weaponDeck.size();
 	}
 
@@ -586,7 +586,6 @@ public class Board {
 	}
 
 	public int getNumHumanPlayers() {
-		
 		int numHumanPlayers = 0 ; 
 		for (int i = 0 ; i < playerList.size(); i++) {
 		

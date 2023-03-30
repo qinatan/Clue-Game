@@ -17,7 +17,6 @@ import clueGame.CardType;
 public class GameSetupTests {
 	private static Board board ;
 
-	//@BeforeEach
 	@BeforeAll
 	public static void  setUp() {
 		// Board is singleton, get the only instance
@@ -26,7 +25,6 @@ public class GameSetupTests {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		// Initialize will load BOTH config files
 		board.initialize();
-
 	}
 
 	// Test for how many player objects.. There should always be 6 players
@@ -104,7 +102,6 @@ public class GameSetupTests {
 		Assert.assertEquals(1, thisCard);
 	}
 	
-	// TODO: Test to make sure each player has a color
 	@Test
 	public void playerColor() {
 		for (Player player: board.getPlayerList()) {

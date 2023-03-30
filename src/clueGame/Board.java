@@ -149,11 +149,10 @@ public class Board {
 				Player newPlayer = null;
 				// human player
 				if (result[NAME].contains("Chihiro Ogino")) {
-					//System.out.println(result[ROW].getClass().getSimpleName());
-					newPlayer = new humanPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+					newPlayer = newHumanPlayer(result);
 
 				} else { // computer players
-					newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+					newPlayer = newComputerPlayer(result);
 				}
 				playerList.add(newPlayer);
 			} else if (itemType.contains("Weapon")){
@@ -163,6 +162,18 @@ public class Board {
 			lineNum++;
 		}
 		myReader.close();
+	}
+
+	private Player newHumanPlayer(String[] result) {
+		Player newPlayer;
+		newPlayer = new humanPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+		return newPlayer;
+	}
+
+	private Player newComputerPlayer(String[] result) {
+		Player newPlayer;
+		newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+		return newPlayer;
 	}
 
 	/**

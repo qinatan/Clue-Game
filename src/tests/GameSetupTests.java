@@ -58,7 +58,7 @@ public class GameSetupTests {
 	// Solution contains 1 room, 1 player, 1 weapon
 	@Test
 	public void testSolution() {
-		// board.createSolution();
+	
 		Assert.assertEquals(CardType.ROOM, Board.getSolution().getRoom().getCardType());
 		Assert.assertEquals(CardType.WEAPON, Board.getSolution().getWeapon().getCardType());
 		Assert.assertEquals(CardType.PERSON, Board.getSolution().getPerson().getCardType());

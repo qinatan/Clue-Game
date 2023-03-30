@@ -25,12 +25,12 @@ public class Board {
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private ArrayList<Card> fullDeck = new ArrayList<Card>(); // store all cards
-	private ArrayList<Card> dealtDeck = new ArrayList<Card>();
-	private ArrayList<Card> peopleDeck = new ArrayList<Card>();
-	private ArrayList<Card> roomDeck = new ArrayList<Card>();
-	private ArrayList<Card> weaponDeck = new ArrayList<Card>();
-	private ArrayList<Player> playerList = new ArrayList<Player>();
+	private ArrayList<Card> fullDeck ; // store all cards
+	private ArrayList<Card> dealtDeck ;
+	private ArrayList<Card> peopleDeck ;
+	private ArrayList<Card> roomDeck ;
+	private ArrayList<Card> weaponDeck ;
+	private ArrayList<Player> playerList ;
 	private String layoutConfig;
 	private String setupConfig;
 	private final static int TYPE = 0;
@@ -54,6 +54,14 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize() {
+		
+		playerList = new ArrayList<Player>();
+		fullDeck = new ArrayList<Card>(); // store all cards
+		dealtDeck = new ArrayList<Card>();
+		peopleDeck = new ArrayList<Card>();
+		roomDeck = new ArrayList<Card>();
+		weaponDeck = new ArrayList<Card>();
+		
 		try {
 			loadSetupConfig();
 		} catch (BadConfigFormatException | IOException e1) {

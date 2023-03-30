@@ -35,6 +35,7 @@ public class FileInitTests {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		// Initialize will load BOTH config files
 		board.initialize();
+		
 	}
 
 	@Test
@@ -99,7 +100,6 @@ public class FileInitTests {
 
 	// Test a few room cells to ensure the room initial is correct.
 	@Test
-	//TODO: this throws an error rn
 	public void testRooms() {
 		// just test a standard room location
 		BoardCell cell = board.getCell(22, 8);

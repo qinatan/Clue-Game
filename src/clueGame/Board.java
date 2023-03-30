@@ -1,9 +1,11 @@
 package clueGame;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.io.*;
@@ -23,11 +25,20 @@ public class Board {
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
+	private ArrayList<Card> fullDeck ;
+	private ArrayList<Card> dealtDeck ;
+	private ArrayList<Card> peopleDeck ;
+	private ArrayList<Card> roomDeck ;
+	private ArrayList<Card> weaponDeck ;
+	private ArrayList<Player> playerList ;
 	private String layoutConfig;
 	private String setupConfig;
 	private final static int TYPE = 0;
-	private final static int ROOMNAME = 1;
-	private final static int ROOMSYMBOL = 2;
+	private final static int NAME = 1;
+	private final static int SYMBOL = 2;
+	private final static int ROW = 3;
+	private final static int COLUMN = 4;
+	private static Solution solution; // Only initializing for test purposes
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -43,6 +54,13 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize() {
+		playerList = new ArrayList<Player>();
+		fullDeck = new ArrayList<Card>(); 
+		dealtDeck = new ArrayList<Card>();
+		peopleDeck = new ArrayList<Card>();
+		roomDeck = new ArrayList<Card>();
+		weaponDeck = new ArrayList<Card>();
+		
 		try {
 			loadSetupConfig();
 		} catch (BadConfigFormatException | IOException e1) {
@@ -53,6 +71,8 @@ public class Board {
 		} catch (FileNotFoundException | BadConfigFormatException e) {
 			e.printStackTrace();
 		}
+		
+		setGame() ; 
 	}
 
 	public void setConfigFiles(String layoutConfig, String setupConfig) {
@@ -96,25 +116,64 @@ public class Board {
 			if (line.contains("//")) {
 				continue;
 			}
-			// If not a comment, split by ", "
-			else {
-				String[] result = line.split(", ");
-				String itemType = result[TYPE];
-				if (!itemType.equals("Room") && !itemType.equals("Space")) {
-					myReader.close();
-					throw new BadConfigFormatException("Error in setup file on line: " + lineNum);
-				}
-				// Populates roomMap
-				Character roomSymbol = result[ROOMSYMBOL].charAt(0);
-				// Creates a new room for each line of setup file
-				Room room = new Room(result[ROOMNAME], roomSymbol);
 
+			// If not a comment, split by ", "
+			String[] result = line.split(", ");
+			String itemType = result[TYPE];
+
+			if (!itemType.equals("Room") && !itemType.equals("Space") && !itemType.equals("Player")
+					&& !itemType.equals("Weapon")) {
+				myReader.close();
+				throw new BadConfigFormatException("Error in setup file on line: " + lineNum);
+			}
+
+			Card newCard = null;
+
+			// create a new card for each object except "Space"
+			if (!itemType.contains("Space")) {
+				newCard = new Card(result[NAME], result[TYPE]);
+				fullDeck.add(newCard);
+			}
+
+			if (itemType.contains("Room") || itemType.contains("Space")) {
+				Character roomSymbol = result[SYMBOL].charAt(0);
+				// Creates a new room for each line of setup file
+				Room room = new Room(result[NAME], roomSymbol);
 				// Adds each room to roomMap
 				roomMap.put(roomSymbol, room);
+				if (newCard != null) {
+					roomDeck.add(newCard);
+				}
+			} else if (itemType.contains("Player")) {
+				peopleDeck.add(newCard);
+				Player newPlayer = null;
+				// human player
+				if (result[NAME].contains("Chihiro Ogino")) {
+					newPlayer = newHumanPlayer(result);
+
+				} else { // computer players
+					newPlayer = newComputerPlayer(result);
+				}
+				playerList.add(newPlayer);
+			} else if (itemType.contains("Weapon")){
+				weaponDeck.add(newCard);
 			}
+
 			lineNum++;
 		}
 		myReader.close();
+	}
+
+	private Player newHumanPlayer(String[] result) {
+		Player newPlayer;
+		newPlayer = new humanPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+		return newPlayer;
+	}
+
+	private Player newComputerPlayer(String[] result) {
+		Player newPlayer;
+		newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+		return newPlayer;
 	}
 
 	/**
@@ -221,6 +280,8 @@ public class Board {
 		}
 	}
 
+
+	
 	/*
 	 * Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 	 * isSecretPassageway. e.g. Takes in a room cell, sets isRoom = true
@@ -471,4 +532,94 @@ public class Board {
 			}
 		}
 	}
+	
+	/*
+	 * initial function to setup and deal with the cards
+	 */
+	private void setGame() {
+		createSolution();
+		dealCards();
+	}
+
+	public void createSolution() {
+		Random random = new Random();
+		int randomPerson = random.nextInt(peopleDeck.size());
+		int randomRoom = random.nextInt(roomDeck.size());
+		int randomWeapon = random.nextInt(weaponDeck.size());
+		this.solution = new Solution(peopleDeck.get(randomPerson), roomDeck.get(randomRoom),
+				weaponDeck.get(randomWeapon));
+
+		// update dealtStack after removing solution cards
+		dealtDeck.addAll(fullDeck);
+		dealtDeck.remove(peopleDeck.get(randomPerson));
+		dealtDeck.remove(roomDeck.get(randomRoom));
+		dealtDeck.remove(weaponDeck.get(randomWeapon));
+	}
+
+	public void dealCards() {
+		// shuffle card
+		Collections.shuffle(dealtDeck);
+		while (!dealtDeck.isEmpty()) {
+			for (Player player: playerList) {
+				player.updateHand(dealtDeck.remove(0));
+			}
+		}
+		
+
+	}
+
+	public static Solution getSolution() {
+		return solution;
+	}
+	// ************** Methods for unit testing purposes only *************//
+	public int getNumPlayerCards() {
+		return peopleDeck.size();
+	}
+
+	public int getNumRoomCards() {
+		return roomDeck.size();
+	}
+
+	public int getNumWeaponCards() {
+		return weaponDeck.size();
+	}
+
+	public int getNumCards() {
+		return fullDeck.size();
+	}
+
+	public Player getPlayer(int index) {
+		return playerList.get(index);
+	}
+
+	public int getDealtDeckSize() {
+		return dealtDeck.size();
+	}
+
+	public int getNumHumanPlayers() {
+		int numHumanPlayers = 0 ; 
+		for (int i = 0 ; i < playerList.size(); i++) {
+		
+			if (playerList.get(i) instanceof humanPlayer) {
+				numHumanPlayers ++ ; 
+			}
+		}
+		return numHumanPlayers ;
+	}
+
+	public int getNumCompPlayers() {
+		int numComputerPlayers = 0 ; 
+		for (int i = 0 ; i < playerList.size(); i++) {
+		
+			if (playerList.get(i) instanceof computerPlayer) {
+				numComputerPlayers ++ ; 
+			}
+		}
+		return numComputerPlayers ;
+	}
+	
+	public ArrayList<Player> getPlayerList() {
+		return playerList;
+	}
+
 }

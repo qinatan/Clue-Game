@@ -25,12 +25,12 @@ public class Board {
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private ArrayList<Card> fullDeck = new ArrayList<Card>();  //store all cards 
-	private ArrayList<Card> dealtDeck = new ArrayList<Card>(); 
+	private ArrayList<Card> fullDeck = new ArrayList<Card>(); // store all cards
+	private ArrayList<Card> dealtDeck = new ArrayList<Card>();
 	private ArrayList<Card> peopleDeck = new ArrayList<Card>();
-	private ArrayList<Card> roomDeck = new ArrayList<Card>(); 
+	private ArrayList<Card> roomDeck = new ArrayList<Card>();
 	private ArrayList<Card> weaponDeck = new ArrayList<Card>();
-	private ArrayList<Player> playerList = new ArrayList<Player>(); 
+	private ArrayList<Player> playerList = new ArrayList<Player>();
 	private String layoutConfig;
 	private String setupConfig;
 	private final static int TYPE = 0;
@@ -107,55 +107,55 @@ public class Board {
 			if (line.contains("//")) {
 				continue;
 			}
-			
+
 			// If not a comment, split by ", "
 			String[] result = line.split(", ");
 			String itemType = result[TYPE];
-			Card newCard = null; 
-			
-			//create a new card for each object except "Space" 
-			if (!itemType.contains("Space"))
-			{
-				newCard = new Card(result[NAME], result[TYPE]); 
-				fullDeck.add(newCard); 
+
+			if (!itemType.equals("Room") && !itemType.equals("Space") && !itemType.equals("Player")
+					&& !itemType.equals("Weapon")) {
+				myReader.close();
+				throw new BadConfigFormatException("Error in setup file on line: " + lineNum);
 			}
-			
+
+			Card newCard = null;
+
+			// create a new card for each object except "Space"
+			if (!itemType.contains("Space")) {
+				newCard = new Card(result[NAME], result[TYPE]);
+				fullDeck.add(newCard);
+			}
+
 			if (itemType.contains("Room") || itemType.contains("Space")) {
-			Character roomSymbol = result[SYMBOL].charAt(0);
-			// Creates a new room for each line of setup file
-			Room room = new Room(result[NAME], roomSymbol);
-			// Adds each room to roomMap
-			roomMap.put(roomSymbol, room);
-			if (newCard != null)
-				{
-				roomDeck.add(newCard); 
+				Character roomSymbol = result[SYMBOL].charAt(0);
+				// Creates a new room for each line of setup file
+				Room room = new Room(result[NAME], roomSymbol);
+				// Adds each room to roomMap
+				roomMap.put(roomSymbol, room);
+				if (newCard != null) {
+					roomDeck.add(newCard);
 				}
 			}
-			
-			else if (itemType.contains("Player"))
-			{
+
+			else if (itemType.contains("Player")) {
 				peopleDeck.add(newCard);
-				Player newPlayer = null; 
-				//human player
-				if (result[NAME].contains("Chihiro Ogino"))
-				{
-					 newPlayer = new humanPlayer (result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
-					
-				}
-				else 
-				{ //computer players
+				Player newPlayer = null;
+				// human player
+				if (result[NAME].contains("Chihiro Ogino")) {
+					newPlayer = new humanPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+
+				} else { // computer players
 					newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
 				}
-					playerList.add(newPlayer); 
-			}
-			else
-			{
-				weaponDeck.add(newCard); 
+				playerList.add(newPlayer);
+			} else {
+				weaponDeck.add(newCard);
 			}
 			lineNum++;
 		}
 		myReader.close();
 	}
+
 	/**
 	 * loadLayoutConfig() Performs 4 Major Functions: 1. Reads in the layout file to
 	 * determine board size 2. Reads in the layout file to build the grid of
@@ -510,64 +510,73 @@ public class Board {
 			}
 		}
 	}
-	
-	public void createSolution()
-	{
-		Random random = new Random(); 
-		int randomPerson = random.nextInt(peopleDeck.size()); 
-		int randomRoom = random.nextInt(roomDeck.size()); 
-		int randomWeapon = random.nextInt(weaponDeck.size()); 
-		this.solution = new Solution (peopleDeck.get(randomPerson), roomDeck.get(randomRoom), weaponDeck.get(randomWeapon));
-		
-		//update dealtStack after removing solution cards 
-		dealtDeck.addAll(fullDeck); 
+
+	public void createSolution() {
+		Random random = new Random();
+		int randomPerson = random.nextInt(peopleDeck.size());
+		int randomRoom = random.nextInt(roomDeck.size());
+		int randomWeapon = random.nextInt(weaponDeck.size());
+		this.solution = new Solution(peopleDeck.get(randomPerson), roomDeck.get(randomRoom),
+				weaponDeck.get(randomWeapon));
+
+		// update dealtStack after removing solution cards
+		dealtDeck.addAll(fullDeck);
 		dealtDeck.remove(peopleDeck.get(randomPerson));
 		dealtDeck.remove(roomDeck.get(randomRoom));
 		dealtDeck.remove(weaponDeck.get(randomWeapon));
 	}
-	
-	public void dealtCard()
-	{
-		//shuffle card 
-		Collections.shuffle(dealtDeck); 
+
+	public void dealtCard() {
+		// shuffle card
+		Collections.shuffle(dealtDeck);
 		int numPlayer = getNumPlayers();
-		for (int i = 0; i < numPlayer; i++)
-		{
+		for (int i = 0; i < numPlayer; i++) {
 			playerList.get(i).updateHand(dealtDeck.remove(0));
 			playerList.get(i).updateHand(dealtDeck.remove(0));
 			playerList.get(i).updateHand(dealtDeck.remove(0));
 		}
-		
-	}
-	// *********************** Methods for unit testing purposes only *************///
-	
-	public int getNumPlayers() {
-		return peopleDeck.size(); 
+
 	}
 	
-	public int getNumRooms()
-	{
-		return roomDeck.size(); 
-	}
-	public int getNumWeapons()
-	{
-		return weaponDeck.size(); 
-	}
-	public  int getNumCards() {
-		return fullDeck.size(); 
-	}
-	
-	public Player getPlayer(int index)
-	{
-		return playerList.get(index); 
-	}
 	public static Solution getSolution() {
 		return solution;
 	}
-	public int getDealtDeckSize()
-	{
-		return dealtDeck.size(); 
+	
+	// *********************** Methods for unit testing purposes only *************//
+	public int getNumPlayers() {
+		return peopleDeck.size();
 	}
 
-	
+	public int getNumRooms() {
+		return roomDeck.size();
+	}
+
+	public int getNumWeapons() {
+		return weaponDeck.size();
+	}
+
+	public int getNumCards() {
+		return fullDeck.size();
+	}
+
+	public Player getPlayer(int index) {
+		return playerList.get(index);
+	}
+
+
+
+	public int getDealtDeckSize() {
+		return dealtDeck.size();
+	}
+
+	public int getNumHumanPlayers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getNumCompPlayers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

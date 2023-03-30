@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import clueGame.BoardCell;
+import clueGame.Card;
 import clueGame.DoorDirection;
 import clueGame.Room;
 import clueGame.Board;
@@ -30,6 +31,9 @@ public class GameSetupTests {
 	@Test
 	public void testNumberPlayers() {
 		assertEquals(6, board.getNumPlayers());
+		assertEquals(5, board.getNumHumanPlayers());
+		assertEquals(1, board.getNumCompPlayers());
+		
 	}
 	
 	@Test
@@ -60,7 +64,7 @@ public class GameSetupTests {
 		assertEquals(CardType.PERSON, Board.getSolution().getPerson().getCardType());
 	}
 	
-	// Are all cards dealt?
+	//Test for if all the cards are dealt
 	@Test
 	public void testDealt()
 	{
@@ -68,7 +72,7 @@ public class GameSetupTests {
 		assertEquals(0, board.getDealtDeckSize()); 
 	}
 	
-	// Do all players have roughly the same number of cards?
+	// Testing if every player has the same number of cards
 	@Test
 	public void testSameNumber()
 	{
@@ -79,7 +83,36 @@ public class GameSetupTests {
 		}
 	}
 	
-	// same card should not be given to >1 player
-	
+	// Test that only one player has a card
+	@Test
+	public void uniqueCards ()
+	{
+		//TODO: This test need to initialize players and hands before running the tests
+		//Card testCard = board.getPlayer(0).getHand().get(0);  
+		boolean passTest = true ; 
+		int thisCard = 0 ; 
+		int numPlayer = board.getNumPlayers(); 
+		
+		if (board.getNumPlayers() == 0 ) {
+			fail("Numplayers equals zero");
+		}
 
+		for (int i = 0; i < numPlayer; i++)
+		{
+			
+			if (board.getPlayer(i).getHand().size() == 0 ) {
+				fail("Player Hand Size is zero");
+			}
+			//TODO: change number of cards per player to be a variable
+			for (int j = 0 ; j < 3 ; j ++) {
+//				if (board.getPlayer(i).getHand().get(i) == testCard) {
+//					thisCard ++ ; 
+//				}
+			}
+			
+		}
+		//This tests to ensure that only one person has a given card
+		assertEquals(1, thisCard) ; 
+		
+	}
 }

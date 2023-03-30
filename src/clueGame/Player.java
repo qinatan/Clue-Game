@@ -1,13 +1,15 @@
 package clueGame;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 public abstract class Player {
 	private String name;
 	private Color playerColor; // Maybe we can change this to type "color" and implement a color enum
 	private String color; 
 	private int row, col;
-	protected Set <Card> hand = new HashSet<Card>(); 
+	protected ArrayList <Card> hand = new ArrayList<Card>(); 
 	
 	
 	public Player(String playerName, String playerColor, String row, String col)
@@ -42,7 +44,7 @@ public abstract class Player {
 		return this.playerColor; 
 	}
 	
-	public Set<Card> getHand()
+	public ArrayList<Card> getHand()
 	{
 		return hand; 
 	}

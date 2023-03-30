@@ -49,5 +49,12 @@ public abstract class Player {
 		return hand; 
 	}
 	
-	public void updateHand (Card card) {}; // abstract method
+	public void updateHand (Card card) {
+	}; // abstract method
+	
+	public void printHand() {
+		for (int i = 0 ; i < hand.size(); i ++) {
+			System.out.println(hand.get(i)) ;
+		}
+	}
 }

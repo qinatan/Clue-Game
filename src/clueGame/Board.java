@@ -64,6 +64,8 @@ public class Board {
 		} catch (FileNotFoundException | BadConfigFormatException e) {
 			e.printStackTrace();
 		}
+		
+		setGame() ; 
 	}
 
 	public void setConfigFiles(String layoutConfig, String setupConfig) {
@@ -135,22 +137,24 @@ public class Board {
 				if (newCard != null) {
 					roomDeck.add(newCard);
 				}
-			}
-
-			else if (itemType.contains("Player")) {
+			} else if (itemType.contains("Player")) {
 				peopleDeck.add(newCard);
 				Player newPlayer = null;
 				// human player
 				if (result[NAME].contains("Chihiro Ogino")) {
+					System.out.println("human player created") ; 
 					newPlayer = new humanPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
 
 				} else { // computer players
 					newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+					System.out.println("computer player created") ; 
 				}
 				playerList.add(newPlayer);
-			} else {
+				System.out.println(newPlayer.getPlayerName()) ;
+			} else if (itemType.contains("Weapon")){
 				weaponDeck.add(newCard);
 			}
+
 			lineNum++;
 		}
 		myReader.close();
@@ -260,6 +264,15 @@ public class Board {
 		}
 	}
 
+	/*
+	 * initial function to setup and deal with the cards
+	 */
+	private void setGame() {
+
+		createSolution();
+		dealCards();
+	}
+	
 	/*
 	 * Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 	 * isSecretPassageway. e.g. Takes in a room cell, sets isRoom = true
@@ -526,7 +539,7 @@ public class Board {
 		dealtDeck.remove(weaponDeck.get(randomWeapon));
 	}
 
-	public void dealtCard() {
+	public void dealCards() {
 		// shuffle card
 		Collections.shuffle(dealtDeck);
 		int numPlayer = getNumPlayers();
@@ -534,15 +547,19 @@ public class Board {
 			playerList.get(i).updateHand(dealtDeck.remove(0));
 			playerList.get(i).updateHand(dealtDeck.remove(0));
 			playerList.get(i).updateHand(dealtDeck.remove(0));
+			
+			System.out.println(playerList.get(i)) ;
+			playerList.get(i).printHand();
 		}
+		
 
 	}
-	
+
 	public static Solution getSolution() {
 		return solution;
 	}
-	
-	// *********************** Methods for unit testing purposes only *************//
+
+	// ************** Methods for unit testing purposes only *************//
 	public int getNumPlayers() {
 		return peopleDeck.size();
 	}
@@ -563,20 +580,31 @@ public class Board {
 		return playerList.get(index);
 	}
 
-
-
 	public int getDealtDeckSize() {
 		return dealtDeck.size();
 	}
 
 	public int getNumHumanPlayers() {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		int numHumanPlayers = 0 ; 
+		for (int i = 0 ; i < playerList.size(); i++) {
+		
+			if (playerList.get(i) instanceof humanPlayer) {
+				numHumanPlayers ++ ; 
+			}
+		}
+		return numHumanPlayers ;
 	}
 
 	public int getNumCompPlayers() {
-		// TODO Auto-generated method stub
-		return 0;
+		int numComputerPlayers = 0 ; 
+		for (int i = 0 ; i < playerList.size(); i++) {
+		
+			if (playerList.get(i) instanceof computerPlayer) {
+				numComputerPlayers ++ ; 
+			}
+		}
+		return numComputerPlayers ;
 	}
 
 }

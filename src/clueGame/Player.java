@@ -53,6 +53,7 @@ public abstract class Player {
 	// abstract method
 	public void updateHand (Card card) {
 	}; 
+
 	
 	public void printHand() {
 		for (int i = 0 ; i < hand.size(); i ++) {

@@ -41,7 +41,12 @@ public class Card {
 	}
 
 	public boolean equals(Card target) {
-		return false;
+		if (this.cardType == target.cardType && this.cardName.equals(target.cardName)){
+			return true;
+		}
+		else {
+			return false; 
+		}
 	}
 
 	@Override

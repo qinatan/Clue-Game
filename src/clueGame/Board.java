@@ -38,7 +38,7 @@ public class Board {
 	private final static int SYMBOL = 2;
 	private final static int ROW = 3;
 	private final static int COLUMN = 4;
-	private static Solution solution; // Only initializing for test purposes
+	private static Solution solution;
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -546,7 +546,7 @@ public class Board {
 		int randomPerson = random.nextInt(peopleDeck.size());
 		int randomRoom = random.nextInt(roomDeck.size());
 		int randomWeapon = random.nextInt(weaponDeck.size());
-		this.solution = new Solution(peopleDeck.get(randomPerson), roomDeck.get(randomRoom),
+		Board.solution = new Solution(peopleDeck.get(randomPerson), roomDeck.get(randomRoom),
 				weaponDeck.get(randomWeapon));
 
 		// update dealtStack after removing solution cards
@@ -571,6 +571,18 @@ public class Board {
 	public static Solution getSolution() {
 		return solution;
 	}
+	
+	public Boolean checkAccusation (Card Room, Card Person, Card Weapon) {
+		Solution solution = getSolution();
+		
+		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person) && solution.getWeapon().equals(Weapon)) {
+			return true; 
+		}
+		else {
+			return false; 
+		}
+	}
+	
 	// ************** Methods for unit testing purposes only *************//
 	public int getNumPlayerCards() {
 		return peopleDeck.size();

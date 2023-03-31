@@ -25,12 +25,12 @@ public class Board {
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private ArrayList<Card> fullDeck ;
-	private ArrayList<Card> dealtDeck ;
-	private ArrayList<Card> peopleDeck ;
-	private ArrayList<Card> roomDeck ;
-	private ArrayList<Card> weaponDeck ;
-	private ArrayList<Player> playerList ;
+	private ArrayList<Card> fullDeck;
+	private ArrayList<Card> dealtDeck;
+	private ArrayList<Card> peopleDeck;
+	private ArrayList<Card> roomDeck;
+	private ArrayList<Card> weaponDeck;
+	private ArrayList<Player> playerList;
 	private String layoutConfig;
 	private String setupConfig;
 	private final static int TYPE = 0;
@@ -55,12 +55,12 @@ public class Board {
 	 */
 	public void initialize() {
 		playerList = new ArrayList<Player>();
-		fullDeck = new ArrayList<Card>(); 
+		fullDeck = new ArrayList<Card>();
 		dealtDeck = new ArrayList<Card>();
 		peopleDeck = new ArrayList<Card>();
 		roomDeck = new ArrayList<Card>();
 		weaponDeck = new ArrayList<Card>();
-		
+
 		try {
 			loadSetupConfig();
 		} catch (BadConfigFormatException | IOException e1) {
@@ -71,8 +71,66 @@ public class Board {
 		} catch (FileNotFoundException | BadConfigFormatException e) {
 			e.printStackTrace();
 		}
-		
-		setGame() ; 
+
+		setGame();
+	}
+
+	public void initializeForTest() {
+		playerList = new ArrayList<Player>();
+		fullDeck = new ArrayList<Card>();
+		dealtDeck = new ArrayList<Card>();
+		peopleDeck = new ArrayList<Card>();
+		roomDeck = new ArrayList<Card>();
+		weaponDeck = new ArrayList<Card>();
+
+		try {
+			loadSetupConfig();
+		} catch (BadConfigFormatException | IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			loadLayoutConfig();
+		} catch (FileNotFoundException | BadConfigFormatException e) {
+			e.printStackTrace();
+		}
+
+		setGameForTest();
+	}
+
+	public void setGameForTest() {
+
+		createSolutionForTest();
+		dealCardsForTest();
+
+	}
+
+	private void dealCardsForTest() {
+
+		while (!dealtDeck.isEmpty()) {
+			for (Player player : playerList) {
+				System.out.print(player.getPlayerName());
+				System.out.println(dealtDeck.get(0));
+				player.updateHand(dealtDeck.remove(0));
+
+			}
+		}
+
+	}
+
+	private void createSolutionForTest() {
+
+		System.out.println("Solution");
+		System.out.println(peopleDeck.get(0) + " " + roomDeck.get(0) + " " + weaponDeck.get(0));
+
+		// initialized solution to be the first person, first room, first weapon
+		Board.solution = new Solution(peopleDeck.get(0), roomDeck.get(0), weaponDeck.get(0));
+
+		// update dealtStack after removing solution cards
+		dealtDeck.addAll(fullDeck);
+		dealtDeck.remove(peopleDeck.get(0));
+		dealtDeck.remove(roomDeck.get(0));
+		dealtDeck.remove(weaponDeck.get(0));
+
 	}
 
 	public void setConfigFiles(String layoutConfig, String setupConfig) {
@@ -155,7 +213,7 @@ public class Board {
 					newPlayer = newComputerPlayer(result);
 				}
 				playerList.add(newPlayer);
-			} else if (itemType.contains("Weapon")){
+			} else if (itemType.contains("Weapon")) {
 				weaponDeck.add(newCard);
 			}
 
@@ -280,8 +338,6 @@ public class Board {
 		}
 	}
 
-
-	
 	/*
 	 * Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 	 * isSecretPassageway. e.g. Takes in a room cell, sets isRoom = true
@@ -532,7 +588,7 @@ public class Board {
 			}
 		}
 	}
-	
+
 	/*
 	 * initial function to setup and deal with the cards
 	 */
@@ -560,29 +616,28 @@ public class Board {
 		// shuffle card
 		Collections.shuffle(dealtDeck);
 		while (!dealtDeck.isEmpty()) {
-			for (Player player: playerList) {
+			for (Player player : playerList) {
 				player.updateHand(dealtDeck.remove(0));
 			}
 		}
-		
 
 	}
 
 	public static Solution getSolution() {
 		return solution;
 	}
-	
-	public Boolean checkAccusation (Card Room, Card Person, Card Weapon) {
+
+	public Boolean checkAccusation(Card Room, Card Person, Card Weapon) {
 		Solution solution = getSolution();
-		
-		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person) && solution.getWeapon().equals(Weapon)) {
-			return true; 
-		}
-		else {
-			return false; 
+
+		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person)
+				&& solution.getWeapon().equals(Weapon)) {
+			return true;
+		} else {
+			return false;
 		}
 	}
-	
+
 	// ************** Methods for unit testing purposes only *************//
 	public int getNumPlayerCards() {
 		return peopleDeck.size();
@@ -609,27 +664,27 @@ public class Board {
 	}
 
 	public int getNumHumanPlayers() {
-		int numHumanPlayers = 0 ; 
-		for (int i = 0 ; i < playerList.size(); i++) {
-		
+		int numHumanPlayers = 0;
+		for (int i = 0; i < playerList.size(); i++) {
+
 			if (playerList.get(i) instanceof humanPlayer) {
-				numHumanPlayers ++ ; 
+				numHumanPlayers++;
 			}
 		}
-		return numHumanPlayers ;
+		return numHumanPlayers;
 	}
 
 	public int getNumCompPlayers() {
-		int numComputerPlayers = 0 ; 
-		for (int i = 0 ; i < playerList.size(); i++) {
-		
+		int numComputerPlayers = 0;
+		for (int i = 0; i < playerList.size(); i++) {
+
 			if (playerList.get(i) instanceof computerPlayer) {
-				numComputerPlayers ++ ; 
+				numComputerPlayers++;
 			}
 		}
-		return numComputerPlayers ;
+		return numComputerPlayers;
 	}
-	
+
 	public ArrayList<Player> getPlayerList() {
 		return playerList;
 	}

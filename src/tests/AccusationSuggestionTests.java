@@ -17,20 +17,20 @@ public class AccusationSuggestionTests {
 
 	@BeforeAll
 	public static void setUp() {
-		System.out.println("Here");
+	
 		// Board is singleton, get the only instance
 		board = Board.getInstance();
 		// set the file names to use my config files
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		// Initialize will load BOTH config files
-		board.initialize();
+		board.initializeForTest();
+		
 	}
 
 	@Test
 	public void testSolution() {
 		Solution solution = Board.getSolution();
 
-		System.out.println(solution);
 		Card correctRoom = solution.getRoom();
 		Card correctPerson = solution.getPerson();
 		Card correctWeapon = solution.getWeapon();
@@ -51,6 +51,48 @@ public class AccusationSuggestionTests {
 		// Solution with wrong room
 		Assert.assertFalse(board.checkAccusation(wrongRoom, correctPerson, correctWeapon));
 	}
+	
+	//Test player Disproves suggestion
+	@Test
+	public void disprovesSuggestion () {
+		Solution solution = Board.getSolution();
+		
+		Card correctRoom = solution.getRoom();
+		Card correctPerson = solution.getPerson(); 
+		Card correctWeapon = solution.getWeapon();
 
-	// Disproven suggestion tests
+		Card wrongRoom = board.getPlayerList().get(0).getHand().get(0);
+		Card wrongPerson = board.getPlayerList().get(0).getHand().get(0);
+		Card wrongWeapon = board.getPlayerList().get(0).getHand().get(0);
+		
+		
+		Card suggestedRoom = board.getPlayerList().get(0).getHand().get(0);
+		Card suggestedPerson = board.getPlayerList().get(0).getHand().get(0);
+		Card suggestedWeapon = board.getPlayerList().get(0).getHand().get(0);
+		
+		
+		boolean isBadSuggestion = board.getPlayerList().get(0).makeSuggestion(suggestedRoom, correctPerson, correctWeapon) ; 
+		Assert.assertTrue(isBadSuggestion) ; 
+	}
+	
+	
+//Test accusation for both CPU and human
+	@Test
+	public void handleSuggestionMade () {
+		
+	}
+
+	@Test
+	public void CPUSuggestion () {
+		
+	}
+	
+	@Test
+	public void CPUSelectTarget () {
+		
+	}
+
+
+	
+
 }

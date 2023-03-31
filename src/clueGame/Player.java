@@ -68,4 +68,6 @@ public abstract class Player {
 	public int getPlayerCol() {
 		return col;
 	}
+
+	public abstract boolean makeSuggestion(Card suggestedRoom, Card correctPerson, Card correctWeapon);
 }

@@ -3,7 +3,8 @@ package tests;
 import java.util.Map;
 import org.junit.Assert.*;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import clueGame.Board;
@@ -11,30 +12,9 @@ import clueGame.Card;
 import clueGame.CardType;
 import clueGame.Solution;
 
-import org.junit.Assert.*;
-
-import org.junit.Assert;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import clueGame.BoardCell;
-import clueGame.Card;
-import clueGame.DoorDirection;
-import clueGame.Player;
-import clueGame.Room;
-import clueGame.Board;
-import clueGame.CardType;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import java.util.Set;
-import org.junit.jupiter.api.BeforeAll;
-import clueGame.Board;
-import clueGame.BoardCell;
-
-
 public class AccusationSuggestionTests {
 	private static Board board;
-	
+
 	@BeforeAll
 	public static void setUp() {
 		System.out.println("Here");
@@ -45,23 +25,32 @@ public class AccusationSuggestionTests {
 		// Initialize will load BOTH config files
 		board.initialize();
 	}
-	
 
-	@Test 
-	public void testSolution () {
-		//Solution solution = Board.getSolution();
-		//Card correctRoom = solution.getRoom();
-		//Card correctPerson = solution.getPerson();
-		//Card correctWeapon = solution.getWeapon();
-		
-		Assert.fail();
+	@Test
+	public void testSolution() {
+		Solution solution = Board.getSolution();
+
+		System.out.println(solution);
+		Card correctRoom = solution.getRoom();
+		Card correctPerson = solution.getPerson();
+		Card correctWeapon = solution.getWeapon();
+
+		Card wrongRoom = board.getPlayerList().get(0).getHand().get(0);
+		Card wrongPerson = board.getPlayerList().get(0).getHand().get(0);
+		Card wrongWeapon = board.getPlayerList().get(0).getHand().get(0);
+
 		// Correct solution
-		//Assert.assertTrue(board.checkAccusation(correctRoom, correctPerson, correctWeapon));
-		
+		Assert.assertTrue(board.checkAccusation(correctRoom, correctPerson, correctWeapon));
+
 		// Solution with wrong person
+		Assert.assertFalse(board.checkAccusation(correctRoom, wrongPerson, correctWeapon));
+
 		// solution with wrong weapon
+		Assert.assertFalse(board.checkAccusation(correctRoom, correctPerson, wrongWeapon));
+
 		// Solution with wrong room
+		Assert.assertFalse(board.checkAccusation(wrongRoom, correctPerson, correctWeapon));
 	}
-	
+
 	// Disproven suggestion tests
 }

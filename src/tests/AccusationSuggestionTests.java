@@ -95,7 +95,7 @@ public class AccusationSuggestionTests {
 			}
 
 			if (foundCard == suggestedPerson) {
-				foundFirstCard = true;
+				foundSecondCard = true;
 			}
 			numLoops++;
 			if (numLoops > 10) {

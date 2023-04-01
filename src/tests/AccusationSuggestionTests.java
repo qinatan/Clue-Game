@@ -1,5 +1,7 @@
 package tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Map;
 import org.junit.Assert.*;
 import org.junit.Assert;
@@ -71,8 +73,22 @@ public class AccusationSuggestionTests {
 		Card suggestedWeapon = board.getPlayerList().get(0).getHand().get(0);
 		
 		
-		boolean isBadSuggestion = board.getPlayerList().get(0).makeSuggestion(suggestedRoom, correctPerson, correctWeapon) ; 
-		Assert.assertTrue(isBadSuggestion) ; 
+		
+		Assert.assertEquals(suggestedRoom, board.getPlayerList().get(0).makeSuggestion(suggestedRoom, correctPerson, correctWeapon)) ; 
+		
+		Assert.assertEquals(suggestedPerson, board.getPlayerList().get(0).makeSuggestion(correctRoom, suggestedPerson, correctWeapon)); 
+		
+		Assert.assertEquals(suggestedWeapon, board.getPlayerList().get(0).makeSuggestion(correctRoom, correctPerson, suggestedWeapon));
+		
+		int showBoth = 0; 
+
+		while(showBoth!= 2)
+		{
+			if(b)
+		}
+
+			
+		
 	}
 	
 	

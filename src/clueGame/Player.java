@@ -69,5 +69,5 @@ public abstract class Player {
 		return col;
 	}
 
-	public abstract boolean makeSuggestion(Card suggestedRoom, Card correctPerson, Card correctWeapon);
+	public abstract Card makeSuggestion(Card suggestedRoom, Card correctPerson, Card correctWeapon);
 }

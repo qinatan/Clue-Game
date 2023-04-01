@@ -4,8 +4,14 @@ public class Card {
 	private String cardName;
 	private CardType cardType;
 	private int dealCount = 0;
-	// constructor
-
+	
+	// constructors
+	 public Card(CardType type, String cardName) {
+		 this.cardType = type; 
+		 this.cardName = cardName;
+	 }
+	 
+	 
 	public Card(String cardName, String type) {
 		this.cardName = cardName;
 		switch (type) {

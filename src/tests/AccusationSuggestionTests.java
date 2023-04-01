@@ -2,7 +2,10 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
+
 import org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -12,6 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import clueGame.Board;
 import clueGame.Card;
 import clueGame.CardType;
+import clueGame.Player;
+import clueGame.Room;
 import clueGame.Solution;
 
 public class AccusationSuggestionTests {
@@ -128,7 +133,6 @@ public class AccusationSuggestionTests {
 		Card correctRoom = solution.getRoom();
 		Card correctPerson = solution.getPerson();
 		Card correctWeapon = solution.getWeapon();
-
 		Card suggestedRoom = board.getPlayerList().get(0).getHand().get(0);
 		Card suggestedPerson = board.getPlayerList().get(0).getHand().get(0);
 		Card suggestedWeapon = board.getPlayerList().get(0).getHand().get(0);
@@ -163,6 +167,33 @@ public class AccusationSuggestionTests {
 
 	@Test
 	public void CPUSuggestion() {
+		// Room matches current location
+		Player YubabaCpuPlayer = board.getPlayerList().get(1); 
+		// Set players location to plant room 
+		YubabaCpuPlayer.setPlayerLocation(24, 10); // row 24, col 10 = plant room center
+		Card currRoom = new Card(CardType.ROOM, "Plant Room");
+		YubabaCpuPlayer.currRoom = currRoom;  // sets currRoom to plant room
+		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.ROOM, "Dog Bone"));
+		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.ROOM, "Broken DVD"));
+		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.ROOM, "Wrench"));
+		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.ROOM, "Venus Fly Trap"));
+		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.ROOM, "Dumbbell"));
+		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Chihiro Ogino"));
+		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.ROOM, "Zeniba"));
+		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.ROOM, "No-Face"));
+		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.ROOM, "Boh"));
+		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.ROOM, "River Spirit"));
+		// Only Player Yubaba, and Weapon Extension Cord not in seen list
+		// Expect Yubaba to guess: Person: Yubaba, Weapon: Extension Cord, Room: Plant Room
+		ArrayList<Card> suggestion = YubabaCpuPlayer.makeSuggestion();
+		ArrayList<Card> expectedSuggestion = null; 
+		expectedSuggestion.add(new Card(CardType.PERSON, "Yubaba"));
+		expectedSuggestion.add(new Card(CardType.WEAPON, "Extension Cord"));
+		expectedSuggestion.add(new Card(CardType.ROOM, "Plant Room"));
+		
+		
+		// if multiple weapons not seen, one of them is randomly selected
+		// if multiple persons not seen, one of them is randomly selected
 		Assert.fail();
 	}
 

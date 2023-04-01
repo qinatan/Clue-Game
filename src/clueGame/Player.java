@@ -2,8 +2,10 @@ package clueGame;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Random;
 
@@ -13,6 +15,9 @@ public abstract class Player {
 	private String color;
 	private int row, col;
 	protected ArrayList<Card> hand = new ArrayList<Card>();
+	protected Map<CardType, ArrayList <Card>> seenMap = new HashMap<CardType, ArrayList <Card>>();
+	public Card currRoom; // TODO: Discuss using this variable with team. 
+						   // Variable gets set everytime a player enters a room
 
 	public Player(String playerName, String playerColor, String row, String col) {
 		this.name = playerName;
@@ -41,7 +46,7 @@ public abstract class Player {
 		}
 	}
 
-	// getters
+	// ******** getters & setters  ********* // 
 	public String getPlayerName() {
 		return this.name;
 	}
@@ -57,17 +62,7 @@ public abstract class Player {
 	public ArrayList<Card> getHand() {
 		return hand;
 	}
-
-	// abstract method
-	public void updateHand(Card card) {
-	};
-
-	public void printHand() {
-		for (int i = 0; i < hand.size(); i++) {
-			System.out.println(hand.get(i));
-		}
-	}
-
+	
 	public int getPlayerRow() {
 		return row;
 	}
@@ -75,7 +70,22 @@ public abstract class Player {
 	public int getPlayerCol() {
 		return col;
 	}
+	
+	// *********************************** //
 
+	// Abstract Methods
+	protected abstract void updateHand(Card card);
+	
+	public abstract ArrayList<Card> makeSuggestion();
+
+	// *********** Other Methods ********* // 
+	public void printHand() {
+		for (int i = 0; i < hand.size(); i++) {
+			System.out.println(hand.get(i));
+		}
+	}
+
+	// **** Other Methods ***************** // 
 	public Card disproveSuggestion(Card suggestedCard1, Card suggestedCard2, Card suggestedCard3) {
 
 		ArrayList<Card> matchingCard = new ArrayList<Card>();
@@ -100,5 +110,18 @@ public abstract class Player {
 		}
 		return null;
 	}
+	
+	public void addToSeenMap(CardType cardType, Card seenCard) {
+		this.seenMap.computeIfAbsent(cardType, k -> new ArrayList<>()).add(seenCard);
+	}
+	
+	// ********** TEST METHODS **************** //
+	// These methods should only be used to facilitate unit testing and never run in prod code //
+	
+	public void setPlayerLocation(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
+
 
 }

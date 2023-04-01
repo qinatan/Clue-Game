@@ -27,9 +27,9 @@ public class Board {
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private ArrayList<Card> fullDeck;
 	private ArrayList<Card> dealtDeck;
-	private ArrayList<Card> peopleDeck;
-	private ArrayList<Card> roomDeck;
-	private ArrayList<Card> weaponDeck;
+	public ArrayList<Card> peopleDeck;   // TODO: Discuss this change: Making these public lets the players make suggestions/ accusations
+	public ArrayList<Card> roomDeck;	// TODO: Discuss this change: Otherwise they don't have another ds to reference availabe to them
+	public ArrayList<Card> weaponDeck;   // TODO: Discuss this change. 
 	private ArrayList<Player> playerList;
 	private String layoutConfig;
 	private String setupConfig;

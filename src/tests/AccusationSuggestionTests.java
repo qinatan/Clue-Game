@@ -31,7 +31,6 @@ public class AccusationSuggestionTests {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		// Initialize will load BOTH config files
 		board.initializeForTest();
-
 	}
 
 	@Test
@@ -48,15 +47,9 @@ public class AccusationSuggestionTests {
 
 		// Correct solution
 		Assert.assertTrue(board.checkAccusation(correctRoom, correctPerson, correctWeapon));
-
-		// Solution with wrong person
-		Assert.assertFalse(board.checkAccusation(correctRoom, wrongPerson, correctWeapon));
-
-		// solution with wrong weapon
-		Assert.assertFalse(board.checkAccusation(correctRoom, correctPerson, wrongWeapon));
-
-		// Solution with wrong room
-		Assert.assertFalse(board.checkAccusation(wrongRoom, correctPerson, correctWeapon));
+		Assert.assertFalse(board.checkAccusation(correctRoom, wrongPerson, correctWeapon)); // Solution with wrong person
+		Assert.assertFalse(board.checkAccusation(correctRoom, correctPerson, wrongWeapon)); // solution with wrong weapon
+		Assert.assertFalse(board.checkAccusation(wrongRoom, correctPerson, correctWeapon)); // solution with wrong weapon
 	}
 
 	// Test player Disproves suggestion
@@ -70,7 +63,6 @@ public class AccusationSuggestionTests {
 		Card correctRoom = solution.getRoom(); // Expected: PlantRoom
 		Card correctPerson = solution.getPerson(); // Expected: Dog Bone
 		Card correctWeapon = solution.getWeapon(); // Expected: Chihiro Ogino
-
 		Card suggestedRoom = board.getPlayerList().get(0).getHand().get(0); // Expected: Exercise Room
 		Card suggestedPerson = board.getPlayerList().get(1).getHand().get(2); // Expected: Yubaba
 		Card suggestedWeapon = board.getPlayerList().get(2).getHand().get(1); // Expected: Broken DVD
@@ -84,7 +76,7 @@ public class AccusationSuggestionTests {
 		Assert.assertEquals(suggestedPerson,
 				board.getPlayerList().get(1).disproveSuggestion(correctRoom, suggestedPerson, correctWeapon));
 
-		// EXpected: Broken DVD
+		// Expected: Broken DVD
 		Assert.assertEquals(suggestedWeapon,
 				board.getPlayerList().get(2).disproveSuggestion(correctRoom, correctPerson, suggestedWeapon));
 
@@ -179,7 +171,7 @@ public class AccusationSuggestionTests {
 		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Wrench"));
 		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Venus Fly Trap"));
 		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Dumbbell"));
-		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Chihiro Ogino"));
+		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Yubaba"));
 		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Zeniba"));
 		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "No-Face"));
 		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Boh"));
@@ -204,6 +196,11 @@ public class AccusationSuggestionTests {
 
 	@Test
 	public void CPUSelectTarget() {
+		// targetList is a list of rooms not in seen List 
+		// TODO: If no rooms in seenList, select randomly
+		// TODO: If only one room not in seenList, select it 
+		// TODO: If room in list that has been seen, each target (including room) selected randomly
+		
 		Assert.fail();
 	}
 

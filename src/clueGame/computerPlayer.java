@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class computerPlayer extends Player {
+	ArrayList<Card> targetList = new ArrayList<Card>();
 
 	public computerPlayer(String playerName, String playerColor, String row, String col) {
 		super(playerName, playerColor, row, col);
@@ -16,48 +17,69 @@ public class computerPlayer extends Player {
 	}
 	
 	public ArrayList<Card> makeSuggestion() {
+		Boolean handContains = false;
+		Boolean seenWeaponsContains = false;
+		Boolean seenPersonContains = false;
+		
 		// Debug Printing all possible suggestions
 		System.out.println("Printing seenMap");
 		seenMap.forEach((key, value) -> System.out.println(key + ":" + value));
 		
+		System.out.println("Printing hand");
+		for (int i = 0 ; i < hand.size(); i++) {
+			System.out.println(hand.get(i).toString());
+		}
 		ArrayList <Card> finalSuggestion = new ArrayList<Card>();
 		HashMap<CardType, ArrayList<Card>> possibleSuggestions = new HashMap<CardType, ArrayList<Card>>();
 		// pick this players current room
 		possibleSuggestions.computeIfAbsent(CardType.ROOM, k -> new ArrayList<>()).add(this.currRoom);
+		
 		//suggestion.put(CardType.ROOM, this.currRoom);
 		Board board = Board.getInstance();
 		
 		// pick weapon that has not been seen and is not in their hand
-		for (Card card : board.weaponDeck) {
+		for (Card weaponCard : board.weaponDeck) {
 			ArrayList<Card> seenWeapons = seenMap.get(CardType.WEAPON);
-			System.out.println(hand.size());
-			if (seenWeapons.contains(card)){
-				System.out.println("seenWeapons contains " + card.toString());
-			}
-			if (hand.contains(card)){
-				System.out.println("hand contains " + card.toString());
+			for (int i = 0; i < seenWeapons.size(); i++) {
+				if (weaponCard.equals(seenWeapons.get(i))) {
+					System.out.println("seenWeapons contains " + weaponCard.toString());
+					seenWeaponsContains = true;
+					break;
+				}
+				
+				else {
+					System.out.println(seenWeapons.get(i).toString() + " != " + weaponCard.toString());
+					continue;
+				}		
 			}
 			
-			if (seenWeapons.contains(card) && hand.contains(card)) {
-						System.out.println("Adding " + card.toString() + " to possibleSuggestions.");
-						possibleSuggestions.computeIfAbsent(CardType.WEAPON, k -> new ArrayList<>()).add(card);
-					}
+			
+			for (int j =0 ; j < hand.size(); j++) {
+				if (weaponCard.equals(hand.get(j))) {
+					handContains = true;
+				}
 			}
 	
 		
+		if (!handContains && !seenWeaponsContains) {
+			possibleSuggestions.computeIfAbsent(CardType.WEAPON, k -> new ArrayList<>()).add(weaponCard);
+		}
+			
+	
 		
+		// TODO: Fix bugs with this part
 		// pick person that hasnt been seen and isnt in their hand
-		for (Card card : board.peopleDeck) {
+		for (Card personCard : board.peopleDeck) {
 			ArrayList<Card> seenPeople = seenMap.get(CardType.PERSON);
-				if(seenPeople.contains(card)) {
+				if(seenPeople.contains(personCard)) {
 					continue;
 				}
-				else if (hand.contains(card)) {
+				else if (hand.contains(personCard)) {
 					continue;
 				}
 				else {
 					// oOoO fancy lambda expression
-					possibleSuggestions.computeIfAbsent(CardType.PERSON, k -> new ArrayList<>()).add(card);
+					possibleSuggestions.computeIfAbsent(CardType.PERSON, k -> new ArrayList<>()).add(personCard);
 				}
 			}
 		
@@ -80,7 +102,10 @@ public class computerPlayer extends Player {
 			}
 		}
 		
-		return finalSuggestion;
+		
+		}
+		return finalSuggestion;	
 	}
-	
 }
+
+

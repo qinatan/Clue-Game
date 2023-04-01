@@ -108,8 +108,9 @@ public class Board {
 
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
-				System.out.print(player.getPlayerName());
-				System.out.println(dealtDeck.get(0));
+				// We can keep these because they display each players hand
+//				System.out.print(player.getPlayerName());
+//				System.out.println(dealtDeck.get(0));
 				player.updateHand(dealtDeck.remove(0));
 
 			}
@@ -119,8 +120,10 @@ public class Board {
 
 	private void createSolutionForTest() {
 
-		System.out.println("Solution");
-		System.out.println(peopleDeck.get(0) + " " + roomDeck.get(0) + " " + weaponDeck.get(0));
+		// We can keep these because this displays out solution
+		// System.out.println("Solution");
+		// System.out.println(peopleDeck.get(0) + " " + roomDeck.get(0) + " " +
+		// weaponDeck.get(0));
 
 		// initialized solution to be the first person, first room, first weapon
 		Board.solution = new Solution(peopleDeck.get(0), roomDeck.get(0), weaponDeck.get(0));
@@ -637,8 +640,6 @@ public class Board {
 			return false;
 		}
 	}
-	
-	
 
 	// ************** Methods for unit testing purposes only *************//
 	public int getNumPlayerCards() {
@@ -689,6 +690,13 @@ public class Board {
 
 	public ArrayList<Player> getPlayerList() {
 		return playerList;
+	}
+
+	public Card handleSuggestion(Card suggestedRoom, Card suggestedPerson, Card suggestedWeapon,
+			Player suggestingPlayer) {
+		// TODO Auto-generated method stub
+		return null;
+
 	}
 
 }

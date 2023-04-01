@@ -1,6 +1,6 @@
 package clueGame;
 
-public class Card {
+public class Card /* TODO: implements Comparable need to do this */ {
 	private String cardName;
 	private CardType cardType;
 	private int dealCount = 0;
@@ -46,6 +46,7 @@ public class Card {
 		return cardType;
 	}
 
+	// TODO: I think we need to do this to get that test passing @Override
 	public boolean equals(Card target) {
 		if (this.cardType == target.cardType && this.cardName.equals(target.cardName)){
 			return true;

@@ -69,5 +69,5 @@ public abstract class Player {
 		return col;
 	}
 
-	public abstract Card makeSuggestion(Card suggestedRoom, Card correctPerson, Card correctWeapon);
+	public abstract Card disproveSuggestion(Card suggestedRoom, Card correctPerson, Card correctWeapon);
 }

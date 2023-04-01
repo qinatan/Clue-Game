@@ -11,5 +11,10 @@ public class computerPlayer extends Player {
 	{
 		hand.add(card); 
 	}
+	@Override
+	public Card disproveSuggestion(Card suggestedRoom, Card correctPerson, Card correctWeapon) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

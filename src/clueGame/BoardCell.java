@@ -13,6 +13,7 @@ import java.util.Set;
 
 public class BoardCell {
 	private int columnNum;
+	private int rowNum;
 	private Set<BoardCell> adjList = new HashSet<BoardCell>();
 	private Boolean isRoom = false;
 	private Boolean isOccupied = false;
@@ -22,7 +23,7 @@ public class BoardCell {
 	private Boolean isRoomCenterCell = false;
 	private Character secretPassage = null;
 	private DoorDirection doorDirection;
-	private int rowNum;
+	
 	
 	
 	public int getRowNum() {

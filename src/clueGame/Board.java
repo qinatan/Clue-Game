@@ -618,21 +618,22 @@ public class Board {
 		dealtDeck.remove(weaponDeck.get(randomWeapon));
 	}
 	
+	//return first disproval card that matching to suggesting card from other players, except the suggesting player 
 	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3, Player suggestingPlayer)
 	{
 		Card disprovedCard = null;
 		
-		for (int i = 0; i <playerList.size(); i++)
+		for (int i = 0; i <playerList.size(); i++) 
 		{
 			Player player = playerList.get(i); 
 			
 			if (player != suggestingPlayer)
 			{
 				disprovedCard = player.disproveSuggestion(suggestedCard1, sugguestedCard2, suggestedCard3); 
-				// no need to look further when we have a disproved card 
+				
 				if (disprovedCard != null)
 				{
-					break; 
+					break; // no need to look further when we have a disproved card 
 				}
 
 			}
@@ -666,6 +667,8 @@ public class Board {
 			return false;
 		}
 	}
+	
+
 
 	// ************** Methods for unit testing purposes only *************//
 	public int getNumPlayerCards() {
@@ -718,6 +721,18 @@ public class Board {
 		return playerList;
 	}
 
+	public Set <BoardCell> getTargetList()
+	{
+		return this.targets; 
+	}
+	public Map<Character, Room> getRoomMap()
+	{
+		return roomMap; 
+	}
 	
+	public ArrayList<Card> getRoomDeck()
+	{
+		return roomDeck; 
+	}
 
 }

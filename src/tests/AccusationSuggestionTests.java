@@ -3,8 +3,10 @@ package tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.junit.Assert.*;
 import org.junit.Assert;
@@ -13,11 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import clueGame.Board;
+import clueGame.BoardCell;
 import clueGame.Card;
 import clueGame.CardType;
 import clueGame.Player;
 import clueGame.Room;
 import clueGame.Solution;
+import clueGame.computerPlayer;
 
 public class AccusationSuggestionTests {
 	private static Board board;
@@ -52,7 +56,7 @@ public class AccusationSuggestionTests {
 		Assert.assertFalse(board.checkAccusation(wrongRoom, correctPerson, correctWeapon)); // solution with wrong weapon
 	}
 
-	// Test player Disproves suggestion
+	// Test player Disproves suggestion -- PASSED -- May need to cleanup code 
 	@Test
 	public void disprovesSuggestion() {
 		// TODO: make sure that these are using the cards we think that they are using
@@ -115,7 +119,7 @@ public class AccusationSuggestionTests {
 
 	}
 
-//Test handleSuggestion() for both CPU and human
+	//Test handleSuggestion() for both CPU and human --DONE 
 	@Test
 	public void handleSuggestionTest() {
 		Solution solution = Board.getSolution();
@@ -130,21 +134,10 @@ public class AccusationSuggestionTests {
 		ArrayList<Card> testingHand1 = testingPlayer1.getHand(); 
 		ArrayList<Card> testingHand2 = testingPlayer2.getHand(); 
 		 
-		
-		for (int i = 0; i < testingHand1.size(); i++)
-		{
-			
-			System.out.println(testingHand1.get(i)); 
-		}
-
 		Card suggestedRoom1 = testingHand1.get(0); //Exercise Room 
 		Card suggestedPerson1 = null; //player1 has another room: Garage 
 		Card suggestedWeapon1 = testingHand1.get(2); //Extension Cord 
 		
-		for (int i = 0; i < testingHand2.size(); i++)
-		{
-			System.out.println(testingHand2.get(i)); 
-		}
 		Card suggestedRoom2 = testingHand2.get(0); // Dog House 
 		Card suggestedPerson2 = testingHand2.get(1); //Yubaba 
 		Card suggestedWeapon2 = null; // player2 has another room: Basement
@@ -152,16 +145,16 @@ public class AccusationSuggestionTests {
 		
 
 		// Tests that no one can disprove the solution
-		Card disprovedCard = board.handleSuggestion(solutionRoom, solutionPerson, solutionWeapon, testingPlayer1); 
-		Assert.assertEquals(null, disprovedCard); 
+		Card disprovalCard = board.handleSuggestion(solutionRoom, solutionPerson, solutionWeapon, testingPlayer1); 
+		Assert.assertEquals(null, disprovalCard ); 
 		
 		//Suggestion only suggesting player can disprove returns null
-		disprovedCard = board.handleSuggestion(solutionRoom, solutionPerson, suggestedWeapon1, testingPlayer1);
-		Assert.assertEquals(null, disprovedCard); 
+		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, suggestedWeapon1, testingPlayer1);
+		Assert.assertEquals(null, disprovalCard); 
 		
 		//Query in order. No other players can show other disproval cards once a disproval card is shown from one player 
-		disprovedCard = board.handleSuggestion(suggestedRoom1, suggestedPerson2, solutionWeapon, testingPlayer3);
-		Assert.assertEquals(suggestedRoom1, disprovedCard); 
+		disprovalCard  = board.handleSuggestion(suggestedRoom1, suggestedPerson2, solutionWeapon, testingPlayer3);
+		Assert.assertEquals(suggestedRoom1, disprovalCard ); 
 				
 	}
 
@@ -202,14 +195,53 @@ public class AccusationSuggestionTests {
 		// TODO: IDK how to do this if multiple persons not seen, one of them is randomly selected
 	}
 
-	//@Test
+	//DONE 
+	@Test 
 	public void CPUSelectTarget() {
-		// targetList is a list of rooms not in seen List 
-		// TODO: If no rooms in seenList, select randomly
-		// TODO: If only one room not in seenList, select it 
-		// TODO: If room in list that has been seen, each target (including room) selected randomly
+		//get the second player from playerList
+		computerPlayer CPUPlayer = (computerPlayer) board.getPlayerList().get(1);
+		int row = CPUPlayer.getPlayerRow(); 
+		int col = CPUPlayer.getPlayerCol();
+		//get the second player's start location 
+		BoardCell startLocation = board.getCell(row, col); 
 		
-		Assert.fail();
+		//find target list rolling 3 from start location -- target list contains no room 
+		// we do not which specific location will be selected -- but test to make sure it is one of the location in target list 
+		board.findAllTargets(startLocation, 3); 
+		Set<BoardCell> CPUTargetList = board.getTargetList(); 
+		BoardCell targetLocation = CPUPlayer.targetSelection(); 
+		Assert.assertTrue(CPUTargetList.contains(targetLocation));
+		
+		//target list contins one room "Patio" by rolling 4 at startLocation 
+		//room is not at seenMap - test to return the room as target selected
+		board.findAllTargets(startLocation, 4); 
+		targetLocation = CPUPlayer.targetSelection(); 	
+		Assert.assertEquals(board.getCell(2,19), targetLocation);
+		Set<BoardCell> targets = board.getTargetList(); 
+	
+		
+		//add room to seenMap
+		//test selected target not equal to room   
+		//test that selected target to make sure it is one of the location in target list 
+		Card seenCard = null; 
+		ArrayList<Card> roomDeck = board.getRoomDeck(); 
+		for (int i = 0; i < roomDeck.size(); i++)
+		{
+			//System.out.println(roomDeck.get(i)); 
+			String cardName = roomDeck.get(i).getCardName(); 
+			
+			if (cardName.equals("Patio"))
+			{
+				seenCard = roomDeck.get(i); 
+				
+			}
+		}
+	
+		CPUPlayer.addToSeenMap(CardType.ROOM, seenCard);
+		targetLocation = CPUPlayer.targetSelection(); 
+		Assert.assertNotEquals(board.getCell(2,19), targetLocation);
+		Assert.assertTrue(CPUTargetList.contains(targetLocation));
+		
 	}
 
 }

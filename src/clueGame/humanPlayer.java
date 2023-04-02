@@ -1,6 +1,8 @@
 package clueGame;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class humanPlayer extends Player {
 
@@ -20,5 +22,8 @@ public class humanPlayer extends Player {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
+	
 
 }

@@ -15,7 +15,7 @@ public abstract class Player {
 	private String color;
 	private int row, col;
 	protected ArrayList<Card> hand = new ArrayList<Card>();
-	protected Map<CardType, ArrayList <Card>> seenMap = new HashMap<CardType, ArrayList <Card>>();
+	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList <Card>>();
 	public Card currRoom; // TODO: add update currRoom every time you move
 
 	public Player(String playerName, String playerColor, String row, String col) {
@@ -85,6 +85,11 @@ public abstract class Player {
 	}
 
 	// **** Other Methods ***************** // 
+	
+	// every player check if they have a card in hand to disprove a suggestedCard
+	//return null if they do not have 
+	//return disapproval card if they have one 
+	//randomly pick one disapproval card if they have more than one 
 	public Card disproveSuggestion(Card suggestedCard1, Card suggestedCard2, Card suggestedCard3) {
 
 		ArrayList<Card> matchingCard = new ArrayList<Card>();
@@ -111,7 +116,18 @@ public abstract class Player {
 	}
 	
 	public void addToSeenMap(CardType cardType, Card seenCard) {
-		this.seenMap.computeIfAbsent(cardType, k -> new ArrayList<>()).add(seenCard);
+		
+		if (seenMap.containsKey(cardType))
+		{
+			seenMap.get(cardType).add(seenCard); 
+		}
+		else
+		{
+			ArrayList<Card> seenCards = new ArrayList<Card>(); 
+			seenCards.add(seenCard); 
+			seenMap.put(cardType, seenCards); 
+		}
+
 	}
 	
 	// ********** TEST METHODS **************** //

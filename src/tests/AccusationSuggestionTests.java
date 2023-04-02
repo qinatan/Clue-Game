@@ -34,7 +34,7 @@ public class AccusationSuggestionTests {
 	}
 
 	@Test
-	public void testSolution() {
+	public void accusationTest() {
 		Solution solution = Board.getSolution();
 
 		Card correctRoom = solution.getRoom();
@@ -46,7 +46,7 @@ public class AccusationSuggestionTests {
 		Card wrongWeapon = board.getPlayerList().get(0).getHand().get(0);
 
 		// Correct solution
-		Assert.assertTrue(board.checkAccusation(correctRoom, correctPerson, correctWeapon));
+		Assert.assertTrue(board.checkAccusation(correctRoom, correctPerson, correctWeapon)); //Check for correct solution
 		Assert.assertFalse(board.checkAccusation(correctRoom, wrongPerson, correctWeapon)); // Solution with wrong person
 		Assert.assertFalse(board.checkAccusation(correctRoom, correctPerson, wrongWeapon)); // solution with wrong weapon
 		Assert.assertFalse(board.checkAccusation(wrongRoom, correctPerson, correctWeapon)); // solution with wrong weapon
@@ -55,8 +55,6 @@ public class AccusationSuggestionTests {
 	// Test player Disproves suggestion -- PASSED -- May need to cleanup code 
 	@Test
 	public void disprovesSuggestion() {
-		// TODO: make sure that these are using the cards we think that they are using
-		// TODO: add all of our tests into documentation on the google drive
 		// TODO: try to refactor to remove the magic ints in the tests
 		Solution solution = Board.getSolution();
 
@@ -108,8 +106,7 @@ public class AccusationSuggestionTests {
 		Assert.assertTrue(foundFirstCard);
 		Assert.assertTrue(foundSecondCard);
 
-		// Section for testing if a player has no matching cards
-
+		// Section for testing if suggestion no one can disprove returns null
 		Assert.assertEquals(null,
 				board.getPlayerList().get(0).disproveSuggestion(correctRoom, correctPerson, correctWeapon));
 
@@ -124,33 +121,39 @@ public class AccusationSuggestionTests {
 		Card solutionPerson = solution.getPerson();
 		Card solutionWeapon = solution.getWeapon();
 		
-		Player testingPlayer1 = board.getPlayer(0);  // Chihiro Ogino == human player
-		Player testingPlayer2 = board.getPlayer(1);
-		Player testingPlayer3 = board.getPlayer(2); 
-		ArrayList<Card> testingHand1 = testingPlayer1.getHand(); 
-		ArrayList<Card> testingHand2 = testingPlayer2.getHand(); 
+		Player humanPlayerForTesting = board.getPlayer(0);  // Chihiro Ogino == human player
+		Player CPUPlayerForTesting0 = board.getPlayer(1); // CPU Player 
+		Player CPUPlayerForTesting1 = board.getPlayer(2); //CPU Player
+		ArrayList<Card> humanHand = humanPlayerForTesting.getHand(); 
+		ArrayList<Card> CPUHand = CPUPlayerForTesting0.getHand(); 
 		 
-		Card suggestedRoom1 = testingHand1.get(0); //Exercise Room 
-		Card suggestedPerson1 = null; //player1 has another room: Garage 
-		Card suggestedWeapon1 = testingHand1.get(2); //Extension Cord 
+		Card humanSuggestedRoom = humanHand.get(0); //Exercise Room 
+		Card humanSuggestedPerson = null; //player1 has another room: Garage 
+		Card humanSuggestedWeapon = humanHand.get(2); //Extension Cord 
 		
-		Card suggestedRoom2 = testingHand2.get(0); // Dog House 
-		Card suggestedPerson2 = testingHand2.get(1); //Yubaba 
-		Card suggestedWeapon2 = null; // player2 has another room: Basement
+		Card CPU0SuggestedRoom = CPUHand.get(0); // Dog House 
+		Card CPU0SuggesterPerson = CPUHand.get(1); //Yubaba 
+		Card CPU0SuggestedRoom0 = null; // player2 has another room: Basement
 		
 		
 
 		// Tests that no one can disprove the solution
-		Card disprovalCard = board.handleSuggestion(solutionRoom, solutionPerson, solutionWeapon, testingPlayer1); 
+		Card disprovalCard = board.handleSuggestion(solutionRoom, solutionPerson, solutionWeapon, humanPlayerForTesting); 
 		Assert.assertEquals(null, disprovalCard ); 
 		
 		//Suggestion only suggesting player can disprove returns null
-		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, suggestedWeapon1, testingPlayer1);
+		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, humanSuggestedWeapon, humanPlayerForTesting);
 		Assert.assertEquals(null, disprovalCard); 
 		
+		
+		//Test for Suggestion only the human player can disprove returns card
+		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, humanHand.get(2), humanPlayerForTesting);
+		Assert.assertEquals(humanHand.get(2), disprovalCard); 
+		
+	
 		//Query in order. No other players can show other disproval cards once a disproval card is shown from one player 
-		disprovalCard  = board.handleSuggestion(suggestedRoom1, suggestedPerson2, solutionWeapon, testingPlayer3);
-		Assert.assertEquals(suggestedRoom1, disprovalCard ); 
+		disprovalCard  = board.handleSuggestion(humanSuggestedRoom, CPU0SuggesterPerson, solutionWeapon, CPUPlayerForTesting1);
+		Assert.assertEquals(humanSuggestedRoom, disprovalCard ); 
 				
 	}
 

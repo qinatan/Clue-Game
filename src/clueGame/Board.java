@@ -735,4 +735,9 @@ public class Board {
 		return roomDeck; 
 	}
 
+	public void movePlayer(int i, int j, Player player) {
+		player.setPlayerLocation(i, j);
+		
+	}
+
 }

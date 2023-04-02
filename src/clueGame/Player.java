@@ -121,6 +121,12 @@ public abstract class Player {
 		this.row = row;
 		this.col = col;
 	}
+	
+	@Override
+	public String toString() {
+		return "Player [name=" + name + "]";
+	}
+
 
 
 }

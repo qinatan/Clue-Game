@@ -601,6 +601,9 @@ public class Board {
 	}
 
 	public void createSolution() {
+		Collections.shuffle(peopleDeck); 
+		Collections.shuffle(roomDeck);
+		Collections.shuffle(weaponDeck);
 		Random random = new Random();
 		int randomPerson = random.nextInt(peopleDeck.size());
 		int randomRoom = random.nextInt(roomDeck.size());
@@ -613,6 +616,29 @@ public class Board {
 		dealtDeck.remove(peopleDeck.get(randomPerson));
 		dealtDeck.remove(roomDeck.get(randomRoom));
 		dealtDeck.remove(weaponDeck.get(randomWeapon));
+	}
+	
+	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3, Player suggestingPlayer)
+	{
+		Card disprovedCard = null;
+		
+		for (int i = 0; i <playerList.size(); i++)
+		{
+			Player player = playerList.get(i); 
+			
+			if (player != suggestingPlayer)
+			{
+				disprovedCard = player.disproveSuggestion(suggestedCard1, sugguestedCard2, suggestedCard3); 
+				// no need to look further when we have a disproved card 
+				if (disprovedCard != null)
+				{
+					break; 
+				}
+
+			}
+		}
+		
+		return disprovedCard; 
 	}
 
 	public void dealCards() {
@@ -692,11 +718,6 @@ public class Board {
 		return playerList;
 	}
 
-	public Card handleSuggestion(Card suggestedRoom, Card suggestedPerson, Card suggestedWeapon,
-			Player suggestingPlayer) {
-		// TODO Auto-generated method stub
-		return null;
-
-	}
+	
 
 }

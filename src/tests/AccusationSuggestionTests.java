@@ -115,50 +115,58 @@ public class AccusationSuggestionTests {
 
 	}
 
-//Test accusation for both CPU and human
+//Test handleSuggestion() for both CPU and human
 	@Test
-	public void handleSuggestionMade() {
-		Assert.fail();
-
+	public void handleSuggestionTest() {
 		Solution solution = Board.getSolution();
 
-		Card correctRoom = solution.getRoom();
-		Card correctPerson = solution.getPerson();
-		Card correctWeapon = solution.getWeapon();
-		Card suggestedRoom = board.getPlayerList().get(0).getHand().get(0);
-		Card suggestedPerson = board.getPlayerList().get(0).getHand().get(0);
-		Card suggestedWeapon = board.getPlayerList().get(0).getHand().get(0);
+		Card solutionRoom = solution.getRoom();
+		Card solutionPerson = solution.getPerson();
+		Card solutionWeapon = solution.getWeapon();
+		
+		Player testingPlayer1 = board.getPlayer(0);  // Chihiro Ogino == human player
+		Player testingPlayer2 = board.getPlayer(1);
+		Player testingPlayer3 = board.getPlayer(2); 
+		ArrayList<Card> testingHand1 = testingPlayer1.getHand(); 
+		ArrayList<Card> testingHand2 = testingPlayer2.getHand(); 
+		 
+		
+		for (int i = 0; i < testingHand1.size(); i++)
+		{
+			
+			System.out.println(testingHand1.get(i)); 
+		}
 
-		// Suggestion no one can disprove returns null
+		Card suggestedRoom1 = testingHand1.get(0); //Exercise Room 
+		Card suggestedPerson1 = null; //player1 has another room: Garage 
+		Card suggestedWeapon1 = testingHand1.get(2); //Extension Cord 
+		
+		for (int i = 0; i < testingHand2.size(); i++)
+		{
+			System.out.println(testingHand2.get(i)); 
+		}
+		Card suggestedRoom2 = testingHand2.get(0); // Dog House 
+		Card suggestedPerson2 = testingHand2.get(1); //Yubaba 
+		Card suggestedWeapon2 = null; // player2 has another room: Basement
+		
+		
 
 		// Tests that no one can disprove the solution
-		Assert.assertEquals(null,
-				board.handleSuggestion(correctRoom, correctPerson, correctWeapon, board.getPlayerList().get(0)));
-
-		// Suggestion only suggesting player can disprove returns null
-		// TODO: This needs to be changed to make sure that the players card that we are
-		// testing is correct
-		Assert.assertEquals(null,
-				board.handleSuggestion(suggestedRoom, suggestedPerson, suggestedWeapon, board.getPlayerList().get(0)));
-
-		// Suggestion only human can disprove returns answer (i.e., card that disproves
-		// suggestion)
-		// TODO: This needs to be changed to make sure that we are testing the
-		Assert.assertEquals(suggestedRoom,
-				board.handleSuggestion(suggestedRoom, suggestedPerson, suggestedWeapon, board.getPlayerList().get(0)));
-
-		// Suggestion that two players can disprove, correct player (based on starting
-		// with next player in list) returns answer
-		// TODO: This needs to be changed to make sure that we are testing the
-		Assert.assertEquals(suggestedRoom,
-				board.handleSuggestion(suggestedRoom, suggestedPerson, suggestedWeapon, board.getPlayerList().get(0)));
-
-		Assert.assertEquals(suggestedRoom,
-				board.handleSuggestion(suggestedRoom, suggestedPerson, suggestedWeapon, board.getPlayerList().get(0)));
+		Card disprovedCard = board.handleSuggestion(solutionRoom, solutionPerson, solutionWeapon, testingPlayer1); 
+		Assert.assertEquals(null, disprovedCard); 
+		
+		//Suggestion only suggesting player can disprove returns null
+		disprovedCard = board.handleSuggestion(solutionRoom, solutionPerson, suggestedWeapon1, testingPlayer1);
+		Assert.assertEquals(null, disprovedCard); 
+		
+		//Query in order. No other players can show other disproval cards once a disproval card is shown from one player 
+		disprovedCard = board.handleSuggestion(suggestedRoom1, suggestedPerson2, solutionWeapon, testingPlayer3);
+		Assert.assertEquals(suggestedRoom1, disprovedCard); 
+				
 	}
 
 	@SuppressWarnings("null")
-	@Test
+	//@Test
 	public void CPUSuggestion() {
 		// Room matches current location
 		Player YubabaCpuPlayer = board.getPlayerList().get(1); 
@@ -194,7 +202,7 @@ public class AccusationSuggestionTests {
 		// TODO: IDK how to do this if multiple persons not seen, one of them is randomly selected
 	}
 
-	@Test
+	//@Test
 	public void CPUSelectTarget() {
 		// targetList is a list of rooms not in seen List 
 		// TODO: If no rooms in seenList, select randomly

@@ -94,16 +94,16 @@ public abstract class Player {
 
 		ArrayList<Card> matchingCard = new ArrayList<Card>();
 		for (int i = 0; i < hand.size(); i++) {
-			if (hand.get(i) == suggestedCard1) {
+			if (hand.get(i).equals(suggestedCard1)) {
 				matchingCard.add(suggestedCard1);
 			}
-			if (hand.get(i) == suggestedCard2)
+			if (hand.get(i).equals(suggestedCard2))
 
 			{
 				matchingCard.add(suggestedCard2);
 
 			}
-			if (hand.get(i) == suggestedCard3) {
+			if (hand.get(i).equals(suggestedCard3)) {
 				matchingCard.add(suggestedCard3);
 			}
 		}

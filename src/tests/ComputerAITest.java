@@ -249,9 +249,6 @@ class ComputerAITest {
 		for (int i = 0; i < 10; i++) {
 			ArrayList<Card> multiSuggestion = NoFaceCpuPlayer.makeSuggestion();
 
-			System.out.println(multiSuggestion) ; 
-			// suggestion.contains(new Card(CardType.PERSON, "Chihiro Ogino") ;
-
 			if (multiSuggestion.contains(new Card(CardType.WEAPON, "Extension Cord"))) {
 				seenFirstWeapon = true;
 			}

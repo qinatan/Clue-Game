@@ -122,16 +122,16 @@ public class AccusationSuggestionTests {
 		Card solutionPerson = solution.getPerson();
 		Card solutionWeapon = solution.getWeapon();
 		
-		Player humanPlayerForTesting = board.getPlayer(0);  // Chihiro Ogino == human player
-		Player CPUPlayerForTesting0 = board.getPlayer(1); // CPU Player 
-		Player CPUPlayerForTesting1 = board.getPlayer(2); //CPU Player
+		Player humanPlayerForTesting = board.getPlayer(0); // Chihiro Ogino == human player
+		Player CPUPlayerForTesting0 = board.getPlayer(1);  // CPU Player 
+		Player CPUPlayerForTesting1 = board.getPlayer(2);  // CPU Player
 		ArrayList<Card> humanHand = humanPlayerForTesting.getHand(); 
 		ArrayList<Card> CPUHand = CPUPlayerForTesting0.getHand(); 
 		 
 		Card humanSuggestedRoom = humanHand.get(0); //Exercise Room 
 		Card humanSuggestedPerson = null; //player1 has another room: Garage 
 		Card humanSuggestedWeapon = humanHand.get(2); //Extension Cord 
-		
+		// TODO: These variable names are gross
 		Card CPU0SuggestedRoom = CPUHand.get(0); // Dog House 
 		Card CPU0SuggesterPerson = CPUHand.get(1); //Yubaba 
 		Card CPU0SuggestedRoom0 = null; // player2 has another room: Basement
@@ -148,7 +148,9 @@ public class AccusationSuggestionTests {
 		
 		
 		//Test for Suggestion only the human player can disprove returns card
-		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, humanHand.get(2), humanPlayerForTesting);
+		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, humanHand.get(2), CPUPlayerForTesting0);
+		System.out.println(humanHand.get(2).toString());
+		System.out.println(disprovalCard.toString());
 		Assert.assertEquals(humanHand.get(2), disprovalCard); 
 		
 	

@@ -161,7 +161,6 @@ public class AccusationSuggestionTests {
 	
 
 
-	//DONE 
 	@Test 
 	public void CPUSelectTarget() {
 		
@@ -188,16 +187,29 @@ public class AccusationSuggestionTests {
 		targetLocation = CPUPlayer.targetSelection(CPUTargetList); 	
 		Assert.assertEquals(board.getCell(2,19), targetLocation);
 		Set<BoardCell> targets = board.getTargetList(); 
+	
+		
+		//add room to seenMap
+		//test that selected target to make sure it is one of the location in target list 
+		Card seenCard = null; 
+		ArrayList<Card> roomDeck = board.getRoomDeck(); 
+		for (int i = 0; i < roomDeck.size(); i++)
+		{
+			//System.out.println(roomDeck.get(i)); 
+			String cardName = roomDeck.get(i).getCardName(); 
 			
-
+			if (cardName.equals("Patio"))
+			{
+				seenCard = roomDeck.get(i); 
+				
+			}
+		}
+	
 		CPUPlayer.addToSeenMap(CardType.ROOM, seenCard);
 		targetLocation = CPUPlayer.targetSelection(CPUTargetList); 
 	
-		System.out.println("This is target location"); 
-		System.out.println(targetLocation); 
-		//Assert.assertTrue(CPUTargetList.contains(targetLocation));
+		Assert.assertTrue(CPUTargetList.contains(targetLocation));
 		
 	}
-
 
 }

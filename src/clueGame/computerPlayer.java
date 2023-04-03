@@ -112,25 +112,10 @@ public class computerPlayer extends Player {
 	public BoardCell targetSelection(Set<BoardCell> targetList)
 	{
 		Board board = Board.getInstance(); 
-		System.out.println("This is target set from function target selection"); 
-		for (BoardCell target : targetList)
-		{
-			System.out.println(target); 
-		}
-		
 		ArrayList<BoardCell> targets = new ArrayList<BoardCell>(targetList); 
-		System.out.println("This arraylist targets from function"); 
-		for (int k = 0; k < targets.size(); k++)
-		{
-			System.out.println(targets.get(k)); 
-		}
-				
 		ArrayList<String> cardNames = new ArrayList<String>(); 
-		
 		BoardCell targetLocation = null; 
-		
 		ArrayList<Card> roomCards = seenMap.get(CardType.ROOM);
-		
 		if (roomCards !=null)
 		{
 			for (int j = 0; j < roomCards.size(); j++)
@@ -145,13 +130,11 @@ public class computerPlayer extends Player {
 			targetLocation = targets.get(i); 
 			if (targetLocation.isRoom())
 			{
-			
 				//get the cellSymbol in order to get the matching room from roadMap 
 				Character cellSymbol = targetLocation.getCellSymbol(); 
 				String roomName = board.getRoomMap().get(cellSymbol).getName(); 
-				System.out.println(roomName); 
+				
 				//check if the room is in the seenMap 
-			
 				//No Room Card has seen: we can return this room
 				if (roomCards == null || !cardNames.contains(roomName))
 				{

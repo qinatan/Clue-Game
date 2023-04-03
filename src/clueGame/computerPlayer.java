@@ -109,11 +109,22 @@ public class computerPlayer extends Player {
 	
 	//AI player select one target from targetList to move toward 
 	//return the first room found in targetList if room is not in seenMap, or return random target location if no room exit or room is already in seenMap 
-	public BoardCell targetSelection()
+	public BoardCell targetSelection(Set<BoardCell> targetList)
 	{
 		Board board = Board.getInstance(); 
-		Set<BoardCell> targetList = board.getTargetList(); 
+		System.out.println("This is target set from function target selection"); 
+		for (BoardCell target : targetList)
+		{
+			System.out.println(target); 
+		}
+		
 		ArrayList<BoardCell> targets = new ArrayList<BoardCell>(targetList); 
+		System.out.println("This arraylist targets from function"); 
+		for (int k = 0; k < targets.size(); k++)
+		{
+			System.out.println(targets.get(k)); 
+		}
+				
 		ArrayList<String> cardNames = new ArrayList<String>(); 
 		
 		BoardCell targetLocation = null; 
@@ -138,7 +149,7 @@ public class computerPlayer extends Player {
 				//get the cellSymbol in order to get the matching room from roadMap 
 				Character cellSymbol = targetLocation.getCellSymbol(); 
 				String roomName = board.getRoomMap().get(cellSymbol).getName(); 
-			
+				System.out.println(roomName); 
 				//check if the room is in the seenMap 
 			
 				//No Room Card has seen: we can return this room
@@ -154,6 +165,7 @@ public class computerPlayer extends Player {
 		Random randomTarget = new Random(); 
 		int randomNumber = randomTarget.nextInt(targets.size());
 		return targets.get(randomNumber); 
+		
 	}
 }
 

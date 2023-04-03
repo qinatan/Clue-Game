@@ -119,44 +119,42 @@ public class computerPlayer extends Player {
 			}
 		}
 
-		return finalSuggestion;
-	}// end of function
-
-	// }
-
-	// AI player select one target from targetList to move toward
-	// return the first room found in targetList if room is not in seenMap, or
-	// return random target location if no room exit or room is already in seenMap
-	public BoardCell targetSelection() {
-		Board board = Board.getInstance();
-		Set<BoardCell> targetList = board.getTargetList();
-		ArrayList<BoardCell> targets = new ArrayList<BoardCell>(targetList);
-		ArrayList<String> cardNames = new ArrayList<String>();
-
-		BoardCell targetLocation = null;
-
+		return finalSuggestion;	
+	}
+	
+	//AI player select one target from targetList to move toward 
+	//return the first room found in targetList if room is not in seenMap, or return random target location if no room exit or room is already in seenMap 
+	public BoardCell targetSelection(Set<BoardCell> targetList)
+	{
+		Board board = Board.getInstance(); 
+		ArrayList<BoardCell> targets = new ArrayList<BoardCell>(targetList); 
+		ArrayList<String> cardNames = new ArrayList<String>(); 
+		BoardCell targetLocation = null; 
 		ArrayList<Card> roomCards = seenMap.get(CardType.ROOM);
-
-		if (roomCards != null) {
-			for (int j = 0; j < roomCards.size(); j++) {
-				cardNames.add(roomCards.get(j).getCardName());
+		if (roomCards !=null)
+		{
+			for (int j = 0; j < roomCards.size(); j++)
+			{
+				cardNames.add(roomCards.get(j).getCardName()); 
 			}
 		}
-		// loop through every target location to check if a room exist
+		//loop through every target location to check if a room exist
+		
+		for (int i = 0; i < targets.size(); i++)
+		{
+			targetLocation = targets.get(i); 
+			if (targetLocation.isRoom())
+			{
+				//get the cellSymbol in order to get the matching room from roadMap 
+				Character cellSymbol = targetLocation.getCellSymbol(); 
+				String roomName = board.getRoomMap().get(cellSymbol).getName(); 
+				
+				//check if the room is in the seenMap 
+				//No Room Card has seen: we can return this room
+				if (roomCards == null || !cardNames.contains(roomName))
+				{
+					return targetLocation; 
 
-		for (int i = 0; i < targets.size(); i++) {
-			targetLocation = targets.get(i);
-			if (targetLocation.isRoom()) {
-
-				// get the cellSymbol in order to get the matching room from roadMap
-				Character cellSymbol = targetLocation.getCellSymbol();
-				String roomName = board.getRoomMap().get(cellSymbol).getName();
-
-				// check if the room is in the seenMap
-
-				// No Room Card has seen: we can return this room
-				if (roomCards == null || !cardNames.contains(roomName)) {
-					return targetLocation;
 				}
 
 			}
@@ -165,6 +163,9 @@ public class computerPlayer extends Player {
 		// return random target location is no room in the target list
 		Random randomTarget = new Random();
 		int randomNumber = randomTarget.nextInt(targets.size());
-		return targets.get(randomNumber);
+
+		return targets.get(randomNumber); 
+		
+
 	}
 }

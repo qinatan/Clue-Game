@@ -3,6 +3,7 @@ package tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import org.junit.Assert.*;
 import org.junit.Assert;
@@ -159,7 +160,56 @@ public class AccusationSuggestionTests {
 
 	
 
+
+	@Test 
+	public void CPUSelectTarget() {
+		
+		//get the second player from playerList
+		computerPlayer CPUPlayer = (computerPlayer) board.getPlayerList().get(1);
+		int row = CPUPlayer.getPlayerRow(); 
+		int col = CPUPlayer.getPlayerCol();
+		//get the second player's start location 
+		BoardCell startLocation = board.getCell(row, col); 
+		
+		
+		//find target list rolling 3 from start location -- target list contains no room 
+		// we do not which specific location will be selected -- but test to make sure it is one of the location in target list 
+		board.findAllTargets(startLocation, 3); 
+		Set<BoardCell> CPUTargetList = board.getTargetList(); 
+		BoardCell targetLocation = CPUPlayer.targetSelection(CPUTargetList); 
+		Assert.assertTrue(CPUTargetList.contains(targetLocation));
+		
+		
+		//target list contins one room "Patio" by rolling 4 at startLocation 
+		//room is not at seenMap - test to return the room as target selected
+		
+		board.findAllTargets(startLocation, 4); 
+		targetLocation = CPUPlayer.targetSelection(CPUTargetList); 	
+		Assert.assertEquals(board.getCell(2,19), targetLocation);
+		Set<BoardCell> targets = board.getTargetList(); 
 	
+		
+		//add room to seenMap
+		//test that selected target to make sure it is one of the location in target list 
+		Card seenCard = null; 
+		ArrayList<Card> roomDeck = board.getRoomDeck(); 
+		for (int i = 0; i < roomDeck.size(); i++)
+		{
+			//System.out.println(roomDeck.get(i)); 
+			String cardName = roomDeck.get(i).getCardName(); 
+			
+			if (cardName.equals("Patio"))
+			{
+				seenCard = roomDeck.get(i); 
+				
+			}
+		}
 	
+		CPUPlayer.addToSeenMap(CardType.ROOM, seenCard);
+		targetLocation = CPUPlayer.targetSelection(CPUTargetList); 
+	
+		Assert.assertTrue(CPUTargetList.contains(targetLocation));
+		
+	}
 
 }

@@ -32,6 +32,8 @@ class ComputerAITest {
 
 	@Test
 	public void CPUSelectTarget() {
+		Assert.fail(); 
+		/*
 		// get the second player from playerList
 		
 		computerPlayer CPUPlayer = (computerPlayer) board.getPlayerList().get(1);
@@ -171,7 +173,7 @@ class ComputerAITest {
 		Assert.assertTrue(forthLocation);
 		Assert.assertTrue(fifthLocation);
 		
-
+*/
 	}
 
 	@SuppressWarnings("null")

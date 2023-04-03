@@ -4,14 +4,13 @@ public class Card implements Comparable<Card> {
 	private String cardName;
 	private CardType cardType;
 	private int dealCount = 0;
-	
+
 	// constructors
-	 public Card(CardType type, String cardName) {
-		 this.cardType = type; 
-		 this.cardName = cardName;
-	 }
-	 
-	 
+	public Card(CardType type, String cardName) {
+		this.cardType = type;
+		this.cardName = cardName;
+	}
+
 	public Card(String cardName, String type) {
 		this.cardName = cardName;
 		switch (type) {
@@ -46,25 +45,26 @@ public class Card implements Comparable<Card> {
 		return cardType;
 	}
 
-	//@Override
-	public boolean equals(Card target) {
-		if (this.cardType == target.cardType && this.cardName.equals(target.cardName)){
-			return true;
-		}
-		else {
-			return false; 
-		}
+	@Override
+	public boolean equals(Object o ) {
+		 if (o == null || getClass() != o.getClass()) return false;
+		Card that = (Card) o ; 
+		return cardType.equals(that.cardType) && cardName.equals(that.cardName);
+//		if (this.cardType.equals(((Card) target).getCardType()) && this.cardName.equals(target.cardName)) {
+//			return true;
+//		} else {
+//			return false;
+//		}
 	}
 
 	@Override
 	public String toString() {
 		return "Card [cardName=" + cardName + ", cardType=" + cardType + "]";
 	}
-	
-	public void setDealCount() {
-		dealCount ++ ; 
-	}
 
+	public void setDealCount() {
+		dealCount++;
+	}
 
 	@Override
 	public int compareTo(Card o) {

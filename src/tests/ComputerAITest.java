@@ -207,9 +207,9 @@ class ComputerAITest {
 		Assert.assertTrue(suggestion.size() == 3);
 
 		// This prints the suggestions made
-		for (Card card : suggestion) {
-			System.out.println(card.toString());
-		}
+//		for (Card card : suggestion) {
+//			System.out.println(card.toString());
+//		}
 
 		// This test that the CPU suggests the not seen Person
 		Assert.assertTrue(suggestion.contains(new Card(CardType.PERSON, "Chihiro Ogino")));
@@ -243,9 +243,11 @@ class ComputerAITest {
 
 		boolean seenFirstPerson = false;
 		boolean seenSecondPerson = false;
+		
 		for (int i = 0; i < 10; i++) {
-			ArrayList<Card> multiSuggestion = YubabaCpuPlayer.makeSuggestion();
+			ArrayList<Card> multiSuggestion = NoFaceCpuPlayer.makeSuggestion();
 
+			System.out.println(multiSuggestion) ; 
 			// suggestion.contains(new Card(CardType.PERSON, "Chihiro Ogino") ;
 
 			if (multiSuggestion.contains(new Card(CardType.WEAPON, "Extension Cord"))) {

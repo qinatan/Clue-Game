@@ -14,7 +14,7 @@ Space, Unused, X
 Space, Walkway, W
 //Weapons
 Weapon, Dog Bone
-Weapon, Broken DVD 
+Weapon, Broken DVD
 Weapon, Wrench
 Weapon, Venus Fly Trap
 Weapon, Dumbbell

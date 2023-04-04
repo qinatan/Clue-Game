@@ -69,7 +69,7 @@ public abstract class Player {
 	public int getPlayerCol() {
 		return col;
 	}
-	
+
 	// *********************************** //
 
 	// Abstract Methods

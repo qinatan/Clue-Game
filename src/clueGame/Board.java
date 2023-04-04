@@ -23,7 +23,7 @@ public class Board {
 	private BoardCell[][] grid;
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
-	private Set<BoardCell> targets = new HashSet<BoardCell>();
+	private Set<BoardCell> targets;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private ArrayList<Card> fullDeck;
 	private ArrayList<Card> dealtDeck;
@@ -54,6 +54,7 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize() {
+		targets = new HashSet<BoardCell>();
 		playerList = new ArrayList<Player>();
 		fullDeck = new ArrayList<Card>();
 		dealtDeck = new ArrayList<Card>();
@@ -76,6 +77,7 @@ public class Board {
 	}
 
 	public void initializeForTest() {
+		targets = new HashSet<BoardCell>();
 		playerList = new ArrayList<Player>();
 		fullDeck = new ArrayList<Card>();
 		dealtDeck = new ArrayList<Card>();
@@ -108,9 +110,6 @@ public class Board {
 
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
-				// We can keep these because they display each players hand
-//				System.out.print(player.getPlayerName());
-//				System.out.println(dealtDeck.get(0));
 				player.updateHand(dealtDeck.remove(0));
 
 			}

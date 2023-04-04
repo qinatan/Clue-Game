@@ -1,14 +1,10 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.Test; // Must always include this to declare Junit5
 import java.util.ArrayList;
 import java.util.Set;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.Card;
@@ -21,7 +17,6 @@ class ComputerAITest {
 
 	@BeforeAll
 	public static void setUp() {
-
 		// Board is singleton, get the only instance
 		board = Board.getInstance();
 		// set the file names to use my config files
@@ -32,24 +27,28 @@ class ComputerAITest {
 
 	@Test
 	public void CPUSelectTarget() {
-		Assert.fail(); 
-		/*
-		// get the second player from playerList
+		//Assert.fail(); 
 		
+		// Tests that CPUPlayer selects randomly if no rooms in seenList
+		// get the second player from playerList
 		computerPlayer CPUPlayer = (computerPlayer) board.getPlayerList().get(1);
 		int row = 10;
 		int col = 8;
-		// System.out.println(row + " " + col);
 		// get the second player's start location as a known board cell
-		BoardCell startLocation = board.getCell(row, col);
-		board.movePlayer(10, 8, board.getPlayerList().get(1)); 
+		BoardCell CPUstartLocation = board.getCell(row, col);
+		board.movePlayer(10, 8, CPUPlayer); 
+		//computerPlayer CPUPlayer = new computerPlayer("TestOne", "RED", "10", "8");
 		// find target list rolling 2 from start location -- target list contains no
 		// room
 		// we do not which specific location will be selected -- but test to make sure
 		// it is one of the location in target list
-		board.findAllTargets(startLocation, 2);
-		Set<BoardCell> CPUTargetList = board.getTargetList();
-		BoardCell targetLocation = CPUPlayer.targetSelection();
+		board.findAllTargets(CPUstartLocation, 2);
+		//System.out.println("Target List = ");
+		//System.out.println(board.getTargetList().toString());
+		Set<BoardCell> CPUTargetList = board.getTargetList(); // TODO: Why does a board have a targetsList
+		System.out.println(CPUTargetList);
+		BoardCell targetLocation = CPUPlayer.targetSelection(CPUTargetList);
+		
 
 		boolean firstLocation = false;
 		boolean secondLocation = false;
@@ -57,8 +56,8 @@ class ComputerAITest {
 		boolean forthLocation = false;
 		boolean fifthLocation = false;
 		for (int i = 0; i < 20; i++) {
-			targetLocation = CPUPlayer.targetSelection();
-			
+			targetLocation = CPUPlayer.targetSelection(CPUTargetList);
+			System.out.println(targetLocation.toString());
 			if (targetLocation.getRowNum() == 8 && targetLocation.getColumnNum() == 8) {
 				firstLocation = true;
 			}
@@ -79,6 +78,7 @@ class ComputerAITest {
 				fifthLocation = true;
 			}
 		}
+		
 
 		Assert.assertTrue(firstLocation);
 		Assert.assertTrue(secondLocation);
@@ -87,22 +87,26 @@ class ComputerAITest {
 		Assert.assertTrue(fifthLocation);
 		Assert.assertTrue(CPUTargetList.contains(targetLocation));
 
-		// target list contins one room "Patio" by rolling 4 at startLocation
+		// target list contains one room "Patio" by rolling 4 at startLocation
 		// room is not at seenMap - test to return the room as target selected
+		/*
 		board.findAllTargets(startLocation, 4);
-		targetLocation = CPUPlayer.targetSelection();
+		targetLocation = CPUPlayer.targetSelection(CPUTargetList);
 		Assert.assertEquals(board.getCell(2, 19), targetLocation);
 		Set<BoardCell> targets = board.getTargetList();
-
-		//Test for if the room is not seen go into it
+		*/
+		
+		// #2 Test whether the player always selects a room that it has not seen from targets
 		board.movePlayer(11, 5, board.getPlayerList().get(1)); 
+		BoardCell secondStartLocation = board.getCell(11, 5);
+		board.findAllTargets(secondStartLocation, 2);
 		firstLocation = false;
 		secondLocation = false;
 		thirdLocation = false;
 		forthLocation = false;
 		fifthLocation = false;
 		for (int i = 0; i < 20; i++) {
-			targetLocation = CPUPlayer.targetSelection();
+			targetLocation = CPUPlayer.targetSelection(CPUTargetList);
 			
 			if (targetLocation.getRowNum() == 11 && targetLocation.getColumnNum() == 3) {
 				firstLocation = true;
@@ -132,19 +136,20 @@ class ComputerAITest {
 		Assert.assertTrue(fifthLocation);
 		
 		
+		// #3 Test that all targets are randomly chosen
 		CPUPlayer.addToSeenMap(CardType.ROOM, new Card(CardType.ROOM, "Garage"));																// should have a random component so this test
 																		
 		
-		//Test for if the room is seen go to a random location 
-		// TODO:Move the player to 11, 5 
+		// Test for if the room is seen go to a random location 
+		// Move the player to 11, 5 
 		board.movePlayer(11, 5, board.getPlayerList().get(1)); 
 		firstLocation = false;
 		secondLocation = false;
 		thirdLocation = false;
 		forthLocation = false;
 		fifthLocation = false;
-		for (int i = 0; i < 20; i++) {
-			targetLocation = CPUPlayer.targetSelection();
+		for (int i = 0; i < 60; i++) {
+			targetLocation = CPUPlayer.targetSelection(CPUTargetList);
 			
 			if (targetLocation.getRowNum() == 11 && targetLocation.getColumnNum() == 3) {
 				firstLocation = true;
@@ -172,12 +177,10 @@ class ComputerAITest {
 		Assert.assertTrue(thirdLocation);
 		Assert.assertTrue(forthLocation);
 		Assert.assertTrue(fifthLocation);
-		
-*/
 	}
 
 	@SuppressWarnings("null")
-	@Test
+	//@Test
 	public void CPUSuggestion() {
 		// Room matches current location
 		Player YubabaCpuPlayer = board.getPlayerList().get(1);

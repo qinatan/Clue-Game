@@ -4,8 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * BoardCell
- * @author michaeleack @author johnOmalley
+ * 
+ * BoardCell contains variables that store information of a boardCell, including: row and column location,
+ * initial and other special conditions (room, roomLable, roomCenter, doorway, secrete passage, occupied, adjacency list)
+ * 
+ * @author michaeleack 
+ * @author johnOmalley
+ * @author Qina Tan
  * Date: 3/10/23
  * Collaborators: N/A
  * Sources: None

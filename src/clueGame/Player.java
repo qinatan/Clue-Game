@@ -1,3 +1,21 @@
+/**
+ * Player Class contains attribute of a Player (Human and AI player), includes name, playColor, row, col(start location)
+ * card hands' of a player and a list of seen cards. 
+ * 
+ * Player class is responsible for all actions of a player including make suggestion, 
+ * disprove suggestion by showing a matching card to a suggested card by another player
+ * 
+ * @author: Mike Eact 
+ * @author: John Omalley 
+ * @author: Qina Tan 
+ * @start Date: 8/3/2025
+ * @collaborator: none 
+ * @resources: none 
+ */
+
+
+
+
 package clueGame;
 
 import java.awt.Color;

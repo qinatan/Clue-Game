@@ -1,3 +1,16 @@
+/**
+ * Card Class contains attributes describing a card, includes card type, card name
+ * @author: Mike Eact 
+ * @author: John Omalley 
+ * @author: Qina Tan 
+ * @start Date: 8/3/2025
+ * @collaborator: none 
+ * @resources: none 
+ * 
+ * 
+ **/
+
+
 package clueGame;
 
 public class Card implements Comparable<Card> {

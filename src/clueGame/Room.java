@@ -2,7 +2,9 @@ package clueGame;
 
 
 /**
- * BoardCell
+ * Room class contains information of a cell indicated as a room, includes room name, room initial
+ * special condition: whether the cell indicates the center or label of a room 
+ * 
  * @author michaeleack 
  * @author johnOmalley
  * Date: 3/7/23

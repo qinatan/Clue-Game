@@ -11,11 +11,15 @@ import java.util.Set;
 import java.io.*;
 
 /**
- * BoardCell
+ * Board
+ * 
+ * Board class contains variables that represent objects in the game board, and methods that organize the objects and handle movements of objects.
+ * Board class is responsible for 1) loading setupConfigFile and initialized roomMap with the room name and room initial; 2) loading layoutConfigFile and indicate information of 
+ * each cell in CSV file accordingly; 3)calculate adjacency of each cells according to game rules; 4) calculate the target of each cell according to the rolling die 5) handle suggestion from every player
  * 
  * @author michaeleack
  * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
- * @author Qian Tan
+ * @author Qina Tan
  */
 public class Board {
 	private static Board boardInstance = new Board();

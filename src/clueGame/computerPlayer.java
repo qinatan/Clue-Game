@@ -1,3 +1,19 @@
+/**
+ * computerPlayer is an extension of abstract class of Players
+ * It is responsible for for actions of AI players including making suggestion and select a target from target list when making a move 
+ * @author: Mike Eact 
+ * @author: John Omalley 
+ * @author: Qina Tan 
+ * @start Date: 8/3/2025
+ * @collaborator: none 
+ * @resources: none 
+ * 
+ * 
+ */
+
+
+
+
 package clueGame;
 
 import java.util.ArrayList;

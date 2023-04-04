@@ -19,7 +19,7 @@ public class humanPlayer extends Player {
 
 	@Override
 	public ArrayList<Card> makeSuggestion() {
-		// TODO Auto-generated method stub
+	
 		return null;
 	}
 	

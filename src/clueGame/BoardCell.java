@@ -25,7 +25,6 @@ public class BoardCell {
 	private DoorDirection doorDirection;
 	
 	
-	
 	public int getRowNum() {
 		return rowNum;
 	}
@@ -147,9 +146,5 @@ public class BoardCell {
 	public Set<BoardCell> getAdjList() {
 		return adjList;
 	}
-
-
-	
-
 
 }

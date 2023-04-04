@@ -110,7 +110,6 @@ public class GameSetupTests {
 	}
 	
 	
-	// TODO: Test to make sure each player has a start location
 	@Test
 	public void testStartLocation() {
 		for (Player player: board.getPlayerList()) {

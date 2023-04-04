@@ -15,6 +15,7 @@ import java.io.*;
  * 
  * @author michaeleack
  * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
+ * @author Qian Tan
  */
 public class Board {
 	private static Board boardInstance = new Board();
@@ -27,9 +28,9 @@ public class Board {
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private ArrayList<Card> fullDeck;
 	private ArrayList<Card> dealtDeck;
-	public ArrayList<Card> peopleDeck;   // TODO: Discuss this change: Making these public lets the players make suggestions/ accusations
-	public ArrayList<Card> roomDeck;	// TODO: Discuss this change: Otherwise they don't have another ds to reference availabe to them
-	public ArrayList<Card> weaponDeck;   // TODO: Discuss this change. 
+	public ArrayList<Card> peopleDeck;  
+	public ArrayList<Card> roomDeck;	
+	public ArrayList<Card> weaponDeck;   
 	private ArrayList<Player> playerList;
 	private String layoutConfig;
 	private String setupConfig;
@@ -76,65 +77,7 @@ public class Board {
 		setGame();
 	}
 
-	public void initializeForTest() {
-		targets = new HashSet<BoardCell>();
-		playerList = new ArrayList<Player>();
-		fullDeck = new ArrayList<Card>();
-		dealtDeck = new ArrayList<Card>();
-		peopleDeck = new ArrayList<Card>();
-		roomDeck = new ArrayList<Card>();
-		weaponDeck = new ArrayList<Card>();
-
-		try {
-			loadSetupConfig();
-		} catch (BadConfigFormatException | IOException e1) {
-			e1.printStackTrace();
-		}
-		try {
-			loadLayoutConfig();
-		} catch (FileNotFoundException | BadConfigFormatException e) {
-			e.printStackTrace();
-		}
-
-		setGameForTest();
-	}
-
-	public void setGameForTest() {
-
-		createSolutionForTest();
-		dealCardsForTest();
-
-	}
-
-	private void dealCardsForTest() {
-
-		while (!dealtDeck.isEmpty()) {
-			for (Player player : playerList) {
-				player.updateHand(dealtDeck.remove(0));
-
-			}
-		}
-
-	}
-
-	private void createSolutionForTest() {
-
-		// We can keep these because this displays out solution
-		// System.out.println("Solution");
-		// System.out.println(peopleDeck.get(0) + " " + roomDeck.get(0) + " " +
-		// weaponDeck.get(0));
-
-		// initialized solution to be the first person, first room, first weapon
-		Board.solution = new Solution(peopleDeck.get(0), roomDeck.get(0), weaponDeck.get(0));
-
-		// update dealtStack after removing solution cards
-		dealtDeck.addAll(fullDeck);
-		dealtDeck.remove(peopleDeck.get(0));
-		dealtDeck.remove(roomDeck.get(0));
-		dealtDeck.remove(weaponDeck.get(0));
-
-	}
-
+	
 	public void setConfigFiles(String layoutConfig, String setupConfig) {
 		this.layoutConfig = "data/" + layoutConfig;
 		this.setupConfig = "data/" + setupConfig;
@@ -384,7 +327,6 @@ public class Board {
 				// Sets the rooms passage room to the destination of the secret Passage
 				currRoom.setPassageRoom(result[col].charAt(1));
 			}
-
 		}
 	}
 
@@ -617,7 +559,7 @@ public class Board {
 		dealtDeck.remove(weaponDeck.get(randomWeapon));
 	}
 	
-	//return first disproval card that matching to suggesting card from other players, except the suggesting player 
+	//return first disapproval card that matching to suggesting card from other players, except the suggesting player 
 	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3, Player suggestingPlayer)
 	{
 		Card disprovedCard = null;
@@ -641,6 +583,7 @@ public class Board {
 		return disprovedCard; 
 	}
 
+	//dealing cards to every player one at a time 
 	public void dealCards() {
 		// shuffle card
 		Collections.shuffle(dealtDeck);
@@ -652,9 +595,7 @@ public class Board {
 
 	}
 
-	public static Solution getSolution() {
-		return solution;
-	}
+
 
 	public Boolean checkAccusation(Card Room, Card Person, Card Weapon) {
 		Solution solution = getSolution();
@@ -738,5 +679,68 @@ public class Board {
 		player.setPlayerLocation(i, j);
 		
 	}
+	
+	public static Solution getSolution() {
+		return solution;
+	}
+	
+	public void initializeForTest() {
+		targets = new HashSet<BoardCell>();
+		playerList = new ArrayList<Player>();
+		fullDeck = new ArrayList<Card>();
+		dealtDeck = new ArrayList<Card>();
+		peopleDeck = new ArrayList<Card>();
+		roomDeck = new ArrayList<Card>();
+		weaponDeck = new ArrayList<Card>();
+
+		try {
+			loadSetupConfig();
+		} catch (BadConfigFormatException | IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			loadLayoutConfig();
+		} catch (FileNotFoundException | BadConfigFormatException e) {
+			e.printStackTrace();
+		}
+
+		setGameForTest();
+	}
+	
+	public void setGameForTest() {
+
+		createSolutionForTest();
+		dealCardsForTest();
+
+	}
+	
+	private void dealCardsForTest() {
+
+		while (!dealtDeck.isEmpty()) {
+			for (Player player : playerList) {
+				player.updateHand(dealtDeck.remove(0));
+
+			}
+		}
+	}
+	
+	private void createSolutionForTest() {
+
+		// We can keep these because this displays out solution
+		// System.out.println("Solution");
+		// System.out.println(peopleDeck.get(0) + " " + roomDeck.get(0) + " " +
+		// weaponDeck.get(0));
+
+		// initialized solution to be the first person, first room, first weapon
+		Board.solution = new Solution(peopleDeck.get(0), roomDeck.get(0), weaponDeck.get(0));
+
+		// update dealtStack after removing solution cards
+		dealtDeck.addAll(fullDeck);
+		dealtDeck.remove(peopleDeck.get(0));
+		dealtDeck.remove(roomDeck.get(0));
+		dealtDeck.remove(weaponDeck.get(0));
+
+	}
+
 
 }

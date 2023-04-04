@@ -16,7 +16,7 @@ public abstract class Player {
 	private int row, col;
 	protected ArrayList<Card> hand = new ArrayList<Card>();
 	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList <Card>>();
-	public Card currRoom; // TODO: add update currRoom every time you move
+	public Card currRoom; 
 
 	public Player(String playerName, String playerColor, String row, String col) {
 		this.name = playerName;

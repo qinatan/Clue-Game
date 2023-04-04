@@ -45,8 +45,7 @@ class ComputerAITest {
 		board.findAllTargets(CPUstartLocation, 2);
 		//System.out.println("Target List = ");
 		//System.out.println(board.getTargetList().toString());
-		Set<BoardCell> CPUTargetList = board.getTargetList(); // TODO: Why does a board have a targetsList
-		System.out.println(CPUTargetList);
+		Set<BoardCell> CPUTargetList = board.getTargetList(); 
 		BoardCell targetLocation = CPUPlayer.targetSelection(CPUTargetList);
 		
 
@@ -55,9 +54,9 @@ class ComputerAITest {
 		boolean thirdLocation = false;
 		boolean forthLocation = false;
 		boolean fifthLocation = false;
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 100; i++) {
 			targetLocation = CPUPlayer.targetSelection(CPUTargetList);
-			System.out.println(targetLocation.toString());
+			
 			if (targetLocation.getRowNum() == 8 && targetLocation.getColumnNum() == 8) {
 				firstLocation = true;
 			}
@@ -87,14 +86,6 @@ class ComputerAITest {
 		Assert.assertTrue(fifthLocation);
 		Assert.assertTrue(CPUTargetList.contains(targetLocation));
 
-		// target list contains one room "Patio" by rolling 4 at startLocation
-		// room is not at seenMap - test to return the room as target selected
-		/*
-		board.findAllTargets(startLocation, 4);
-		targetLocation = CPUPlayer.targetSelection(CPUTargetList);
-		Assert.assertEquals(board.getCell(2, 19), targetLocation);
-		Set<BoardCell> targets = board.getTargetList();
-		*/
 		
 		// #2 Test whether the player always selects a room that it has not seen from targets
 		board.movePlayer(11, 5, board.getPlayerList().get(1)); 
@@ -105,7 +96,7 @@ class ComputerAITest {
 		thirdLocation = false;
 		forthLocation = false;
 		fifthLocation = false;
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 100; i++) {
 			targetLocation = CPUPlayer.targetSelection(CPUTargetList);
 			
 			if (targetLocation.getRowNum() == 11 && targetLocation.getColumnNum() == 3) {
@@ -180,7 +171,7 @@ class ComputerAITest {
 	}
 
 	@SuppressWarnings("null")
-	//@Test
+	@Test
 	public void CPUSuggestion() {
 		// Room matches current location
 		Player YubabaCpuPlayer = board.getPlayerList().get(1);
@@ -249,7 +240,7 @@ class ComputerAITest {
 		boolean seenFirstPerson = false;
 		boolean seenSecondPerson = false;
 		
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			ArrayList<Card> multiSuggestion = NoFaceCpuPlayer.makeSuggestion();
 
 			if (multiSuggestion.contains(new Card(CardType.WEAPON, "Extension Cord"))) {

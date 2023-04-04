@@ -50,11 +50,6 @@ public class Card implements Comparable<Card> {
 		 if (o == null || getClass() != o.getClass()) return false;
 		Card that = (Card) o ; 
 		return cardType.equals(that.cardType) && cardName.equals(that.cardName);
-//		if (this.cardType.equals(((Card) target).getCardType()) && this.cardName.equals(target.cardName)) {
-//			return true;
-//		} else {
-//			return false;
-//		}
 	}
 
 	@Override
@@ -68,7 +63,7 @@ public class Card implements Comparable<Card> {
 
 	@Override
 	public int compareTo(Card o) {
-		// TODO Auto-generated method stub
+	
 		return 0;
 	}
 

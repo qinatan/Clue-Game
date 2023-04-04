@@ -56,7 +56,6 @@ public class AccusationSuggestionTests {
 	// Test player Disproves suggestion -- PASSED -- May need to cleanup code 
 	@Test
 	public void disprovesSuggestion() {
-		// TODO: try to refactor to remove the magic ints in the tests
 		Solution solution = Board.getSolution();
 
 		Card correctRoom = solution.getRoom(); // Expected: PlantRoom
@@ -122,93 +121,40 @@ public class AccusationSuggestionTests {
 		Card solutionPerson = solution.getPerson();
 		Card solutionWeapon = solution.getWeapon();
 		
-		Player humanPlayerForTesting = board.getPlayer(0); // Chihiro Ogino == human player
-		Player CPUPlayerForTesting0 = board.getPlayer(1);  // CPU Player 
-		Player CPUPlayerForTesting1 = board.getPlayer(2);  // CPU Player
-		ArrayList<Card> humanHand = humanPlayerForTesting.getHand(); 
-		ArrayList<Card> CPUHand = CPUPlayerForTesting0.getHand(); 
-		 
+		Player humanPlayer = board.getPlayer(0); // Chihiro Ogino == human player
+		Player CPUPlayer1 = board.getPlayer(1);  // CPU Player 
+		Player CPUPlayer2 = board.getPlayer(2);  // CPU Player
+		ArrayList<Card> humanHand = humanPlayer.getHand(); 
+		ArrayList<Card> CPUHand = CPUPlayer1.getHand(); 
+		
 		Card humanSuggestedRoom = humanHand.get(0); //Exercise Room 
-		Card humanSuggestedPerson = null; //player1 has another room: Garage 
+		Card humanSuggestedPerson = null; //human player has another room: Garage 
 		Card humanSuggestedWeapon = humanHand.get(2); //Extension Cord 
-		// TODO: These variable names are gross
-		Card CPU0SuggestedRoom = CPUHand.get(0); // Dog House 
-		Card CPU0SuggesterPerson = CPUHand.get(1); //Yubaba 
-		Card CPU0SuggestedRoom0 = null; // player2 has another room: Basement
+		
+		Card CPU1SuggestedRoom = CPUHand.get(0); // Dog House 
+		Card CPU1SuggesterPerson = CPUHand.get(1); //Yubaba 
+		Card CPU1SuggestedWeapon = null; // CPU has another room: Basement
 		
 		
 
 		// Tests that no one can disprove the solution
-		Card disprovalCard = board.handleSuggestion(solutionRoom, solutionPerson, solutionWeapon, humanPlayerForTesting); 
+		Card disprovalCard = board.handleSuggestion(solutionRoom, solutionPerson, solutionWeapon, humanPlayer); 
 		Assert.assertEquals(null, disprovalCard ); 
 		
 		//Suggestion only suggesting player can disprove returns null
-		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, humanSuggestedWeapon, humanPlayerForTesting);
+		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, humanSuggestedWeapon, humanPlayer);
 		Assert.assertEquals(null, disprovalCard); 
 		
 		
 		//Test for Suggestion only the human player can disprove returns card
-		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, humanHand.get(2), CPUPlayerForTesting0);
-		System.out.println(humanHand.get(2).toString());
-		System.out.println(disprovalCard.toString());
+		disprovalCard  = board.handleSuggestion(solutionRoom, solutionPerson, humanHand.get(2), CPUPlayer1);
 		Assert.assertEquals(humanHand.get(2), disprovalCard); 
 		
 	
-		//Query in order. No other players can show other disproval cards once a disproval card is shown from one player 
-		disprovalCard  = board.handleSuggestion(humanSuggestedRoom, CPU0SuggesterPerson, solutionWeapon, CPUPlayerForTesting1);
+		//Query in order. No other players can show other disapproval cards once a disapproval card is shown from one player 
+		disprovalCard  = board.handleSuggestion(humanSuggestedRoom, CPU1SuggesterPerson, solutionWeapon, CPUPlayer2);
 		Assert.assertEquals(humanSuggestedRoom, disprovalCard ); 
 				
-	}
-
-	
-
-
-	@Test 
-	public void CPUSelectTarget() {
-		
-		//get the second player from playerList
-		computerPlayer CPUPlayer = (computerPlayer) board.getPlayerList().get(1);
-		int row = CPUPlayer.getPlayerRow(); 
-		int col = CPUPlayer.getPlayerCol();
-		// get the second player's start location 
-		BoardCell startLocation = board.getCell(row, col); 
-		
-		
-		// find target list rolling 3 from start location -- target list contains no room 
-		// we do not which specific location will be selected -- but test to make sure it is one of the location in target list 
-		board.findAllTargets(startLocation, 3); 
-		Set<BoardCell> CPUTargetList = board.getTargetList(); 
-		BoardCell targetLocation = CPUPlayer.targetSelection(CPUTargetList); 
-		Assert.assertTrue(CPUTargetList.contains(targetLocation));
-		
-		
-		// target list contains one room "Patio" by rolling 4 at startLocation 
-		// room is not at seenMap - test to return the room as target selected
-		board.findAllTargets(startLocation, 4); 
-		targetLocation = CPUPlayer.targetSelection(CPUTargetList); 	
-		Assert.assertEquals(board.getCell(2,19), targetLocation);
-		Set<BoardCell> targets = board.getTargetList(); 
-	
-		
-		// add room to seenMap
-		// test that selected target to make sure it is one of the location in target list 
-		Card seenCard = null; 
-		ArrayList<Card> roomDeck = board.getRoomDeck(); 
-		for (int i = 0; i < roomDeck.size(); i++)
-		{
-			String cardName = roomDeck.get(i).getCardName(); 
-			if (cardName.equals("Patio"))
-			{
-				seenCard = roomDeck.get(i); 
-				
-			}
-		}
-	
-		CPUPlayer.addToSeenMap(CardType.ROOM, seenCard);
-		targetLocation = CPUPlayer.targetSelection(CPUTargetList); 
-	
-		Assert.assertTrue(CPUTargetList.contains(targetLocation));
-		
 	}
 
 }

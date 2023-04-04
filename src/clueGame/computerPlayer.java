@@ -17,7 +17,7 @@ public class computerPlayer extends Player {
 	}
 
 	public ArrayList<Card> makeSuggestion() {
-
+		
 		ArrayList<Card> finalSuggestion = new ArrayList<Card>();
 		HashMap<CardType, ArrayList<Card>> possibleSuggestions = new HashMap<CardType, ArrayList<Card>>();
 
@@ -25,11 +25,8 @@ public class computerPlayer extends Player {
 		possibleSuggestions.computeIfAbsent(CardType.ROOM, k -> new ArrayList<>()).add(this.currRoom);
 		// adds a the room were into the possible suggestions
 
-
-		// TODO: Code Smell
 		Board board = Board.getInstance();
 
-		// TODO: create a get weapon deck method and set weapon deck to private
 		for (Card weaponCard : board.weaponDeck) { // Loop through all the weapons we have
 			ArrayList<Card> seenWeapons = seenMap.get(CardType.WEAPON);
 
@@ -40,7 +37,6 @@ public class computerPlayer extends Player {
 	
 		}
 
-		
 		for (Card personCard : board.peopleDeck) { // Loop through all the weapons we have
 			ArrayList<Card> seenPeople = seenMap.get(CardType.PERSON);
 
@@ -75,10 +71,8 @@ public class computerPlayer extends Player {
 	//return the first room found in targetList if room is not in seenMap, or return random target location if no room exit or room is already in seenMap 
 	public BoardCell targetSelection(Set<BoardCell> targetList)
 	{
-		Board board = Board.getInstance(); // TODO: Code smell
+		Board board = Board.getInstance(); 
 		ArrayList<BoardCell> targets = new ArrayList<BoardCell>(targetList); 
-		//System.out.println("targets = ");
-		//System.out.println(targets.toString());
 		ArrayList<String> cardNames = new ArrayList<String>(); 
 		BoardCell targetLocation = null; 
 		ArrayList<Card> roomCards = seenMap.get(CardType.ROOM);
@@ -89,28 +83,8 @@ public class computerPlayer extends Player {
 				cardNames.add(roomCards.get(j).getCardName()); 
 			}
 		}
-		//loop through every target location to check if a room exist
-		/*
-		for (int i = 0; i < targets.size(); i++)
-		{
-			targetLocation = targets.get(i); 
-			if (targetLocation.isRoom())
-			{
-				//get the cellSymbol in order to get the matching room from roomMap 
-				Character cellSymbol = targetLocation.getCellSymbol(); 
-				String roomName = board.getRoomMap().get(cellSymbol).getName(); 
-				
-				//check if the room is in the seenMap 
-				//No Room Card was seen: we can return this room
-				if (!cardNames.contains(roomName))
-				{
-					return targetLocation; 
-
-				}
-
-			}
-		}*/
-		for (BoardCell target: board.getTargetList()) {
+		
+		for (BoardCell target: targetList) {
 			if (target.isRoom()) {
 				//get the cellSymbol in order to get the matching room from roomMap 
 				Character cellSymbol = target.getCellSymbol(); 
@@ -125,12 +99,11 @@ public class computerPlayer extends Player {
 				}
 			}
 		}
-		//System.out.println("Generating random result");
-		// return random target location is no room in the target list
+	
+		//No room in target list or room in target list has been seen, return random BoardCell from target list
 		Random randomTarget = new Random();
-		int randomNumber = randomTarget.nextInt(board.getTargetList().size());
+		int randomNumber = randomTarget.nextInt(targets.size());
 		return targets.get(randomNumber); 
 		
-
 	}
 }

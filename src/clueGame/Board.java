@@ -44,6 +44,7 @@ public class Board {
 	private final static int ROW = 3;
 	private final static int COLUMN = 4;
 	private static Solution solution;
+	private Player playerTurn; //TODO: initializing for C22A-1 Only 
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -686,6 +687,14 @@ public class Board {
 	
 	public static Solution getSolution() {
 		return solution;
+	}
+	
+	public Player getPlayersTurn() {
+		return playerTurn;
+	}
+	
+	public void setPlayersTurn(Player playersTurn) {
+		this.playerTurn = playersTurn;
 	}
 	
 	public void initializeForTest() {

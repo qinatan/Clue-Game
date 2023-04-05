@@ -1,6 +1,8 @@
 package clueGame;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -35,27 +37,44 @@ public class GameControlPanel extends JPanel {
 		topPanel.add(roll);
 		ButtonGroup group = new ButtonGroup();
 		JButton next = new JButton("NEXT!");
+		next.addActionListener(new NextButtonListener());
 		JButton makeAccusation = new JButton("Make Accusation");
+		makeAccusation.addActionListener(new makeAccusationButtonListener());
 		group.add(makeAccusation);
 		group.add(next);
 		topPanel.add(next);
 		topPanel.add(makeAccusation);
-		topPanel.setBorder(new TitledBorder (new EtchedBorder(), "Top Panel")); // Only using this for testing
 		return topPanel;
 	}
+	
+	private class NextButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Next Button Pressed");
+		}
+	}
+	
+	private class makeAccusationButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Make Accusation Button Pressed");
+		}
+	}
+	
+	
 	
 	private JPanel whoseTurn() {
 		JPanel whoseTurn = new JPanel();
 		JLabel label = new JLabel("Who's Turn:");
+		//String playersTurn = Board.getPlayersTurn().getPlayerName();
+		//whoseTurn.add(label);
 		whoseTurn.add(label);
-		whoseTurn.setBorder(new TitledBorder (new EtchedBorder(), "Who's Turn"));
 		return whoseTurn;
 	}
 	
 	private JPanel roll() {
 		JPanel roll = new JPanel();
 		JLabel rollLabel = new JLabel("ROll");
-		roll.setBorder(new TitledBorder (new EtchedBorder(), "Roll")); // Only using this for testing
 		roll.add(rollLabel);
 		return roll;
 	}
@@ -67,7 +86,6 @@ public class GameControlPanel extends JPanel {
 		bottomPanel.add(leftPanel);
 		JPanel rightPanel = bottomRightPanel();
 		bottomPanel.add(rightPanel);
-		bottomPanel.setBorder(new TitledBorder (new EtchedBorder(), "Bottom Panel")); // Only using this for testing
 		return bottomPanel;
 	}
 	
@@ -76,7 +94,6 @@ public class GameControlPanel extends JPanel {
 		bottomRightPanel.setLayout(new GridLayout(1, 0));
 		JTextField someText = new JTextField("Text");
 		bottomRightPanel.add(someText);
-		//bottomRightPanel.add(guessResultDisplay);
 		bottomRightPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result")); // Only using this for testing
 		return bottomRightPanel;
 	}
@@ -84,7 +101,6 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomLeftPanel() {
 		JPanel bottomLeftPanel = new JPanel();
 		bottomLeftPanel.setLayout(new GridLayout(1, 0));
-		//bottomLeftPanel.add(guessDisplay);
 		JTextField someText = new JTextField("Text");
 		bottomLeftPanel.add(someText);
 		bottomLeftPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess")); // Only using this for testing
@@ -94,13 +110,20 @@ public class GameControlPanel extends JPanel {
 	
 	
 	public static void main(String[] args) {
+		
+		// Initialize values for testing
+		//Board board = Board.getInstance();
+		//board.initializeForTest();
+		//board.setPlayersTurn(board.getPlayerList().get(0));
+		
 		GameControlPanel panel = new GameControlPanel();  // create the panel
 		JFrame frame = new JFrame();  // create the frame 
-		//frame.setContentPane(panel); // put the panel in the frame
 		frame.add(panel, BorderLayout.CENTER);
 		frame.setSize(750, 180);  // size the frame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		frame.setVisible(true);
+		
+		
 	
 	}
 }

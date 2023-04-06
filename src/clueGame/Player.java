@@ -12,10 +12,6 @@
  * @collaborator: none 
  * @resources: none 
  */
-
-
-
-
 package clueGame;
 
 import java.awt.Color;

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -67,6 +68,7 @@ public class Board {
 		peopleDeck = new ArrayList<Card>();
 		roomDeck = new ArrayList<Card>();
 		weaponDeck = new ArrayList<Card>();
+		
 
 		try {
 			loadSetupConfig();
@@ -78,6 +80,8 @@ public class Board {
 		} catch (FileNotFoundException | BadConfigFormatException e) {
 			e.printStackTrace();
 		}
+		
+		setPlayersTurn(getPlayerList().get(0));
 
 		setGame();
 	}
@@ -693,6 +697,15 @@ public class Board {
 		return playerTurn;
 	}
 	
+	public void nextTurn() {
+		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
+			this.playerTurn = getPlayerList().get(0);
+		}
+		else {
+			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn())+1);
+		}
+	}
+	
 	public void setPlayersTurn(Player playersTurn) {
 		this.playerTurn = playersTurn;
 	}
@@ -705,7 +718,7 @@ public class Board {
 		peopleDeck = new ArrayList<Card>();
 		roomDeck = new ArrayList<Card>();
 		weaponDeck = new ArrayList<Card>();
-
+		
 		try {
 			loadSetupConfig();
 		} catch (BadConfigFormatException | IOException e1) {
@@ -716,7 +729,8 @@ public class Board {
 		} catch (FileNotFoundException | BadConfigFormatException e) {
 			e.printStackTrace();
 		}
-
+		
+		setPlayersTurn(getPlayerList().get(0));
 		setGameForTest();
 	}
 	

@@ -83,6 +83,10 @@ public abstract class Player {
 	public int getPlayerCol() {
 		return col;
 	}
+	
+	public Map<CardType, ArrayList<Card>> getSeenMap (){
+		return seenMap;
+	}
 
 	// *********************************** //
 

@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
@@ -15,14 +16,14 @@ public class CardsPanel extends JPanel {
 	// Constructor 
 	public CardsPanel() {
 		JPanel knownCardsPanel = new JPanel();
-		knownCardsPanel.setLayout(new GridLayout(3, 0));
-		knownCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
+		setLayout(new GridLayout(3, 0));
+		setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
 		JPanel peopleCardsPanel = peopleCardsPanel();
-		knownCardsPanel.add(peopleCardsPanel);
+		add(peopleCardsPanel);
 		JPanel roomCardsPanel = roomCardsPanel();
-		knownCardsPanel.add(roomCardsPanel);
+		add(roomCardsPanel);
 		JPanel weaponCardsPanel = weaponCardsPanel();
-		knownCardsPanel.add(weaponCardsPanel);
+		add(weaponCardsPanel);
 	}
 	
 	
@@ -33,16 +34,24 @@ public class CardsPanel extends JPanel {
 		ArrayList<JTextField> seenPeopleCards = getSeenCards(CardType.PERSON, board.getPlayerList().get(0)); // Assuming we are chihiro
 		ArrayList<JTextField> seenPeopleCardsFromHand = getHandCards(CardType.PERSON, board.getPlayerList().get(0));  // Assuming we are chihiro
 		// Adds seen cards 
+		JPanel seenPanel = new JPanel();
+		seenPanel.setLayout(new GridLayout(2,0));
+		JLabel label = new JLabel("Seen:");
+		seenPanel.add(label);
 		for (JTextField card: seenPeopleCards) {
 			System.out.println("here");
-			peopleCardsPanel.add(card);
+			seenPanel.add(card);
 		}
-		
+		peopleCardsPanel.add(seenPanel);
 		// Adds card from hand
+		JPanel handPanel = new JPanel();
+		handPanel.setLayout(new GridLayout(2,0));
+		JLabel handLabel = new JLabel("In Hand:");
+		handPanel.add(handLabel);
 		for (JTextField card: seenPeopleCardsFromHand) {
-			peopleCardsPanel.add(card);
+			handPanel.add(card);
 		}
-		
+		peopleCardsPanel.add(handPanel);
 		return peopleCardsPanel;
 		
 	}
@@ -54,16 +63,24 @@ public class CardsPanel extends JPanel {
 		ArrayList<JTextField> seenRoomCards = getSeenCards(CardType.ROOM, board.getPlayerList().get(0));  // Assuming we are chihiro
 		ArrayList<JTextField> seenRoomCardsFromHand = getHandCards(CardType.ROOM, board.getPlayerList().get(0));  // Assuming we are chihiro
 		// Adds seen cards 
+		JPanel seenPanel = new JPanel();
+		seenPanel.setLayout(new GridLayout(2,0));
+		JLabel label = new JLabel("Seen:");
+		seenPanel.add(label);
 		for (JTextField card: seenRoomCards) {
 			System.out.println("here");
-			roomCardsPanel.add(card);
+			seenPanel.add(card);
 		}
-		
+		roomCardsPanel.add(seenPanel);
 		// Adds card from hand
+		JPanel handPanel = new JPanel();
+		handPanel.setLayout(new GridLayout(2,0));
+		JLabel handLabel = new JLabel("In Hand:");
+		handPanel.add(handLabel);
 		for (JTextField card: seenRoomCardsFromHand) {
-			roomCardsPanel.add(card);
+			handPanel.add(card);
 		}
-		
+		roomCardsPanel.add(handPanel);
 		return roomCardsPanel;
 	}
 	
@@ -74,15 +91,26 @@ public class CardsPanel extends JPanel {
 		ArrayList<JTextField> seenWeaponCards = getSeenCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
 		ArrayList<JTextField> seenWeaponCardsFromHand = getHandCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
 		// Adds seen cards 
+		JPanel seenPanel = new JPanel();
+		seenPanel.setLayout(new GridLayout(2,0));
+		JLabel label = new JLabel("Seen:");
+		seenPanel.add(label);
+		weaponCardsPanel.add(label);
 		for (JTextField card: seenWeaponCards) {
 			System.out.println("here");
-			weaponCardsPanel.add(card);
+			seenPanel.add(card);
 		}
+		weaponCardsPanel.add(seenPanel);
 		
 		// Adds card from hand
+		JPanel handPanel = new JPanel();
+		JLabel handLabel = new JLabel("In Hand:");
+		handPanel.setLayout(new GridLayout(2,0));
+		handPanel.add(handLabel);
 		for (JTextField card: seenWeaponCardsFromHand) {
-			weaponCardsPanel.add(card);
+			handPanel.add(card);
 		}
+		weaponCardsPanel.add(handPanel);
 		return weaponCardsPanel;
 	}
 	

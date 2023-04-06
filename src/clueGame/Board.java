@@ -768,6 +768,14 @@ public class Board {
 		dealtDeck.remove(weaponDeck.get(0));
 
 	}
+	
+	public String rollDie()
+	{
+		Random randomRoll = new Random(); 
+		int randomDie = randomRoll.nextInt(6) + 1;
+		String Die = "" + randomDie; 
+		return Die; 
+	}
 
 
 }

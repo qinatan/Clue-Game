@@ -21,6 +21,7 @@ public class GameControlPanel extends JPanel {
 	Board board = Board.getInstance();
 	String playersTurn; 
 	JTextField playersNameText = new JTextField();
+	JTextField rollText = new JTextField(); 
 	//constructor 
 	public GameControlPanel () {
 		setLayout(new GridLayout(2, 0)); 
@@ -56,6 +57,8 @@ public class GameControlPanel extends JPanel {
 			board.nextTurn();
 			playersTurn = board.getPlayersTurn().getPlayerName();
 			playersNameText.setText(playersTurn);
+			String randomRoll = board.rollDie(); 
+			rollText.setText(randomRoll);
 		}
 	}
 	
@@ -72,7 +75,7 @@ public class GameControlPanel extends JPanel {
 		JLabel label = new JLabel("Who's Turn:");
 		String playersName = board.getPlayersTurn().getPlayerName();
 		// TODO get the color
-		//JTextField playersNameText = new JTextField();
+	
 		playersNameText.setText(playersName);
 		whoseTurn.add(playersNameText);
 		whoseTurn.add(label);
@@ -80,9 +83,13 @@ public class GameControlPanel extends JPanel {
 	}
 	
 	private JPanel roll() {
+		
 		JPanel roll = new JPanel();
 		JLabel rollLabel = new JLabel("Roll:");
+		String die = board.rollDie(); 
+		rollText.setText(die);
 		roll.add(rollLabel);
+		roll.add(rollText);
 		return roll;
 	}
 	
@@ -99,7 +106,7 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomRightPanel() {
 		JPanel bottomRightPanel = new JPanel();
 		bottomRightPanel.setLayout(new GridLayout(1, 0));
-		JTextField someText = new JTextField("Text");
+		JTextField someText = new JTextField("I have no guess");
 		bottomRightPanel.add(someText);
 		bottomRightPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result")); // Only using this for testing
 		return bottomRightPanel;
@@ -108,7 +115,7 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomLeftPanel() {
 		JPanel bottomLeftPanel = new JPanel();
 		bottomLeftPanel.setLayout(new GridLayout(1, 0));
-		JTextField someText = new JTextField("Text");
+		JTextField someText = new JTextField("You have question?");
 		bottomLeftPanel.add(someText);
 		bottomLeftPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess")); // Only using this for testing
 		return bottomLeftPanel;

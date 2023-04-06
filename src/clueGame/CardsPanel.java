@@ -13,9 +13,13 @@ import javax.swing.border.TitledBorder;
 
 public class CardsPanel extends JPanel {
 	Board board = Board.getInstance();
+	JPanel knownCardsPanel = new JPanel();
+	JPanel roomCardsPanel = new JPanel();
+	JPanel weaponCardsPanel = new JPanel();
+	JPanel peopleCardsPanel = new JPanel();
 	// Constructor 
 	public CardsPanel() {
-		JPanel knownCardsPanel = new JPanel();
+		
 		setLayout(new GridLayout(3, 0));
 		setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
 		JPanel peopleCardsPanel = peopleCardsPanel();
@@ -26,6 +30,15 @@ public class CardsPanel extends JPanel {
 		add(weaponCardsPanel);
 	}
 	
+	public void updatedPanels() {
+		peopleCardsPanel.removeAll(); 
+		add(peopleCardsPanel); 
+		roomCardsPanel.removeAll();
+		add(roomCardsPanel); 
+		weaponCardsPanel.removeAll(); 
+		add(weaponCardsPanel); 
+		
+	}
 	
 	private JPanel peopleCardsPanel() {
 		JPanel peopleCardsPanel = new JPanel();
@@ -35,7 +48,7 @@ public class CardsPanel extends JPanel {
 		ArrayList<JTextField> seenPeopleCardsFromHand = getHandCards(CardType.PERSON, board.getPlayerList().get(0));  // Assuming we are chihiro
 		// Adds seen cards 
 		JPanel seenPanel = new JPanel();
-		seenPanel.setLayout(new GridLayout(2,0));
+		seenPanel.setLayout(new GridLayout(0,1));
 		JLabel label = new JLabel("Seen:");
 		seenPanel.add(label);
 		for (JTextField card: seenPeopleCards) {
@@ -45,7 +58,7 @@ public class CardsPanel extends JPanel {
 		peopleCardsPanel.add(seenPanel);
 		// Adds card from hand
 		JPanel handPanel = new JPanel();
-		handPanel.setLayout(new GridLayout(2,0));
+		handPanel.setLayout(new GridLayout(0,1));
 		JLabel handLabel = new JLabel("In Hand:");
 		handPanel.add(handLabel);
 		for (JTextField card: seenPeopleCardsFromHand) {
@@ -64,7 +77,7 @@ public class CardsPanel extends JPanel {
 		ArrayList<JTextField> seenRoomCardsFromHand = getHandCards(CardType.ROOM, board.getPlayerList().get(0));  // Assuming we are chihiro
 		// Adds seen cards 
 		JPanel seenPanel = new JPanel();
-		seenPanel.setLayout(new GridLayout(2,0));
+		seenPanel.setLayout(new GridLayout(0,1));//make size change
 		JLabel label = new JLabel("Seen:");
 		seenPanel.add(label);
 		for (JTextField card: seenRoomCards) {
@@ -74,7 +87,7 @@ public class CardsPanel extends JPanel {
 		roomCardsPanel.add(seenPanel);
 		// Adds card from hand
 		JPanel handPanel = new JPanel();
-		handPanel.setLayout(new GridLayout(2,0));
+		handPanel.setLayout(new GridLayout(0,1));//made size change
 		JLabel handLabel = new JLabel("In Hand:");
 		handPanel.add(handLabel);
 		for (JTextField card: seenRoomCardsFromHand) {
@@ -85,14 +98,14 @@ public class CardsPanel extends JPanel {
 	}
 	
 	private JPanel weaponCardsPanel() {
-		JPanel weaponCardsPanel = new JPanel();
+		
 		weaponCardsPanel.setLayout(new GridLayout(2, 0));
 		weaponCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "weaponCards"));
 		ArrayList<JTextField> seenWeaponCards = getSeenCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
 		ArrayList<JTextField> seenWeaponCardsFromHand = getHandCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
 		// Adds seen cards 
 		JPanel seenPanel = new JPanel();
-		seenPanel.setLayout(new GridLayout(2,0));
+		seenPanel.setLayout(new GridLayout(0,1));
 		JLabel label = new JLabel("Seen:");
 		seenPanel.add(label);
 		weaponCardsPanel.add(label);
@@ -105,7 +118,7 @@ public class CardsPanel extends JPanel {
 		// Adds card from hand
 		JPanel handPanel = new JPanel();
 		JLabel handLabel = new JLabel("In Hand:");
-		handPanel.setLayout(new GridLayout(2,0));
+		handPanel.setLayout(new GridLayout(0,1));
 		handPanel.add(handLabel);
 		for (JTextField card: seenWeaponCardsFromHand) {
 			handPanel.add(card);
@@ -130,6 +143,7 @@ public class CardsPanel extends JPanel {
 	
 	private ArrayList<JTextField> getHandCards(CardType cardType, Player player) {
 		ArrayList<JTextField> seenCards = new ArrayList<JTextField>();
+		
 		for( Card card: player.getHand()) {
 			if (cardType == card.getCardType()) {
 				JTextField seenCard = new JTextField();
@@ -141,16 +155,29 @@ public class CardsPanel extends JPanel {
 	}
 	
 	
-	public static void main(String[] args) {
+	
+	public static void main(String[] args) throws InterruptedException {
 		Board board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initializeForTest();
-		CardsPanel cardsPanel = new CardsPanel();  // create the panel
+		//board.initialize();
+		Player testingPlayer = board.getPlayer(0); 
 		JFrame frame = new JFrame();  // create the frame 
+	
+		for (int i = 0; i < 6; i++)
+		{
+			Card testingCard1 = new Card (CardType.ROOM,"Plant Room" );
+			testingPlayer.addToSeenMap(CardType.ROOM, testingCard1);
+		}
+		CardsPanel cardsPanel = new CardsPanel();  // create the panel
 		frame.add(cardsPanel, BorderLayout.CENTER);
 		frame.setSize(180, 750);  // size the frame
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		frame.setVisible(true);
+		cardsPanel.updatedPanels();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
+	
+			
+		
 	}
 	
 }

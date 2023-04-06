@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -44,6 +45,7 @@ public class Board {
 	private final static int ROW = 3;
 	private final static int COLUMN = 4;
 	private static Solution solution;
+	private Player playerTurn; //TODO: initializing for C22A-1 Only 
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -66,6 +68,7 @@ public class Board {
 		peopleDeck = new ArrayList<Card>();
 		roomDeck = new ArrayList<Card>();
 		weaponDeck = new ArrayList<Card>();
+		
 
 		try {
 			loadSetupConfig();
@@ -77,6 +80,8 @@ public class Board {
 		} catch (FileNotFoundException | BadConfigFormatException e) {
 			e.printStackTrace();
 		}
+		
+		setPlayersTurn(getPlayerList().get(0));
 
 		setGame();
 	}
@@ -688,6 +693,23 @@ public class Board {
 		return solution;
 	}
 	
+	public Player getPlayersTurn() {
+		return playerTurn;
+	}
+	
+	public void nextTurn() {
+		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
+			this.playerTurn = getPlayerList().get(0);
+		}
+		else {
+			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn())+1);
+		}
+	}
+	
+	public void setPlayersTurn(Player playersTurn) {
+		this.playerTurn = playersTurn;
+	}
+	
 	public void initializeForTest() {
 		targets = new HashSet<BoardCell>();
 		playerList = new ArrayList<Player>();
@@ -696,7 +718,7 @@ public class Board {
 		peopleDeck = new ArrayList<Card>();
 		roomDeck = new ArrayList<Card>();
 		weaponDeck = new ArrayList<Card>();
-
+		
 		try {
 			loadSetupConfig();
 		} catch (BadConfigFormatException | IOException e1) {
@@ -707,7 +729,8 @@ public class Board {
 		} catch (FileNotFoundException | BadConfigFormatException e) {
 			e.printStackTrace();
 		}
-
+		
+		setPlayersTurn(getPlayerList().get(0));
 		setGameForTest();
 	}
 	
@@ -744,6 +767,14 @@ public class Board {
 		dealtDeck.remove(roomDeck.get(0));
 		dealtDeck.remove(weaponDeck.get(0));
 
+	}
+	
+	public String rollDie()
+	{
+		Random randomRoll = new Random(); 
+		int randomDie = randomRoll.nextInt(6) + 1;
+		String Die = "" + randomDie; 
+		return Die; 
 	}
 
 

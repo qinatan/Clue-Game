@@ -139,7 +139,7 @@ class ComputerAITest {
 		thirdLocation = false;
 		forthLocation = false;
 		fifthLocation = false;
-		for (int i = 0; i < 60; i++) {
+		for (int i = 0; i < 100; i++) {
 			targetLocation = CPUPlayer.targetSelection(CPUTargetList);
 			
 			if (targetLocation.getRowNum() == 11 && targetLocation.getColumnNum() == 3) {

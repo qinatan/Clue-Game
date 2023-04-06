@@ -47,11 +47,11 @@ public abstract class Player {
 		case "Green":
 			this.playerColor = new Color(0, 255, 0);
 			break;
-		case "Black":
-			this.playerColor = new Color(0, 0, 0);
+		case "Teal":
+			this.playerColor = new Color(0, 175, 206);
 			break;
-		case "Blue":
-			this.playerColor = new Color(0, 0, 255);
+		case "Orange":
+			this.playerColor = new Color(255, 108, 0);
 			break;
 		case "Yellow":
 			this.playerColor = new Color(255, 255, 0);

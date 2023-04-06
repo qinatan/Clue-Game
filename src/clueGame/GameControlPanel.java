@@ -1,5 +1,6 @@
 package clueGame;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,14 +15,15 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JPanel {
-	private JTextField turnDisplay;
-	private JTextField rollDisplay; 
-	private JTextField guessDisplay; 
-	private JTextField guessResultDisplay; 
-	Board board = Board.getInstance();
-	String playersTurn; 
-	JTextField playersNameText = new JTextField();
-	JTextField rollText = new JTextField(); 
+	private JTextField turn;
+	private JTextField roll; 
+	private JTextField guess = new JTextField();
+	private JTextField guessResult = new JTextField();
+	private Board board = Board.getInstance();
+	private String playersTurn; 
+	private JTextField playersNameText = new JTextField();
+	private Color playersColor;
+	private JTextField rollText = new JTextField(); 
 	//constructor 
 	public GameControlPanel () {
 		setLayout(new GridLayout(2, 0)); 
@@ -53,19 +55,20 @@ public class GameControlPanel extends JPanel {
 	private class NextButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Next Button Pressed");
 			board.nextTurn();
 			playersTurn = board.getPlayersTurn().getPlayerName();
+			playersColor = board.getPlayersTurn().getPlayerColor();
 			playersNameText.setText(playersTurn);
+			playersNameText.setBackground(playersColor);
 			String randomRoll = board.rollDie(); 
 			rollText.setText(randomRoll);
+			
 		}
 	}
 	
 	private class makeAccusationButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Make Accusation Button Pressed");
 		}
 	}
 	
@@ -74,16 +77,17 @@ public class GameControlPanel extends JPanel {
 		JPanel whoseTurn = new JPanel();
 		JLabel label = new JLabel("Who's Turn:");
 		String playersName = board.getPlayersTurn().getPlayerName();
-		// TODO get the color
-	
+		Color playersColor = board.getPlayersTurn().getPlayerColor();
+		// TODO: get the color
 		playersNameText.setText(playersName);
-		whoseTurn.add(playersNameText);
+		playersNameText.setBackground(playersColor);
 		whoseTurn.add(label);
+		whoseTurn.add(playersNameText);
 		return whoseTurn;
 	}
 	
+	
 	private JPanel roll() {
-		
 		JPanel roll = new JPanel();
 		JLabel rollLabel = new JLabel("Roll:");
 		String die = board.rollDie(); 
@@ -92,6 +96,7 @@ public class GameControlPanel extends JPanel {
 		roll.add(rollText);
 		return roll;
 	}
+	
 	
 	private JPanel createBottomPanel() {
 		JPanel bottomPanel = new JPanel();
@@ -103,24 +108,35 @@ public class GameControlPanel extends JPanel {
 		return bottomPanel;
 	}
 	
+	
 	private JPanel bottomRightPanel() {
 		JPanel bottomRightPanel = new JPanel();
 		bottomRightPanel.setLayout(new GridLayout(1, 0));
-		JTextField someText = new JTextField("I have no guess");
-		bottomRightPanel.add(someText);
+		//JTextField someText = new JTextField("I have no guess");
+		bottomRightPanel.add(guess);
 		bottomRightPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result")); // Only using this for testing
 		return bottomRightPanel;
 	}
 	
+	
 	private JPanel bottomLeftPanel() {
 		JPanel bottomLeftPanel = new JPanel();
 		bottomLeftPanel.setLayout(new GridLayout(1, 0));
-		JTextField someText = new JTextField("You have question?");
-		bottomLeftPanel.add(someText);
+		//JTextField someText = new JTextField("You have question?");
+		bottomLeftPanel.add(guessResult);
 		bottomLeftPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess")); // Only using this for testing
 		return bottomLeftPanel;
 	}
+	
 
+	public void setGuess(String guess) {
+		this.guess.setText(guess);
+	}
+	
+	
+	public void setGuessResult(String guessResult) {
+		this.guessResult.setText(guessResult);
+	}
 	
 	
 	public static void main(String[] args) {
@@ -135,6 +151,11 @@ public class GameControlPanel extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		frame.setVisible(true);
 		
+		
+		// test filling the data
+		//panel.setTurn(new ComputerPlayer("Col. Mustard", 0, 0, "orange"), 5);
+		panel.setGuess("I have no guess!");
+		panel.setGuessResult( "So you have nothing?");
 	
 	}
 }

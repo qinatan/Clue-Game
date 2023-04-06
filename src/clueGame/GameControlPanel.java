@@ -20,7 +20,7 @@ public class GameControlPanel extends JPanel {
 	private JTextField guessResultDisplay; 
 	Board board = Board.getInstance();
 	String playersTurn; 
-	
+	JTextField playersNameText = new JTextField();
 	//constructor 
 	public GameControlPanel () {
 		setLayout(new GridLayout(2, 0)); 
@@ -55,7 +55,7 @@ public class GameControlPanel extends JPanel {
 			System.out.println("Next Button Pressed");
 			board.nextTurn();
 			playersTurn = board.getPlayersTurn().getPlayerName();
-			
+			playersNameText.setText(playersTurn);
 		}
 	}
 	
@@ -72,7 +72,7 @@ public class GameControlPanel extends JPanel {
 		JLabel label = new JLabel("Who's Turn:");
 		String playersName = board.getPlayersTurn().getPlayerName();
 		// TODO get the color
-		JTextField playersNameText = new JTextField();
+		//JTextField playersNameText = new JTextField();
 		playersNameText.setText(playersName);
 		whoseTurn.add(playersNameText);
 		whoseTurn.add(label);

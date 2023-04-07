@@ -15,6 +15,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -96,6 +97,13 @@ public abstract class Player {
 	public abstract ArrayList<Card> makeSuggestion();
 
 	// *********** Other Methods ********* // 
+	public void draw(int width, int height, Graphics g) {
+		int horOffset = width * row;
+		int vertOffset = height * col;
+		g.drawOval(horOffset, vertOffset, width, height);
+		g.setColor(playerColor);
+	}
+	
 	public void printHand() {
 		for (int i = 0; i < hand.size(); i++) {
 			System.out.println(hand.get(i));

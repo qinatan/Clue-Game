@@ -61,22 +61,35 @@ public class Board extends JPanel {
 	public static Board getInstance() {
 		return boardInstance;
 	}
-	
-	/** TODO: Fix these
+
+	@Override
 	public void paintComponent(Graphics g) {
+		int cellWidth = (getWidth() - 1) / rows; // TODO: somehow our rows and cols and mixed up
+		int cellHeight = (getHeight() - 1) / cols; // TODO: Our board has 27 rows and 22 cols, but is showing the opposite
 		super.paintComponent(g);
-		g.drawRect(ROW, SYMBOL, NAME, COLUMN);
+		// First pass through all cells, just drawing outlines & colors
+		for (int i = 0; i < rows; i ++) {
+			for (int j = 0; j < cols; j++) {
+				grid[i][j].draw(cellWidth, cellHeight, g);
+			}
+		}
+		
+		// ** WE MUST DO MULTIPLE PASSES or else the graphics get all screwy ***
+		// Second pass through all cells, drawing Room names
+		for (int i = 0; i < rows; i ++) {
+			for (int j = 0; j < cols; j++) {
+				grid[i][j].drawRoomNames(cellWidth, cellHeight, g);
+			}
+		}
+		
+		// third pass through drawing players
+		for (Player player: playerList) {
+			player.draw(cellWidth, cellHeight, g);
+		}
 		
 	}
+
 	
-	
-	public void paintCell(BoardCell cell) {
-		
-		
-		
-		paintComponent();
-	}
-	**/
 	/*
 	 * initialize the board (since we are using singleton pattern)
 	 */

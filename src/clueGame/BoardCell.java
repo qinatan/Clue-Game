@@ -3,6 +3,11 @@ package clueGame;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JPanel;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
 /**
  * 
  * BoardCell contains variables that store information of a boardCell, including: row and column location,
@@ -28,6 +33,49 @@ public class BoardCell {
 	private Boolean isRoomCenterCell = false;
 	private Character secretPassage = null;
 	private DoorDirection doorDirection;
+	
+	/**
+	 * INFO FROM RUBRIC
+	Drawing each cell. Board cells should draw themselves. This will require you to:
+		Add a draw method to the BoardCell class.
+		Pass information to the board cell, like the cell size and perhaps a board offset.
+		The draw method will be called from paintComponent. Remember that the parameter to paintComponent
+		 is a Graphics object. You can simply pass that object to the draw method of BoardCell.  
+		Then in BoardCell you can use the drawing commands (drawRect, fillRect, etc.).
+	**/
+	
+	
+	public void draw(int width, int height, Graphics g) {
+		Board board = Board.getInstance();
+		Color RoomColor = new Color(98, 212, 246);
+		Color WalkwayColor = new Color(19, 20, 20);
+		int horOffset = width * rowNum;
+		int vertOffset = height * columnNum;
+		g.drawRect(width, height, horOffset, vertOffset);
+		System.out.println(board.getRoomMap().get(cellSymbol).getName());
+		if (board.getRoomMap().get(cellSymbol).getName() != "Walkway" ) {
+			g.setColor(RoomColor);
+		}
+		// TODO: IDK why walkways are still being set to blue
+		else {
+			g.setColor(WalkwayColor);
+		}
+		
+	}
+	
+	// TODO: This is super buggy for some reason. seems like our roomMap might be jacked
+	public void drawRoomNames(int width, int height, Graphics g) {
+		Board board = Board.getInstance();
+		int horOffset = width * rowNum;
+		int vertOffset = height * columnNum;
+		if ( this.isLabel()) {
+			String roomLabel = board.getRoomMap().get(cellSymbol).getName();
+			g.drawString(roomLabel, horOffset, vertOffset);
+		}
+	}
+	
+	
+
 	
 	
 	public int getRowNum() {

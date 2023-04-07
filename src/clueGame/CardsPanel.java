@@ -18,16 +18,18 @@ public class CardsPanel extends JPanel {
 	JPanel roomCardsPanel = new JPanel();
 	JPanel weaponCardsPanel = new JPanel();
 	JPanel peopleCardsPanel = new JPanel();
-	
+
 	JPanel peopleHandPanel = new JPanel();
 	JPanel roomHandPanel = new JPanel();
 	JPanel weaponHandPanel = new JPanel();
-	
+
 	// Constructor
 	public CardsPanel() {
-		
+
 		setLayout(new GridLayout(3, 1));
-		setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
+		setBorder(new TitledBorder(new EtchedBorder(), "Known Cards"));
+		
+		//Adds each of the cards panels
 		JPanel peopleCardsPanel = peopleCardsPanel();
 		add(peopleCardsPanel);
 		JPanel roomCardsPanel = roomCardsPanel();
@@ -35,119 +37,140 @@ public class CardsPanel extends JPanel {
 		JPanel weaponCardsPanel = weaponCardsPanel();
 		add(weaponCardsPanel);
 	}
-	
-	
+
 	public void updatePanels() {
-		removeAll(); 
+		removeAll();
 		weaponCardsPanel.removeAll();
-		peopleCardsPanel.removeAll();
+		peopleCardsPanel.removeAll(); //These likly aren't needed
 		roomCardsPanel.removeAll();
-		setLayout(new GridLayout(3, 1));
+
+		
+		// setLayout(new GridLayout(3, 1)); //This doenssnt cahnge anything
 		JPanel peopleCardsPanel = peopleCardsPanel();
 		JPanel roomCardsPanel = roomCardsPanel();
 		JPanel weaponCardsPanel = weaponCardsPanel();
-		peopleHandPanel.removeAll();
-		roomHandPanel.removeAll(); 
-		weaponHandPanel.removeAll(); 
-		add(peopleCardsPanel); 
-		add(roomCardsPanel); 
-		add(weaponCardsPanel); 
-		
+
+		// The Hand should never be updated
+//		peopleHandPanel.removeAll();
+//		roomHandPanel.removeAll(); 
+//		weaponHandPanel.removeAll(); 
+
+		add(peopleCardsPanel);
+		add(roomCardsPanel);
+		add(weaponCardsPanel);
+
+		revalidate() ; //This is needed to get rid of when it opens blank
 	}
-	
-	
+
 	private JPanel peopleCardsPanel() {
 		JPanel peopleCardsPanel = new JPanel();
 		peopleCardsPanel.setLayout(new GridLayout(2, 0));
-		peopleCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "peopleCards"));
-		ArrayList<JTextField> seenPeopleCards = getSeenCards(CardType.PERSON, board.getPlayerList().get(0)); // Assuming we are chihiro
-		ArrayList<JTextField> seenPeopleCardsFromHand = getHandCards(CardType.PERSON, board.getPlayerList().get(0));  // Assuming we are chihiro
-		// Adds seen cards 
+		peopleCardsPanel.setBorder(new TitledBorder(new EtchedBorder(), "peopleCards"));
+		ArrayList<JTextField> seenPeopleCards = getSeenCards(CardType.PERSON, board.getPlayerList().get(0)); // Assuming
+																												// we
+																												// are
+																												// chihiro
+		ArrayList<JTextField> seenPeopleCardsFromHand = getHandCards(CardType.PERSON, board.getPlayerList().get(0)); // Assuming
+																														// we
+																														// are
+																														// chihiro
+		// Adds seen cards
 		JPanel seenPanel = new JPanel();
-		seenPanel.setLayout(new GridLayout(0,1));
+		seenPanel.setLayout(new GridLayout(0, 1));
 		JLabel label = new JLabel("Seen:");
 		seenPanel.add(label);
-		for (JTextField card: seenPeopleCards) {
-			
+		for (JTextField card : seenPeopleCards) {
+
 			seenPanel.add(card);
 		}
 		peopleCardsPanel.add(seenPanel);
 		// Adds card from hand
 		JPanel peopleHandPanel = new JPanel();
-		peopleHandPanel.setLayout(new GridLayout(0,1));
+		peopleHandPanel.setLayout(new GridLayout(0, 1));
 		JLabel handLabel = new JLabel("In Hand:");
 		peopleHandPanel.add(handLabel);
-		for (JTextField card: seenPeopleCardsFromHand) {
+		
+		for (JTextField card : seenPeopleCardsFromHand) {
 			peopleHandPanel.add(card);
 		}
 		peopleCardsPanel.add(peopleHandPanel);
 		return peopleCardsPanel;
-		
+
 	}
-	
+
 	private JPanel roomCardsPanel() {
 		JPanel roomCardsPanel = new JPanel();
 		roomCardsPanel.setLayout(new GridLayout(2, 0));
-		roomCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "roomCards"));
-		ArrayList<JTextField> seenRoomCards = getSeenCards(CardType.ROOM, board.getPlayerList().get(0));  // Assuming we are chihiro
-		ArrayList<JTextField> seenRoomCardsFromHand = getHandCards(CardType.ROOM, board.getPlayerList().get(0));  // Assuming we are chihiro
-		// Adds seen cards 
+		roomCardsPanel.setBorder(new TitledBorder(new EtchedBorder(), "roomCards"));
+		ArrayList<JTextField> seenRoomCards = getSeenCards(CardType.ROOM, board.getPlayerList().get(0)); // Assuming we
+																											// are
+																											// chihiro
+		ArrayList<JTextField> seenRoomCardsFromHand = getHandCards(CardType.ROOM, board.getPlayerList().get(0)); // Assuming
+																													// we
+																													// are
+																													// chihiro
+		// Adds seen cards
 		JPanel seenPanel = new JPanel();
-		seenPanel.setLayout(new GridLayout(0,1)); 
+		seenPanel.setLayout(new GridLayout(0, 1));
 		JLabel roomLabel = new JLabel("Seen:");
 		seenPanel.add(roomLabel);
-		for (JTextField card: seenRoomCards) {
+		for (JTextField card : seenRoomCards) {
 			seenPanel.add(card);
 		}
 		roomCardsPanel.add(seenPanel);
 		// Adds card from hand
 		roomHandPanel = new JPanel();
-		roomHandPanel.setLayout(new GridLayout(0,1)); 
+		roomHandPanel.setLayout(new GridLayout(0, 1));
 		JLabel handLabel = new JLabel("In Hand:");
 		roomHandPanel.add(handLabel);
-		for (JTextField card: seenRoomCardsFromHand) {
+		for (JTextField card : seenRoomCardsFromHand) {
 			roomHandPanel.add(card);
 		}
 		roomCardsPanel.add(roomHandPanel);
 		return roomCardsPanel;
 	}
-	
+
 	private JPanel weaponCardsPanel() {
-		weaponCardsPanel.setLayout(new GridLayout(3,0));
-		weaponCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "weaponCards"));
-		ArrayList<JTextField> seenWeaponCardsText = getSeenCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
-		ArrayList<JTextField> seenWeaponCardsFromHand = getHandCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
-		// Adds seen cards 
+		weaponCardsPanel.setLayout(new GridLayout(3, 0));
+		weaponCardsPanel.setBorder(new TitledBorder(new EtchedBorder(), "weaponCards"));
+		ArrayList<JTextField> seenWeaponCardsText = getSeenCards(CardType.WEAPON, board.getPlayerList().get(0)); // Assuming
+																													// we
+																													// are
+																													// chihiro
+		ArrayList<JTextField> seenWeaponCardsFromHand = getHandCards(CardType.WEAPON, board.getPlayerList().get(0)); // Assuming
+																														// we
+																														// are
+																														// chihiro
+		// Adds seen cards
 		JPanel seenPanel = new JPanel();
-		seenPanel.setLayout(new GridLayout(0,1));
+		seenPanel.setLayout(new GridLayout(0, 1));
 		JLabel seenLabel = new JLabel("Seen:");
-		//weaponCardsPanel.add(seenLabel);
+		// weaponCardsPanel.add(seenLabel);
 		seenPanel.add(seenLabel);
-		for (JTextField seenWeaponText: seenWeaponCardsText) {
-			
+		for (JTextField seenWeaponText : seenWeaponCardsText) {
+
 			seenPanel.add(seenWeaponText);
 		}
 		weaponCardsPanel.add(seenPanel);
-		
+
 		// Adds card from hand
 		JPanel weaponHandPanel = new JPanel();
-		weaponHandPanel.setLayout(new GridLayout(0,1));
+		weaponHandPanel.setLayout(new GridLayout(0, 1));
 		JLabel handLabel = new JLabel("In Hand:");
 		weaponHandPanel.add(handLabel);
-		for (JTextField card: seenWeaponCardsFromHand) {
-			
+		for (JTextField card : seenWeaponCardsFromHand) {
+
 			weaponHandPanel.add(card);
 		}
 		weaponCardsPanel.add(weaponHandPanel);
 		return weaponCardsPanel;
 	}
-	
-	
+
 	private ArrayList<JTextField> getSeenCards(CardType cardType, Player player) {
-		ArrayList<JTextField> seenCardsList =  new ArrayList<JTextField>();
+		ArrayList<JTextField> seenCardsList = new ArrayList<JTextField>();
 		if (player.getSeenMap().containsKey(cardType)) {
-			for (Card card: player.getSeenMap().get(cardType)) {
-				Color cardColor = card.getcardColor(); 
+			for (Card card : player.getSeenMap().get(cardType)) {
+				Color cardColor = card.getcardColor();
 				JTextField seenCard = new JTextField();
 				seenCard.setText(card.getCardName());
 				seenCard.setBackground(cardColor);
@@ -157,13 +180,13 @@ public class CardsPanel extends JPanel {
 		}
 		return seenCardsList;
 	}
-	
+
 	private ArrayList<JTextField> getHandCards(CardType cardType, Player player) {
 		ArrayList<JTextField> seenCardsList = new ArrayList<JTextField>();
-		
-		for( Card card: player.getHand()) {
+
+		for (Card card : player.getHand()) {
 			if (cardType == card.getCardType()) {
-				Color cardColor = card.getcardColor(); 
+				Color cardColor = card.getcardColor();
 				JTextField seenCard = new JTextField();
 				seenCard.setText(card.getCardName());
 				seenCard.setBackground(cardColor);
@@ -172,33 +195,31 @@ public class CardsPanel extends JPanel {
 		}
 		return seenCardsList;
 	}
-	
-	
-	
+
 	public static void main(String[] args) throws InterruptedException {
 		Board board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initializeForTest();
-		Player testingPlayer = board.getPlayer(0); 
-		JFrame frame = new JFrame();  // create the frame 
-		CardsPanel cardsPanel = new CardsPanel(); 
+		Player testingPlayer = board.getPlayer(0);
+		JFrame frame = new JFrame(); // create the frame
+		CardsPanel cardsPanel = new CardsPanel();
 		frame.add(cardsPanel, BorderLayout.CENTER);
-		frame.setSize(180, 750);  // size the frame
+		frame.setSize(180, 750); // size the frame
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-		
-		ArrayList<Card> dealtCards = board.getPlayerList().get(1).getHand(); 
-		
-		for (int j = 0; j < dealtCards.size(); j++)
-		{
-			CardType cardType = dealtCards.get(j).getCardType(); 
-			Card testingCard = dealtCards.get(j); 
-			testingPlayer.addToSeenMap(cardType,testingCard);
+
+		// dealtCards is the hand of the first CPU player
+		ArrayList<Card> dealtCards = board.getPlayerList().get(2).getHand();
+
+		// Loop for every card in the hand of the CPU and you add it to seenMap
+		for (int j = 0; j < dealtCards.size(); j++) {
+			CardType cardType = dealtCards.get(j).getCardType();
+			Card testingCard = dealtCards.get(j);
+			testingPlayer.addToSeenMap(cardType, testingCard);
 		}
-		
+
 		cardsPanel.updatePanels();
 
-	
 	}
-	
+
 }

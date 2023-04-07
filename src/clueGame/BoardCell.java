@@ -47,18 +47,18 @@ public class BoardCell {
 	
 	public void draw(int width, int height, Graphics g) {
 		Board board = Board.getInstance();
-		Color RoomColor = new Color(98, 212, 246);
-		Color WalkwayColor = new Color(19, 20, 20);
+		Color lightBlue = new Color(98, 212, 246);
+		Color black = new Color(19, 20, 20); 
 		int horOffset = width * rowNum;
 		int vertOffset = height * columnNum;
-		g.drawRect(width, height, horOffset, vertOffset);
+		g.drawRect(width, height, horOffset, vertOffset);  // Can change to fillRect for filled in color
 		System.out.println(board.getRoomMap().get(cellSymbol).getName());
-		if (board.getRoomMap().get(cellSymbol).getName() != "Walkway" ) {
-			g.setColor(RoomColor);
+		if (board.getRoomMap().get(cellSymbol).getName().equals("Walkway") || board.getRoomMap().get(cellSymbol).getName().equals("Unused")) {
+			g.setColor(black);
 		}
 		// TODO: IDK why walkways are still being set to blue
 		else {
-			g.setColor(WalkwayColor);
+			g.setColor(lightBlue);
 		}
 		
 	}
@@ -73,9 +73,6 @@ public class BoardCell {
 			g.drawString(roomLabel, horOffset, vertOffset);
 		}
 	}
-	
-	
-
 	
 	
 	public int getRowNum() {

@@ -64,8 +64,8 @@ public class Board extends JPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		int cellWidth = (getWidth() - 1) / rows; // TODO: somehow our rows and cols and mixed up
-		int cellHeight = (getHeight() - 1) / cols; // TODO: Our board has 27 rows and 22 cols, but is showing the opposite
+		int cellWidth = (getWidth()) / rows; // TODO: somehow our rows and cols and mixed up
+		int cellHeight = (getHeight()) / cols; // TODO: Our board has 27 rows and 22 cols, but is showing the opposite
 		super.paintComponent(g);
 		// First pass through all cells, just drawing outlines & colors
 		for (int i = 0; i < rows; i ++) {

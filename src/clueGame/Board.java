@@ -4,13 +4,17 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+
+import javax.swing.JPanel;
+
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.*;
+import java.awt.Graphics;
 
 /**
  * Board
@@ -23,7 +27,7 @@ import java.io.*;
  * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
  * @author Qina Tan
  */
-public class Board {
+public class Board extends JPanel {
 	private static Board boardInstance = new Board();
 	private int cols;
 	private int rows;
@@ -46,7 +50,7 @@ public class Board {
 	private final static int ROW = 3;
 	private final static int COLUMN = 4;
 	private static Solution solution;
-	private Player playerTurn; //TODO: initializing for C22A-1 Only 
+	private Player playerTurn;
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -57,7 +61,22 @@ public class Board {
 	public static Board getInstance() {
 		return boardInstance;
 	}
-
+	
+	/** TODO: Fix these
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawRect(ROW, SYMBOL, NAME, COLUMN);
+		
+	}
+	
+	
+	public void paintCell(BoardCell cell) {
+		
+		
+		
+		paintComponent();
+	}
+	**/
 	/*
 	 * initialize the board (since we are using singleton pattern)
 	 */
@@ -227,17 +246,20 @@ public class Board {
 			String line = myReader2.nextLine();
 			String[] result = line.split(",");
 			for (int col = 0; col < cols; col++) {
-				grid[row][col].setCellSymbol(result[col]);
 				// Checks for bad config file
 				if (!roomMap.containsKey(result[col].charAt(0))) {
 					myReader2.close();
 					throw new BadConfigFormatException(
 							"Letter found in config file that is not a known room: " + result[col].charAt(0));
 				}
-
+				
+				grid[row][col].setCellSymbol(result[col]);
+			
 				// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 				// isSecretPassageway, isRoomLabel
 				gridCellClassifier(row, col, result);
+			
+				
 			}
 
 			row++;
@@ -337,6 +359,7 @@ public class Board {
 				// Sets the rooms passage room to the destination of the secret Passage
 				currRoom.setPassageRoom(result[col].charAt(1));
 			}
+			// paintGridCell(grid[row][col]); // TODO: Still working on this. 
 		}
 	}
 
@@ -757,11 +780,6 @@ public class Board {
 	}
 	
 	private void createSolutionForTest() {
-
-		// We can keep these because this displays out solution
-		// System.out.println("Solution");
-		// System.out.println(peopleDeck.get(0) + " " + roomDeck.get(0) + " " +
-		// weaponDeck.get(0));
 
 		// initialized solution to be the first person, first room, first weapon
 		Board.solution = new Solution(peopleDeck.get(0), roomDeck.get(0), weaponDeck.get(0));

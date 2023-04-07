@@ -41,19 +41,15 @@ public class CardsPanel extends JPanel {
 	public void updatePanels() {
 		removeAll();
 		weaponCardsPanel.removeAll();
-		peopleCardsPanel.removeAll(); //These likly aren't needed
+		peopleCardsPanel.removeAll(); //These likely aren't needed
 		roomCardsPanel.removeAll();
 
 		
-		// setLayout(new GridLayout(3, 1)); //This doenssnt cahnge anything
+		// setLayout(new GridLayout(3, 1)); //This doesnt caßhnge anything
 		JPanel peopleCardsPanel = peopleCardsPanel();
 		JPanel roomCardsPanel = roomCardsPanel();
 		JPanel weaponCardsPanel = weaponCardsPanel();
 
-		// The Hand should never be updated
-//		peopleHandPanel.removeAll();
-//		roomHandPanel.removeAll(); 
-//		weaponHandPanel.removeAll(); 
 
 		add(peopleCardsPanel);
 		add(roomCardsPanel);

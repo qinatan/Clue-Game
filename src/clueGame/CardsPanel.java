@@ -20,7 +20,7 @@ public class CardsPanel extends JPanel {
 	// Constructor 
 	public CardsPanel() {
 		
-		setLayout(new GridLayout(3, 0));
+		setLayout(new GridLayout(3, 1));
 		setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
 		JPanel peopleCardsPanel = peopleCardsPanel();
 		add(peopleCardsPanel);
@@ -30,15 +30,18 @@ public class CardsPanel extends JPanel {
 		add(weaponCardsPanel);
 	}
 	
+	
 	public void updatedPanels() {
-		peopleCardsPanel.removeAll(); 
+		removeAll();
+		//peopleCardsPanel.removeAll(); 
+		setLayout(new GridLayout(3, 1));
 		add(peopleCardsPanel); 
-		roomCardsPanel.removeAll();
+		//roomCardsPanel.removeAll();
 		add(roomCardsPanel); 
-		weaponCardsPanel.removeAll(); 
+		//weaponCardsPanel.removeAll(); 
 		add(weaponCardsPanel); 
-		
 	}
+	
 	
 	private JPanel peopleCardsPanel() {
 		JPanel peopleCardsPanel = new JPanel();
@@ -52,7 +55,6 @@ public class CardsPanel extends JPanel {
 		JLabel label = new JLabel("Seen:");
 		seenPanel.add(label);
 		for (JTextField card: seenPeopleCards) {
-			System.out.println("here");
 			seenPanel.add(card);
 		}
 		peopleCardsPanel.add(seenPanel);
@@ -173,7 +175,7 @@ public class CardsPanel extends JPanel {
 		frame.add(cardsPanel, BorderLayout.CENTER);
 		frame.setSize(180, 750);  // size the frame
 		frame.setVisible(true);
-		cardsPanel.updatedPanels();
+		//cardsPanel.updatedPanels();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 	
 			

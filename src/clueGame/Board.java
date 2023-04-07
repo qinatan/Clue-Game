@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+import java.awt.Color;
 import java.io.*;
 
 /**
@@ -598,10 +599,12 @@ public class Board {
 		Collections.shuffle(dealtDeck);
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
-				player.updateHand(dealtDeck.remove(0));
+				Color playerColor = player.getPlayerColor(); 
+				Card dealtCard = dealtDeck.remove(0); 
+				dealtCard.setCardColor(playerColor);
+				player.updateHand(dealtCard);
 			}
 		}
-
 	}
 
 
@@ -745,8 +748,10 @@ public class Board {
 
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
-				player.updateHand(dealtDeck.remove(0));
-
+				Color playerColor = player.getPlayerColor(); 
+				Card dealtCard = dealtDeck.remove(0); 
+				dealtCard.setCardColor(playerColor);
+				player.updateHand(dealtCard);
 			}
 		}
 	}

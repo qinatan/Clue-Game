@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
@@ -67,6 +68,7 @@ public class CardsPanel extends JPanel {
 		JLabel label = new JLabel("Seen:");
 		seenPanel.add(label);
 		for (JTextField card: seenPeopleCards) {
+			
 			seenPanel.add(card);
 		}
 		peopleCardsPanel.add(seenPanel);
@@ -92,8 +94,8 @@ public class CardsPanel extends JPanel {
 		// Adds seen cards 
 		JPanel seenPanel = new JPanel();
 		seenPanel.setLayout(new GridLayout(0,1)); 
-		JLabel label = new JLabel("Seen:");
-		seenPanel.add(label);
+		JLabel roomLabel = new JLabel("Seen:");
+		seenPanel.add(roomLabel);
 		for (JTextField card: seenRoomCards) {
 			seenPanel.add(card);
 		}
@@ -119,10 +121,11 @@ public class CardsPanel extends JPanel {
 		JPanel seenPanel = new JPanel();
 		seenPanel.setLayout(new GridLayout(0,1));
 		JLabel seenLabel = new JLabel("Seen:");
-		weaponCardsPanel.add(seenLabel);
-		for (JTextField seenWeapon: seenWeaponCardsText) {
+		//weaponCardsPanel.add(seenLabel);
+		seenPanel.add(seenLabel);
+		for (JTextField seenWeaponText: seenWeaponCardsText) {
 			
-			seenPanel.add(seenWeapon);
+			seenPanel.add(seenWeaponText);
 		}
 		weaponCardsPanel.add(seenPanel);
 		
@@ -141,29 +144,33 @@ public class CardsPanel extends JPanel {
 	
 	
 	private ArrayList<JTextField> getSeenCards(CardType cardType, Player player) {
-		ArrayList<JTextField> seenCards =  new ArrayList<JTextField>();
+		ArrayList<JTextField> seenCardsList =  new ArrayList<JTextField>();
 		if (player.getSeenMap().containsKey(cardType)) {
 			for (Card card: player.getSeenMap().get(cardType)) {
+				Color cardColor = card.getcardColor(); 
 				JTextField seenCard = new JTextField();
 				seenCard.setText(card.getCardName());
-				seenCards.add(seenCard);
+				seenCard.setBackground(cardColor);
+				seenCardsList.add(seenCard);
 			}
-			return seenCards;
+			return seenCardsList;
 		}
-		return seenCards;
+		return seenCardsList;
 	}
 	
 	private ArrayList<JTextField> getHandCards(CardType cardType, Player player) {
-		ArrayList<JTextField> seenCards = new ArrayList<JTextField>();
+		ArrayList<JTextField> seenCardsList = new ArrayList<JTextField>();
 		
 		for( Card card: player.getHand()) {
 			if (cardType == card.getCardType()) {
+				Color cardColor = card.getcardColor(); 
 				JTextField seenCard = new JTextField();
 				seenCard.setText(card.getCardName());
-				seenCards.add(seenCard);
+				seenCard.setBackground(cardColor);
+				seenCardsList.add(seenCard);
 			}
 		}
-		return seenCards;
+		return seenCardsList;
 	}
 	
 	
@@ -180,21 +187,13 @@ public class CardsPanel extends JPanel {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		
+		ArrayList<Card> dealtCards = board.getPlayerList().get(1).getHand(); 
 		
-		Card testingPersonCard = new Card(CardType.PERSON, "No-Face");
-		testingPlayer.addToSeenMap(CardType.PERSON, testingPersonCard);
-		
-		for (int k = 0; k < 2; k++)
+		for (int j = 0; j < dealtCards.size(); j++)
 		{
-		Card testingWeaponCard = new Card(CardType.WEAPON, "Broken DVD");
-		testingPlayer.addToSeenMap(CardType.WEAPON, testingWeaponCard);}
-		
-		
-		
-		for (int i = 0; i < 6; i++)
-		{
-			Card testingCard1 = new Card (CardType.ROOM,"Plant Room" );
-			testingPlayer.addToSeenMap(CardType.ROOM, testingCard1);
+			CardType cardType = dealtCards.get(j).getCardType(); 
+			Card testingCard = dealtCards.get(j); 
+			testingPlayer.addToSeenMap(cardType,testingCard);
 		}
 		
 		cardsPanel.updatePanels();

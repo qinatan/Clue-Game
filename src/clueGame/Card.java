@@ -60,6 +60,16 @@ public class Card implements Comparable<Card> {
 	public CardType getCardType() {
 		return cardType;
 	}
+	
+	public void setCardColor(Color cardColor)
+	{
+		this.cardColor = cardColor; 
+	}
+	
+	public Color getcardColor()
+	{
+		return this.cardColor; 
+	}
 
 	@Override
 	public boolean equals(Object o ) {

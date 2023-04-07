@@ -17,7 +17,7 @@ public class CardsPanel extends JPanel {
 	JPanel roomCardsPanel = new JPanel();
 	JPanel weaponCardsPanel = new JPanel();
 	JPanel peopleCardsPanel = new JPanel();
-	// Constructor 
+	// Constructor
 	public CardsPanel() {
 		
 		setLayout(new GridLayout(3, 1));
@@ -31,14 +31,17 @@ public class CardsPanel extends JPanel {
 	}
 	
 	
-	public void updatedPanels() {
-		removeAll();
-		//peopleCardsPanel.removeAll(); 
+	public void updatePanels() {
+		removeAll(); 
+		weaponCardsPanel.removeAll();
+		peopleCardsPanel.removeAll();
+		roomCardsPanel.removeAll();
 		setLayout(new GridLayout(3, 1));
+		JPanel peopleCardsPanel = peopleCardsPanel();
+		JPanel roomCardsPanel = roomCardsPanel();
+		JPanel weaponCardsPanel = weaponCardsPanel();
 		add(peopleCardsPanel); 
-		//roomCardsPanel.removeAll();
 		add(roomCardsPanel); 
-		//weaponCardsPanel.removeAll(); 
 		add(weaponCardsPanel); 
 	}
 	
@@ -79,17 +82,16 @@ public class CardsPanel extends JPanel {
 		ArrayList<JTextField> seenRoomCardsFromHand = getHandCards(CardType.ROOM, board.getPlayerList().get(0));  // Assuming we are chihiro
 		// Adds seen cards 
 		JPanel seenPanel = new JPanel();
-		seenPanel.setLayout(new GridLayout(0,1));//make size change
+		seenPanel.setLayout(new GridLayout(0,1)); 
 		JLabel label = new JLabel("Seen:");
 		seenPanel.add(label);
 		for (JTextField card: seenRoomCards) {
-			System.out.println("here");
 			seenPanel.add(card);
 		}
 		roomCardsPanel.add(seenPanel);
 		// Adds card from hand
 		JPanel handPanel = new JPanel();
-		handPanel.setLayout(new GridLayout(0,1));//made size change
+		handPanel.setLayout(new GridLayout(0,1)); 
 		JLabel handLabel = new JLabel("In Hand:");
 		handPanel.add(handLabel);
 		for (JTextField card: seenRoomCardsFromHand) {
@@ -100,7 +102,6 @@ public class CardsPanel extends JPanel {
 	}
 	
 	private JPanel weaponCardsPanel() {
-		
 		weaponCardsPanel.setLayout(new GridLayout(2, 0));
 		weaponCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "weaponCards"));
 		ArrayList<JTextField> seenWeaponCards = getSeenCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
@@ -112,15 +113,14 @@ public class CardsPanel extends JPanel {
 		seenPanel.add(label);
 		weaponCardsPanel.add(label);
 		for (JTextField card: seenWeaponCards) {
-			System.out.println("here");
 			seenPanel.add(card);
 		}
 		weaponCardsPanel.add(seenPanel);
 		
 		// Adds card from hand
 		JPanel handPanel = new JPanel();
-		JLabel handLabel = new JLabel("In Hand:");
 		handPanel.setLayout(new GridLayout(0,1));
+		JLabel handLabel = new JLabel("In Hand:");
 		handPanel.add(handLabel);
 		for (JTextField card: seenWeaponCardsFromHand) {
 			handPanel.add(card);
@@ -162,24 +162,32 @@ public class CardsPanel extends JPanel {
 		Board board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initializeForTest();
-		//board.initialize();
 		Player testingPlayer = board.getPlayer(0); 
 		JFrame frame = new JFrame();  // create the frame 
-	
+		CardsPanel cardsPanel = new CardsPanel(); 
+		frame.add(cardsPanel, BorderLayout.CENTER);
+		frame.setSize(180, 750);  // size the frame
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
+		
+		Card testingPersonCard = new Card(CardType.PERSON, "No-Face");
+		testingPlayer.addToSeenMap(CardType.PERSON, testingPersonCard);
+		
+		Card testingWeaponCard = new Card(CardType.WEAPON, "Broken DVD");
+		testingPlayer.addToSeenMap(CardType.WEAPON, testingWeaponCard);
+		
+		Card testingWeaponCard2 = new Card(CardType.WEAPON, "Hose");
+		testingPlayer.addToSeenMap(CardType.WEAPON, testingWeaponCard2);
+		
 		for (int i = 0; i < 6; i++)
 		{
 			Card testingCard1 = new Card (CardType.ROOM,"Plant Room" );
 			testingPlayer.addToSeenMap(CardType.ROOM, testingCard1);
 		}
-		CardsPanel cardsPanel = new CardsPanel();  // create the panel
-		frame.add(cardsPanel, BorderLayout.CENTER);
-		frame.setSize(180, 750);  // size the frame
-		frame.setVisible(true);
-		//cardsPanel.updatedPanels();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-	
-			
 		
+		cardsPanel.updatePanels();
+
+	
 	}
 	
 }

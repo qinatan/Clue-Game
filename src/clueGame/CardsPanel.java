@@ -17,6 +17,11 @@ public class CardsPanel extends JPanel {
 	JPanel roomCardsPanel = new JPanel();
 	JPanel weaponCardsPanel = new JPanel();
 	JPanel peopleCardsPanel = new JPanel();
+	
+	JPanel peopleHandPanel = new JPanel();
+	JPanel roomHandPanel = new JPanel();
+	JPanel weaponHandPanel = new JPanel();
+	
 	// Constructor
 	public CardsPanel() {
 		
@@ -40,9 +45,13 @@ public class CardsPanel extends JPanel {
 		JPanel peopleCardsPanel = peopleCardsPanel();
 		JPanel roomCardsPanel = roomCardsPanel();
 		JPanel weaponCardsPanel = weaponCardsPanel();
+		peopleHandPanel.removeAll();
+		roomHandPanel.removeAll(); 
+		weaponHandPanel.removeAll(); 
 		add(peopleCardsPanel); 
 		add(roomCardsPanel); 
 		add(weaponCardsPanel); 
+		
 	}
 	
 	
@@ -62,14 +71,14 @@ public class CardsPanel extends JPanel {
 		}
 		peopleCardsPanel.add(seenPanel);
 		// Adds card from hand
-		JPanel handPanel = new JPanel();
-		handPanel.setLayout(new GridLayout(0,1));
+		JPanel peopleHandPanel = new JPanel();
+		peopleHandPanel.setLayout(new GridLayout(0,1));
 		JLabel handLabel = new JLabel("In Hand:");
-		handPanel.add(handLabel);
+		peopleHandPanel.add(handLabel);
 		for (JTextField card: seenPeopleCardsFromHand) {
-			handPanel.add(card);
+			peopleHandPanel.add(card);
 		}
-		peopleCardsPanel.add(handPanel);
+		peopleCardsPanel.add(peopleHandPanel);
 		return peopleCardsPanel;
 		
 	}
@@ -90,42 +99,43 @@ public class CardsPanel extends JPanel {
 		}
 		roomCardsPanel.add(seenPanel);
 		// Adds card from hand
-		JPanel handPanel = new JPanel();
-		handPanel.setLayout(new GridLayout(0,1)); 
+		roomHandPanel = new JPanel();
+		roomHandPanel.setLayout(new GridLayout(0,1)); 
 		JLabel handLabel = new JLabel("In Hand:");
-		handPanel.add(handLabel);
+		roomHandPanel.add(handLabel);
 		for (JTextField card: seenRoomCardsFromHand) {
-			handPanel.add(card);
+			roomHandPanel.add(card);
 		}
-		roomCardsPanel.add(handPanel);
+		roomCardsPanel.add(roomHandPanel);
 		return roomCardsPanel;
 	}
 	
 	private JPanel weaponCardsPanel() {
-		weaponCardsPanel.setLayout(new GridLayout(2, 0));
+		weaponCardsPanel.setLayout(new GridLayout(3,0));
 		weaponCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "weaponCards"));
-		ArrayList<JTextField> seenWeaponCards = getSeenCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
+		ArrayList<JTextField> seenWeaponCardsText = getSeenCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
 		ArrayList<JTextField> seenWeaponCardsFromHand = getHandCards(CardType.WEAPON, board.getPlayerList().get(0));  // Assuming we are chihiro
 		// Adds seen cards 
 		JPanel seenPanel = new JPanel();
 		seenPanel.setLayout(new GridLayout(0,1));
-		JLabel label = new JLabel("Seen:");
-		seenPanel.add(label);
-		weaponCardsPanel.add(label);
-		for (JTextField card: seenWeaponCards) {
-			seenPanel.add(card);
+		JLabel seenLabel = new JLabel("Seen:");
+		weaponCardsPanel.add(seenLabel);
+		for (JTextField seenWeapon: seenWeaponCardsText) {
+			
+			seenPanel.add(seenWeapon);
 		}
 		weaponCardsPanel.add(seenPanel);
 		
 		// Adds card from hand
-		JPanel handPanel = new JPanel();
-		handPanel.setLayout(new GridLayout(0,1));
+		JPanel weaponHandPanel = new JPanel();
+		weaponHandPanel.setLayout(new GridLayout(0,1));
 		JLabel handLabel = new JLabel("In Hand:");
-		handPanel.add(handLabel);
+		weaponHandPanel.add(handLabel);
 		for (JTextField card: seenWeaponCardsFromHand) {
-			handPanel.add(card);
+			
+			weaponHandPanel.add(card);
 		}
-		weaponCardsPanel.add(handPanel);
+		weaponCardsPanel.add(weaponHandPanel);
 		return weaponCardsPanel;
 	}
 	
@@ -170,14 +180,16 @@ public class CardsPanel extends JPanel {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		
+		
 		Card testingPersonCard = new Card(CardType.PERSON, "No-Face");
 		testingPlayer.addToSeenMap(CardType.PERSON, testingPersonCard);
 		
+		for (int k = 0; k < 2; k++)
+		{
 		Card testingWeaponCard = new Card(CardType.WEAPON, "Broken DVD");
-		testingPlayer.addToSeenMap(CardType.WEAPON, testingWeaponCard);
+		testingPlayer.addToSeenMap(CardType.WEAPON, testingWeaponCard);}
 		
-		Card testingWeaponCard2 = new Card(CardType.WEAPON, "Hose");
-		testingPlayer.addToSeenMap(CardType.WEAPON, testingWeaponCard2);
+		
 		
 		for (int i = 0; i < 6; i++)
 		{

@@ -97,12 +97,14 @@ public abstract class Player {
 	public abstract ArrayList<Card> makeSuggestion();
 
 	// *********** Other Methods ********* // 
+	/*
 	public void draw(int width, int height, Graphics g) {
 		int horOffset = width * row;
 		int vertOffset = height * col;
 		g.drawOval(horOffset, vertOffset, width, height);
 		g.setColor(playerColor);
 	}
+	*/
 	
 	public void printHand() {
 		for (int i = 0; i < hand.size(); i++) {

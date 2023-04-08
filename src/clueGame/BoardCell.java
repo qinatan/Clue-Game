@@ -5,8 +5,10 @@ import java.util.Set;
 
 import javax.swing.JPanel;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  * 
@@ -26,53 +28,110 @@ public class BoardCell {
 	private int rowNum;
 	private Set<BoardCell> adjList = new HashSet<BoardCell>();
 	private Boolean isRoom = false;
+	private Boolean isUnused = false;
+	private Boolean isWalkway = false;
+	public Boolean getIsWalkway() {
+		return isWalkway;
+	}
+
+	public void setIsWalkway(Boolean isWalkway) {
+		this.isWalkway = isWalkway;
+	}
+
+	public Boolean getIsUnused() {
+		return isUnused;
+	}
+
+	public void setIsUnused(Boolean isUnused) {
+		this.isUnused = isUnused;
+	}
+
 	private Boolean isOccupied = false;
 	private Boolean isDoorway = false;
 	private Character cellSymbol;
 	private Boolean isLabel = false;
 	private Boolean isRoomCenterCell = false;
+	private Boolean isSecretPassage = false;
+	public Boolean getIsSecretPassage() {
+		return isSecretPassage;
+	}
+
+	public void setIsSecretPassage(Boolean isSecretPassage) {
+		this.isSecretPassage = isSecretPassage;
+	}
+
 	private Character secretPassage = null;
 	private DoorDirection doorDirection;
 	
-	/**
-	 * INFO FROM RUBRIC
-	Drawing each cell. Board cells should draw themselves. This will require you to:
-		Add a draw method to the BoardCell class.
-		Pass information to the board cell, like the cell size and perhaps a board offset.
-		The draw method will be called from paintComponent. Remember that the parameter to paintComponent
-		 is a Graphics object. You can simply pass that object to the draw method of BoardCell.  
-		Then in BoardCell you can use the drawing commands (drawRect, fillRect, etc.).
-	**/
-	
-	
+
+	// This method will draw the initial board without room names or players
 	public void draw(int width, int height, Graphics g) {
+		Graphics2D g2 = (Graphics2D) g; // cast g to Graphics2d object so we can use those methods
 		Board board = Board.getInstance();
-		Color lightBlue = new Color(98, 212, 246);
-		Color black = new Color(19, 20, 20); 
-		int horOffset = width * rowNum;
-		int vertOffset = height * columnNum;
-		g.drawRect(width, height, horOffset, vertOffset);  // Can change to fillRect for filled in color
-		System.out.println(board.getRoomMap().get(cellSymbol).getName());
-		if (board.getRoomMap().get(cellSymbol).getName().equals("Walkway") || board.getRoomMap().get(cellSymbol).getName().equals("Unused")) {
+		
+		//Color black = new Color(0,0,0); // Unused cells will be set to black
+		Color lightBlue = new Color(98, 212, 246); // Rooms will be light blue
+		Color grey = new Color(192, 192, 192); // Walkways will be grey
+		int horOffset = width * columnNum; // calculates the offset of this cell
+		int vertOffset = height * rowNum; // calculates the offset of this cell
+		
+		g2.setStroke(new BasicStroke(2));
+		
+		//if (isUnused) {
+		//	System.out.println("Unused Cell found");
+		//	g2.fillRect(horOffset, vertOffset, width, height);
+		//	g2.setColor(black);
+		//}
+		
+		if (isRoom) {
+			System.out.println("Room found");
+			g2.fillRect(horOffset, vertOffset, width, height);
+			g2.setColor(lightBlue);
+		}
+		
+		
+		//else if (isWalkway ) {
+		//	System.out.println("Walkway found");
+		//	g2.drawRect(horOffset, vertOffset, width, height);
+		//	g2.setColor(black);
+	
+		//}
+	
+		
+		//if (isDoorway) {
+			//System.out.println("Doorway found");
+	//	}
+		
+	//	if (isSecretPassage) {
+			//System.out.println("Secret Passage Found");
+	//	}
+		
+	//	else {
+			//g2.drawRect(width,  height, horOffset, vertOffset);
+			//g2.setColor(grey);
+	//	}
+		
+		/*
+		if (board.getRoomMap().get(cellSymbol).getName().equals("Unused")) {
+			System.out.println("Unused found");
+			g.fillRect(width, height, horOffset, vertOffset);
 			g.setColor(black);
 		}
-		// TODO: IDK why walkways are still being set to blue
-		else {
-			g.setColor(lightBlue);
-		}
+		*/
 		
 	}
 	
-	// TODO: This is super buggy for some reason. seems like our roomMap might be jacked
+	// Method draws room names over the board
+	/*
 	public void drawRoomNames(int width, int height, Graphics g) {
 		Board board = Board.getInstance();
 		int horOffset = width * rowNum;
 		int vertOffset = height * columnNum;
 		if ( this.isLabel()) {
-			String roomLabel = board.getRoomMap().get(cellSymbol).getName();
+			String roomLabel = board.getRoomMap().get(cellSymbol).getName(); 
 			g.drawString(roomLabel, horOffset, vertOffset);
 		}
-	}
+	}*/
 	
 	
 	public int getRowNum() {

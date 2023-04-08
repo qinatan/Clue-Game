@@ -63,19 +63,23 @@ public class Board extends JPanel {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
-		int cellWidth = (getWidth()) / rows; // TODO: somehow our rows and cols and mixed up
-		int cellHeight = (getHeight()) / cols; // TODO: Our board has 27 rows and 22 cols, but is showing the opposite
-		super.paintComponent(g);
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);  // THIS MUST BE the first item within paintComponent
+		int cellWidth = (getWidth()) / cols; 
+		int cellHeight =(getHeight()) / rows;
+		
+		System.out.println("Rows = " + rows + " cols = " + cols);
 		// First pass through all cells, just drawing outlines & colors
 		for (int i = 0; i < rows; i ++) {
 			for (int j = 0; j < cols; j++) {
-				grid[i][j].draw(cellWidth, cellHeight, g);
+				System.out.println("Row = " + i + " Col = " + j );
+				grid[i][j].draw(cellWidth, cellHeight, g);				
 			}
 		}
 		
 		// ** WE MUST DO MULTIPLE PASSES or else the graphics get all screwy ***
 		// Second pass through all cells, drawing Room names
+		/*
 		for (int i = 0; i < rows; i ++) {
 			for (int j = 0; j < cols; j++) {
 				grid[i][j].drawRoomNames(cellWidth, cellHeight, g);
@@ -86,7 +90,7 @@ public class Board extends JPanel {
 		for (Player player: playerList) {
 			player.draw(cellWidth, cellHeight, g);
 		}
-		
+		*/
 	}
 
 	
@@ -224,7 +228,7 @@ public class Board extends JPanel {
 	/**
 	 * loadLayoutConfig() Performs 4 Major Functions: 1. Reads in the layout file to
 	 * determine board size 2. Reads in the layout file to build the grid of
-	 * boardCell objects 3. Runs each cell through the gridCellClassified function
+	 * boardCell objects 3. Runs each cell through the gridCellClassifier function
 	 * to set boardCell specific variables 4. Creates the adjacency list for each
 	 * cell based on the boardCell variables
 	 * 
@@ -335,8 +339,17 @@ public class Board extends JPanel {
 	 */
 	private void gridCellClassifier(int row, int col, String[] result) {
 		// sets cell to "room" if not a walkway or unused square,
+		// TODO: So walkways and unused cells have isRoom = false, but are in roomMap
 		if (!result[col].equals("X") && result[col].charAt(0) != 'W') {
 			grid[row][col].setIsRoom(true);
+		}
+		
+		if (result[col].equals("X")) {
+			grid[row][col].setIsUnused(true);
+		}
+		
+		if (result[col].equals("W")) {
+			grid[row][col].setIsWalkway(true);
 		}
 
 		// Door, Secret Passage, Room Center Cell, Room Label
@@ -364,6 +377,7 @@ public class Board extends JPanel {
 			}
 			// Secret Passageway found. Add secretPassageway Destination Char to Room object
 			else {
+				grid[row][col].setIsSecretPassage(true);
 				// Sets current cell's passageway variable
 				grid[row][col].setSecretPassage(result[col].charAt(1));
 				// Sets current rooms passageway variable
@@ -372,7 +386,6 @@ public class Board extends JPanel {
 				// Sets the rooms passage room to the destination of the secret Passage
 				currRoom.setPassageRoom(result[col].charAt(1));
 			}
-			// paintGridCell(grid[row][col]); // TODO: Still working on this. 
 		}
 	}
 

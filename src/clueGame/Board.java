@@ -68,30 +68,40 @@ public class Board extends JPanel {
 		int cellWidth = (getWidth()) / cols; 
 		int cellHeight =(getHeight()) / rows;
 		
-		System.out.println("Rows = " + rows + " cols = " + cols);
+		//System.out.println("Rows = " + rows + " cols = " + cols);
 		// First pass through all cells, just drawing outlines & colors
 		
-		for (int i = 0; i < rows; i ++) {
-			for (int j = 0; j < cols; j++) {
-				System.out.println("Row = " + i + " Col = " + j );
-				grid[i][j].draw(cellWidth, cellHeight, g);				
+		for (BoardCell[] cells : grid)
+		{
+			for (BoardCell c : cells)
+			{
+				c.drawBoardCell(cellWidth, cellHeight,g); 
+				c.drawRoomNames(cellWidth, cellHeight,g); 
 			}
 		}
-		
-		
-		// ** WE MUST DO MULTIPLE PASSES or else the graphics get all screwy ***
-		// Second pass through all cells, drawing Room names
-		/*
-		for (int i = 0; i < rows; i ++) {
-			for (int j = 0; j < cols; j++) {
-				grid[i][j].drawRoomNames(cellWidth, cellHeight, g);
-			}
-		}*/
-		/*
+//		
+//		
+//		for (int i = 0; i < rows; i ++) {
+//			for (int j = 0; j < cols; j++) {
+//				System.out.println("Row = " + i + " Col = " + j );
+//				grid[i][j].drawBoardCell(cellWidth, cellHeight, g);				
+//			}
+//		}
+//		
+//		
+//		 //WE MUST DO MULTIPLE PASSES or else the graphics get all screwy ***
+//		// Second pass through all cells, drawing Room names
+//		
+//		for (int i = 0; i < rows; i ++) {
+//			for (int j = 0; j < cols; j++) {
+//				grid[i][j].drawRoomNames(cellWidth, cellHeight, g);
+//			}
+//		}
+//		
 		// third pass through drawing players
 		for (Player player: playerList) {
-			player.draw(cellWidth, cellHeight, g);
-		}*/
+			player.drawPlayer(cellWidth, cellHeight, g);
+		}
 	
 	}
 
@@ -355,7 +365,7 @@ public class Board extends JPanel {
 		}
 
 		// Door, Secret Passage, Room Center Cell, Room Label
-		if (result[col].length() == 2) {
+		if (result[col].length() >= 2) {
 			// Doorway found and the next character is an arrow to the doors location
 			if (result[col].charAt(0) == 'W' && isDoorArrow(result[col].charAt(1))) {
 				grid[row][col].setIsDoor(true);
@@ -368,6 +378,7 @@ public class Board extends JPanel {
 				// Set this cell to the Room's labelCell
 				Room room = roomMap.get(result[col].charAt(0));
 				room.setLabelCell(grid[row][col]);
+				
 			}
 			// Center Cell Label Found
 			else if (result[col].charAt(1) == '*') {

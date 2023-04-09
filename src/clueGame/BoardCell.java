@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -41,38 +42,37 @@ public class BoardCell {
 	
 
 	// This method will draw the initial board without room names or players
-	public void draw(int width, int height, Graphics g) {
+	public void drawBoardCell(int width, int height, Graphics g) {
 		Graphics2D g2 = (Graphics2D) g; // cast g to Graphics2d object so we can use those methods
-		Board board = Board.getInstance();
-		
-		Color black = new Color(0,0,0); // Unused cells will be set to black
-		Color lightBlue = new Color(98, 212, 246); // Rooms will be light blue
-		Color grey = new Color(192, 192, 192); // Walkways will be grey
+		Board board = Board.getInstance();	
+		Color black = new Color(0,0,0); 
+		Color skyblue = new Color(135, 206, 235); // Rooms will be sky blue
+		Color grey = new Color(192, 192, 192); // unused space will be grey
+		Color yellow = new Color(255, 255, 0); //walkway will be yellow 
 		int horOffset = width * columnNum; // calculates the offset of this cell
 		int vertOffset = height * rowNum; // calculates the offset of this cell
 		
-		
 		if (isRoom) {
-			g2.setColor(lightBlue);
+			g2.setColor(skyblue);
 			g2.fillRect(horOffset, vertOffset, width, height);
 		}
 		
-		
 		else if (isUnused) {
-			g2.setColor(black); // Set Color MUST come before fill/draw
+			g2.setColor(grey); // Set Color MUST come before fill/draw
 			g2.setStroke(new BasicStroke(2));
 			g2.fillRect(horOffset, vertOffset, width, height);
 		}
 		
-		
-		else if (isWalkway ) {
-			g2.setColor(black);
+		else if (isWalkway) {
+			g2.setColor(black); 
 			g2.drawRect(horOffset, vertOffset, width, height);
+			g2.setColor(yellow);
+			g.fillRect(horOffset, vertOffset, width, height);
 		}
 	
 		
 		if (isDoorway) {
-			System.out.println("Doorway found");
+			
 			switch (doorDirection) {
 				case UP:
 					g2.setColor(black);
@@ -99,35 +99,28 @@ public class BoardCell {
 			}
 			
 		}
-		
-		
+	
 		if (isSecretPassage) {
 			System.out.println("Secret Passage Found");
-		}
-		/*
-		else {
-			g2.drawRect(width,  height, horOffset, vertOffset);
-			g2.setColor(grey);
-		}
-		*/
-		/*
-		if (board.getRoomMap().get(cellSymbol).getName().equals("Unused")) {
-			System.out.println("Unused found");
-			g.fillRect(width, height, horOffset, vertOffset);
-			g.setColor(black);
-		}
-		*/
-		
+			g2.setColor(black); 
+			String secretePassage = " " +this.secretPassage; 
+			g2.drawString(secretePassage,  horOffset+10, vertOffset+10);
+		}	
 	}
 	
 	// Method draws room names over the board
 	
 	public void drawRoomNames(int width, int height, Graphics g) {
+		
 		Board board = Board.getInstance();
-		int horOffset = width * rowNum;
-		int vertOffset = height * columnNum;
-		if ( this.isLabel()) {
+		int horOffset = width * columnNum;
+		int vertOffset = height * rowNum;
+		if (this.isLabel()) {
 			String roomLabel = board.getRoomMap().get(cellSymbol).getName(); 
+			Color pink = new Color(255, 192, 203); 
+			g.setColor(pink);
+			Font font = new Font("Arial", Font.BOLD, 12); 
+			g.setFont(font);
 			g.drawString(roomLabel, horOffset, vertOffset);
 		}
 	}

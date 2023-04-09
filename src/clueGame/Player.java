@@ -98,11 +98,12 @@ public abstract class Player {
 
 	// *********** Other Methods ********* // 
 	
-	public void draw(int width, int height, Graphics g) {
-		int horOffset = width * row;
-		int vertOffset = height * col;
-		g.drawOval(horOffset, vertOffset, width, height);
+	public void drawPlayer(int width, int height, Graphics g) {
+		int horOffset = width * col;
+		int vertOffset = height * row;
 		g.setColor(playerColor);
+		g.drawOval(horOffset, vertOffset, width, height);
+		g.fillOval(horOffset, vertOffset, width, height); 
 	}
 	
 	

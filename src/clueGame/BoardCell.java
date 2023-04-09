@@ -30,36 +30,12 @@ public class BoardCell {
 	private Boolean isRoom = false;
 	private Boolean isUnused = false;
 	private Boolean isWalkway = false;
-	public Boolean getIsWalkway() {
-		return isWalkway;
-	}
-
-	public void setIsWalkway(Boolean isWalkway) {
-		this.isWalkway = isWalkway;
-	}
-
-	public Boolean getIsUnused() {
-		return isUnused;
-	}
-
-	public void setIsUnused(Boolean isUnused) {
-		this.isUnused = isUnused;
-	}
-
 	private Boolean isOccupied = false;
 	private Boolean isDoorway = false;
 	private Character cellSymbol;
 	private Boolean isLabel = false;
 	private Boolean isRoomCenterCell = false;
 	private Boolean isSecretPassage = false;
-	public Boolean getIsSecretPassage() {
-		return isSecretPassage;
-	}
-
-	public void setIsSecretPassage(Boolean isSecretPassage) {
-		this.isSecretPassage = isSecretPassage;
-	}
-
 	private Character secretPassage = null;
 	private DoorDirection doorDirection;
 	
@@ -74,40 +50,56 @@ public class BoardCell {
 		Color grey = new Color(192, 192, 192); // Walkways will be grey
 		int horOffset = width * columnNum; // calculates the offset of this cell
 		int vertOffset = height * rowNum; // calculates the offset of this cell
-		//System.out.println("width = " + width + " height = " + height);
 		
-		//if (isUnused) {
-		//	System.out.println("Unused Cell found");
-		//	g2.fillRect(horOffset, vertOffset, width, height);
-		//	g2.setColor(black);
-		//}
 		
 		if (isRoom) {
-			System.out.println("Room found");
 			g2.setColor(lightBlue);
 			g2.fillRect(horOffset, vertOffset, width, height);
 		}
 		
+		
 		else if (isUnused) {
-			System.out.println("horOffset = " + horOffset + " vertOffset = " + vertOffset);
-			System.out.println("Unused cell found");
 			g2.setColor(black); // Set Color MUST come before fill/draw
+			g2.setStroke(new BasicStroke(2));
 			g2.fillRect(horOffset, vertOffset, width, height);
-			
 		}
 		
 		
 		else if (isWalkway ) {
-			System.out.println("Walkway found");
-			g2.drawRect(horOffset, vertOffset, width, height);
 			g2.setColor(black);
-	
+			g2.drawRect(horOffset, vertOffset, width, height);
 		}
 	
 		
 		if (isDoorway) {
 			System.out.println("Doorway found");
+			switch (doorDirection) {
+				case UP:
+					g2.setColor(black);
+					g2.drawString("^", horOffset, vertOffset + 10);
+					break;
+					
+				case DOWN:
+					g2.setColor(black);
+					g2.drawString("v", horOffset, vertOffset + 10);
+					break;
+				
+				case RIGHT:
+					g2.setColor(black);
+					g2.drawString(">", horOffset, vertOffset + 10 );
+					break;
+					
+				case LEFT:
+					g2.setColor(black);
+					g2.drawString("<", horOffset, vertOffset+ 10);
+				
+				default:
+					break;
+					
+			}
+			
 		}
+		
 		
 		if (isSecretPassage) {
 			System.out.println("Secret Passage Found");
@@ -140,6 +132,21 @@ public class BoardCell {
 		}
 	}
 	
+	public Boolean getIsWalkway() {
+		return isWalkway;
+	}
+
+	public void setIsWalkway(Boolean isWalkway) {
+		this.isWalkway = isWalkway;
+	}
+
+	public Boolean getIsUnused() {
+		return isUnused;
+	}
+
+	public void setIsUnused(Boolean isUnused) {
+		this.isUnused = isUnused;
+	}
 	
 	public int getRowNum() {
 		return rowNum;
@@ -152,6 +159,15 @@ public class BoardCell {
 	public int getColumnNum() {
 		return columnNum;
 	}
+	
+	public Boolean getIsSecretPassage() {
+		return isSecretPassage;
+	}
+
+	public void setIsSecretPassage(Boolean isSecretPassage) {
+		this.isSecretPassage = isSecretPassage;
+	}
+
 
 	public void setColumnNum(int columnNum) {
 		this.columnNum = columnNum;

@@ -81,17 +81,17 @@ public class Board extends JPanel {
 		
 		// ** WE MUST DO MULTIPLE PASSES or else the graphics get all screwy ***
 		// Second pass through all cells, drawing Room names
-		
+		/*
 		for (int i = 0; i < rows; i ++) {
 			for (int j = 0; j < cols; j++) {
 				grid[i][j].drawRoomNames(cellWidth, cellHeight, g);
 			}
-		}
-		
+		}*/
+		/*
 		// third pass through drawing players
 		for (Player player: playerList) {
 			player.draw(cellWidth, cellHeight, g);
-		}
+		}*/
 	
 	}
 

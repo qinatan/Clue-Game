@@ -1,3 +1,14 @@
+/**
+ * 
+ * This class is the main driver for the GUI elements and the game
+ * @author: Mike Eact 
+ * @author: John Omalley 
+ * @author: Qina Tan 
+ * @start Date: 4/9/2023
+ * @collaborator: none 
+ * @resources: none  
+ */
+
 package clueGame;
 import java.awt.BorderLayout;
 import java.awt.Color;

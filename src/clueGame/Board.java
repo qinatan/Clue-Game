@@ -29,21 +29,15 @@ import java.awt.Graphics;
  */
 public class Board extends JPanel {
 	private static Board boardInstance = new Board();
-	private int cols;
-	private int rows;
+	private int cols, rows;
 	private BoardCell[][] grid;
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private ArrayList<Card> fullDeck;
-	private ArrayList<Card> dealtDeck;
-	public ArrayList<Card> peopleDeck;  
-	public ArrayList<Card> roomDeck;	
-	public ArrayList<Card> weaponDeck;   
+	private ArrayList<Card> fullDeck, dealtDeck, peopleDeck, roomDeck, weaponDeck;
 	private ArrayList<Player> playerList;
-	private String layoutConfig;
-	private String setupConfig;
+	private String layoutConfig, setupConfig;
 	private final static int TYPE = 0;
 	private final static int NAME = 1;
 	private final static int SYMBOL = 2;
@@ -61,6 +55,23 @@ public class Board extends JPanel {
 	public static Board getInstance() {
 		return boardInstance;
 	}
+	
+	
+	public ArrayList<Card> getWeaponDeck() {
+		return weaponDeck;
+	}
+	
+	public void setRoomDeck(ArrayList<Card> roomDeck) {
+		this.roomDeck = roomDeck;
+	}
+	
+	public ArrayList<Card> getPeopleDeck() {
+		return peopleDeck;
+	}
+
+	public void setPeopleDeck(ArrayList<Card> peopleDeck) {
+		this.peopleDeck = peopleDeck;
+	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -68,9 +79,7 @@ public class Board extends JPanel {
 		int cellWidth = (getWidth()) / cols; 
 		int cellHeight =(getHeight()) / rows;
 		
-		//System.out.println("Rows = " + rows + " cols = " + cols);
-		// First pass through all cells, just drawing outlines & colors
-		
+		// Draw board cells and room names
 		for (BoardCell[] cells : grid)
 		{
 			for (BoardCell c : cells)
@@ -79,26 +88,8 @@ public class Board extends JPanel {
 				c.drawRoomNames(cellWidth, cellHeight,g); 
 			}
 		}
-//		
-//		
-//		for (int i = 0; i < rows; i ++) {
-//			for (int j = 0; j < cols; j++) {
-//				System.out.println("Row = " + i + " Col = " + j );
-//				grid[i][j].drawBoardCell(cellWidth, cellHeight, g);				
-//			}
-//		}
-//		
-//		
-//		 //WE MUST DO MULTIPLE PASSES or else the graphics get all screwy ***
-//		// Second pass through all cells, drawing Room names
-//		
-//		for (int i = 0; i < rows; i ++) {
-//			for (int j = 0; j < cols; j++) {
-//				grid[i][j].drawRoomNames(cellWidth, cellHeight, g);
-//			}
-//		}
-//		
-		// third pass through drawing players
+
+		// Draw players
 		for (Player player: playerList) {
 			player.drawPlayer(cellWidth, cellHeight, g);
 		}
@@ -504,8 +495,8 @@ public class Board extends JPanel {
 
 				// if yes, check if on left edge
 				if (col == 0) {
-					addWalkwayAdj(currCell, Direction.RIGHT); // This is probably bad practice but I think it will
-																// work
+					addWalkwayAdj(currCell, Direction.RIGHT); 
+																
 					addWalkwayAdj(currCell, Direction.DOWN);
 				}
 				// check if on right edge
@@ -632,32 +623,26 @@ public class Board extends JPanel {
 	}
 	
 	//return first disapproval card that matching to suggesting card from other players, except the suggesting player 
-	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3, Player suggestingPlayer)
-	{
+	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3, Player suggestingPlayer) {
 		Card disprovedCard = null;
 		
-		for (int i = 0; i <playerList.size(); i++) 
-		{
+		for (int i = 0; i <playerList.size(); i++) {
 			Player player = playerList.get(i); 
 			
-			if (player != suggestingPlayer)
-			{
+			if (player != suggestingPlayer) {
 				disprovedCard = player.disproveSuggestion(suggestedCard1, sugguestedCard2, suggestedCard3); 
 				
-				if (disprovedCard != null)
-				{
+				if (disprovedCard != null) {
 					break; // no need to look further when we have a disproved card 
 				}
-
 			}
 		}
 		
 		return disprovedCard; 
 	}
 
-	//dealing cards to every player one at a time 
+	// dealing cards to every player one at a time 
 	public void dealCards() {
-		// shuffle card
 		Collections.shuffle(dealtDeck);
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
@@ -673,7 +658,6 @@ public class Board extends JPanel {
 
 	public Boolean checkAccusation(Card Room, Card Person, Card Weapon) {
 		Solution solution = getSolution();
-
 		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person)
 				&& solution.getWeapon().equals(Weapon)) {
 			return true;
@@ -735,32 +719,33 @@ public class Board extends JPanel {
 		return playerList;
 	}
 
-	public Set <BoardCell> getTargetList()
-	{
+	public Set <BoardCell> getTargetList() {
 		return this.targets; 
 	}
-	public Map<Character, Room> getRoomMap()
-	{
+	public Map<Character, Room> getRoomMap() {
 		return roomMap; 
 	}
 	
-	public ArrayList<Card> getRoomDeck()
-	{
+	public ArrayList<Card> getRoomDeck() {
 		return roomDeck; 
 	}
 
+	
 	public void movePlayer(int i, int j, Player player) {
 		player.setPlayerLocation(i, j);
 		
 	}
 	
+	
 	public static Solution getSolution() {
 		return solution;
 	}
 	
+	
 	public Player getPlayersTurn() {
 		return playerTurn;
 	}
+	
 	
 	public void nextTurn() {
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
@@ -770,6 +755,7 @@ public class Board extends JPanel {
 			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn())+1);
 		}
 	}
+	
 	
 	public void setPlayersTurn(Player playersTurn) {
 		this.playerTurn = playersTurn;
@@ -799,15 +785,14 @@ public class Board extends JPanel {
 		setGameForTest();
 	}
 	
+	
 	public void setGameForTest() {
-
 		createSolutionForTest();
 		dealCardsForTest();
-
 	}
 	
+	
 	private void dealCardsForTest() {
-
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
 				Color playerColor = player.getPlayerColor(); 
@@ -818,11 +803,11 @@ public class Board extends JPanel {
 		}
 	}
 	
+	
 	private void createSolutionForTest() {
 
 		// initialized solution to be the first person, first room, first weapon
 		Board.solution = new Solution(peopleDeck.get(0), roomDeck.get(0), weaponDeck.get(0));
-
 		// update dealtStack after removing solution cards
 		dealtDeck.addAll(fullDeck);
 		dealtDeck.remove(peopleDeck.get(0));
@@ -838,6 +823,8 @@ public class Board extends JPanel {
 		String Die = "" + randomDie; 
 		return Die; 
 	}
+
+	
 
 
 }

@@ -4,7 +4,7 @@
  *  @author: Mike Eact 
  * @author: John Omalley 
  * @author: Qina Tan 
- * @start Date: 8/3/2025
+ * @start Date: 4/9/2023
  * @collaborator: none 
  * @resources: none 
  * 
@@ -25,18 +25,13 @@ public class humanPlayer extends Player {
 	}
 	
 	@Override
-	public void updateHand (Card card)
-	{
+	public void updateHand (Card card) {
 		hand.add(card); 
 	}
 
 	@Override
 	public ArrayList<Card> makeSuggestion() {
-	
 		return null;
 	}
-	
-	
-	
 
 }

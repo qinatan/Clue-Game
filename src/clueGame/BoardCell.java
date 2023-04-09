@@ -58,7 +58,7 @@ public class BoardCell {
 		}
 		
 		else if (isUnused) {
-			g2.setColor(grey); // Set Color MUST come before fill/draw
+			g2.setColor(black); // Set Color MUST come before fill/draw
 			g2.setStroke(new BasicStroke(2));
 			g2.fillRect(horOffset, vertOffset, width, height);
 		}
@@ -66,7 +66,7 @@ public class BoardCell {
 		else if (isWalkway) {
 			g2.setColor(black); 
 			g2.drawRect(horOffset, vertOffset, width, height);
-			g2.setColor(yellow);
+			g2.setColor(grey);
 			g.fillRect(horOffset, vertOffset, width, height);
 		}
 	
@@ -101,7 +101,6 @@ public class BoardCell {
 		}
 	
 		if (isSecretPassage) {
-			System.out.println("Secret Passage Found");
 			g2.setColor(black); 
 			String secretePassage = " " +this.secretPassage; 
 			g2.drawString(secretePassage,  horOffset+10, vertOffset+10);
@@ -118,7 +117,8 @@ public class BoardCell {
 		if (this.isLabel()) {
 			String roomLabel = board.getRoomMap().get(cellSymbol).getName(); 
 			Color pink = new Color(255, 192, 203); 
-			g.setColor(pink);
+			Color black = new Color(0,0,0); 
+			g.setColor(black);
 			Font font = new Font("Arial", Font.BOLD, 12); 
 			g.setFont(font);
 			g.drawString(roomLabel, horOffset, vertOffset);

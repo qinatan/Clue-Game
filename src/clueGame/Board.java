@@ -674,6 +674,7 @@ public class Board extends JPanel {
 	 */
 	public boolean clickContainsTarget(int mouseX, int mouseY) {
 
+		System.out.println(mouseX + " " + mouseY);
 		Object[] targetArray = targets.toArray();
 		// for every box that is a target
 		for (int i = 0; i < targets.size(); i++) {

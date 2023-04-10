@@ -40,7 +40,7 @@ public class ClueGame extends JFrame {
 	}
 	
 	// This method will drive display updates. 
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	private void updateDisplay() {
 		
 	}

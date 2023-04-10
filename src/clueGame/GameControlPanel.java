@@ -75,6 +75,7 @@ public class GameControlPanel extends JPanel {
 
 			humanPlayer player = (humanPlayer) board.getPlayer(0);
 
+			//Checks if the player has moved or made an acc
 			if (player.getIsHasPlayerACC() || player.getIsHasPlayerMoved()) {
 
 				// This is basic psudocode that were going to be working through
@@ -88,6 +89,8 @@ public class GameControlPanel extends JPanel {
 				playersTurn = board.getPlayersTurn().getPlayerName();
 				playersColor = board.getPlayersTurn().getPlayerColor();
 				playersNameText.setText(playersTurn);
+				
+				
 				playersNameText.setBackground(playersColor);
 				String randomRoll = board.rollDie();
 				rollText.setText(randomRoll);
@@ -109,7 +112,7 @@ public class GameControlPanel extends JPanel {
 		}
 	}
 
-	// TODO: implement this
+
 	private class movePlayerClick implements MouseListener {
 		humanPlayer player = (humanPlayer) board.getPlayer(0);
 
@@ -119,7 +122,11 @@ public class GameControlPanel extends JPanel {
 			// TODO: This doesn't work yet. Im not sure if this should be in here because it
 			// has to deal with the board drawing
 			if (board.clickContainsTarget(e.getX(), e.getY())) {
+				//TODO:include here where we move player
 				player.setHasPlayerMoved(true);
+			} else {
+				JOptionPane.showMessageDialog(null, "Please click on a vaild tile", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 
 		}
@@ -127,19 +134,15 @@ public class GameControlPanel extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent e) {
 		}// This should be left blank
-
 		@Override
 		public void mouseReleased(MouseEvent e) {
 		}// This should be left blank
-
 		@Override
 		public void mouseEntered(MouseEvent e) {
 		}// This should be left blank
-
 		@Override
 		public void mouseExited(MouseEvent e) {
 		} // This should be left blank
-
 	}
 
 	private JPanel whoseTurn() {

@@ -3,6 +3,7 @@ package clueGame;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class ClueGame extends JFrame {
 	Board board = Board.getInstance();
@@ -31,6 +32,11 @@ public class ClueGame extends JFrame {
 		setSize(750, 630); //630 was changed from 930 so that it fit on my screen
 		setTitle("Clue");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
+		
+		//This is the splash panel.
+		//TODO: should this open after the game board?
+		JOptionPane.showMessageDialog(null, "You are " + board.getPlayer(0).getPlayerName() + ".\n Can you find the solution before the computers?", "Welcome to Clue",
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	// This method will drive display updates. 

@@ -3,7 +3,7 @@
  * @author: Mike Eact 
  * @author: John Omalley 
  * @author: Qina Tan 
- * @start Date: 8/3/2025
+ * @start Date: 4/9/2023
  * @collaborator: none 
  * @resources: none 
  */
@@ -15,5 +15,4 @@ public enum DoorDirection {
 
 	LEFT, UP, RIGHT, DOWN
 	
-		
 }

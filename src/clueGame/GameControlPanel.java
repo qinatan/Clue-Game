@@ -1,3 +1,14 @@
+/**
+ * 
+ * This class is the main driver for the GUI elements and the game
+ * @author: Mike Eact 
+ * @author: John Omalley 
+ * @author: Qina Tan 
+ * @start Date: 4/9/2023
+ * @collaborator: none 
+ * @resources: none  
+ */
+
 package clueGame;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,6 +35,7 @@ public class GameControlPanel extends JPanel {
 	private JTextField playersNameText = new JTextField();
 	private Color playersColor;
 	private JTextField rollText = new JTextField(); 
+	
 	//constructor 
 	public GameControlPanel () {
 		setLayout(new GridLayout(2, 0)); 
@@ -32,6 +44,7 @@ public class GameControlPanel extends JPanel {
 		add(topPanel);
 		add(bottomPanel);
 	}
+	
 	
 	private JPanel createTopPanel() {
 		JPanel topPanel = new JPanel();
@@ -51,6 +64,7 @@ public class GameControlPanel extends JPanel {
 		topPanel.add(makeAccusation);
 		return topPanel;
 	}
+	
 	
 	private class NextButtonListener implements ActionListener {
 		@Override
@@ -78,7 +92,6 @@ public class GameControlPanel extends JPanel {
 		JLabel label = new JLabel("Who's Turn:");
 		String playersName = board.getPlayersTurn().getPlayerName();
 		Color playersColor = board.getPlayersTurn().getPlayerColor();
-		// TODO: get the color
 		playersNameText.setText(playersName);
 		playersNameText.setBackground(playersColor);
 		whoseTurn.add(label);
@@ -150,8 +163,6 @@ public class GameControlPanel extends JPanel {
 		frame.setSize(750, 180);  // size the frame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		frame.setVisible(true);
-		
-		
 		// test filling the data
 		//panel.setTurn(new ComputerPlayer("Col. Mustard", 0, 0, "orange"), 5);
 		panel.setGuess("I have no guess!");

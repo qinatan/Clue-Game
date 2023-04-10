@@ -13,10 +13,13 @@
 
 package clueGame;
 
+import java.awt.Color;
+
 public class Card implements Comparable<Card> {
 	private String cardName;
 	private CardType cardType;
 	private int dealCount = 0;
+	private Color cardColor; 
 
 	// constructors
 	public Card(CardType type, String cardName) {
@@ -56,6 +59,16 @@ public class Card implements Comparable<Card> {
 
 	public CardType getCardType() {
 		return cardType;
+	}
+	
+	public void setCardColor(Color cardColor)
+	{
+		this.cardColor = cardColor; 
+	}
+	
+	public Color getcardColor()
+	{
+		return this.cardColor; 
 	}
 
 	@Override

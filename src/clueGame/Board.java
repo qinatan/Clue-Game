@@ -4,12 +4,17 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+
+import javax.swing.JPanel;
+
+import java.awt.Color;
+import java.awt.Graphics;
 import java.io.*;
+import java.awt.Graphics;
 
 /**
  * Board
@@ -22,30 +27,24 @@ import java.io.*;
  * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
  * @author Qina Tan
  */
-public class Board {
+public class Board extends JPanel {
 	private static Board boardInstance = new Board();
-	private int cols;
-	private int rows;
+	private int cols, rows;
 	private BoardCell[][] grid;
 	private Map<BoardCell, Set<BoardCell>> adjMtx = new HashMap<BoardCell, Set<BoardCell>>();
 	private ArrayList<BoardCell> visited = new ArrayList<BoardCell>();
 	private Set<BoardCell> targets;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private ArrayList<Card> fullDeck;
-	private ArrayList<Card> dealtDeck;
-	public ArrayList<Card> peopleDeck;  
-	public ArrayList<Card> roomDeck;	
-	public ArrayList<Card> weaponDeck;   
+	private ArrayList<Card> fullDeck, dealtDeck, peopleDeck, roomDeck, weaponDeck;
 	private ArrayList<Player> playerList;
-	private String layoutConfig;
-	private String setupConfig;
+	private String layoutConfig, setupConfig;
 	private final static int TYPE = 0;
 	private final static int NAME = 1;
 	private final static int SYMBOL = 2;
 	private final static int ROW = 3;
 	private final static int COLUMN = 4;
 	private static Solution solution;
-	private Player playerTurn; //TODO: initializing for C22A-1 Only 
+	private Player playerTurn;
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -56,7 +55,48 @@ public class Board {
 	public static Board getInstance() {
 		return boardInstance;
 	}
+	
+	
+	public ArrayList<Card> getWeaponDeck() {
+		return weaponDeck;
+	}
+	
+	public void setRoomDeck(ArrayList<Card> roomDeck) {
+		this.roomDeck = roomDeck;
+	}
+	
+	public ArrayList<Card> getPeopleDeck() {
+		return peopleDeck;
+	}
 
+	public void setPeopleDeck(ArrayList<Card> peopleDeck) {
+		this.peopleDeck = peopleDeck;
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);  // THIS MUST BE the first item within paintComponent
+		int cellWidth = (getWidth()) / cols; 
+		int cellHeight =(getHeight()) / rows;
+		
+		// Draw board cells and room names
+		for (BoardCell[] cells : grid)
+		{
+			for (BoardCell c : cells)
+			{
+				c.drawBoardCell(cellWidth, cellHeight,g); 
+				c.drawRoomNames(cellWidth, cellHeight,g); 
+			}
+		}
+
+		// Draw players
+		for (Player player: playerList) {
+			player.drawPlayer(cellWidth, cellHeight, g);
+		}
+	
+	}
+
+	
 	/*
 	 * initialize the board (since we are using singleton pattern)
 	 */
@@ -191,7 +231,7 @@ public class Board {
 	/**
 	 * loadLayoutConfig() Performs 4 Major Functions: 1. Reads in the layout file to
 	 * determine board size 2. Reads in the layout file to build the grid of
-	 * boardCell objects 3. Runs each cell through the gridCellClassified function
+	 * boardCell objects 3. Runs each cell through the gridCellClassifier function
 	 * to set boardCell specific variables 4. Creates the adjacency list for each
 	 * cell based on the boardCell variables
 	 * 
@@ -226,17 +266,20 @@ public class Board {
 			String line = myReader2.nextLine();
 			String[] result = line.split(",");
 			for (int col = 0; col < cols; col++) {
-				grid[row][col].setCellSymbol(result[col]);
 				// Checks for bad config file
 				if (!roomMap.containsKey(result[col].charAt(0))) {
 					myReader2.close();
 					throw new BadConfigFormatException(
 							"Letter found in config file that is not a known room: " + result[col].charAt(0));
 				}
-
+				
+				grid[row][col].setCellSymbol(result[col]);
+			
 				// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 				// isSecretPassageway, isRoomLabel
 				gridCellClassifier(row, col, result);
+			
+				
 			}
 
 			row++;
@@ -299,12 +342,21 @@ public class Board {
 	 */
 	private void gridCellClassifier(int row, int col, String[] result) {
 		// sets cell to "room" if not a walkway or unused square,
+		// TODO: So walkways and unused cells have isRoom = false, but are in roomMap
 		if (!result[col].equals("X") && result[col].charAt(0) != 'W') {
 			grid[row][col].setIsRoom(true);
 		}
+		
+		if (result[col].equals("X")) {
+			grid[row][col].setIsUnused(true);
+		}
+		
+		if (result[col].equals("W")) {
+			grid[row][col].setIsWalkway(true);
+		}
 
 		// Door, Secret Passage, Room Center Cell, Room Label
-		if (result[col].length() == 2) {
+		if (result[col].length() >= 2) {
 			// Doorway found and the next character is an arrow to the doors location
 			if (result[col].charAt(0) == 'W' && isDoorArrow(result[col].charAt(1))) {
 				grid[row][col].setIsDoor(true);
@@ -317,6 +369,7 @@ public class Board {
 				// Set this cell to the Room's labelCell
 				Room room = roomMap.get(result[col].charAt(0));
 				room.setLabelCell(grid[row][col]);
+				
 			}
 			// Center Cell Label Found
 			else if (result[col].charAt(1) == '*') {
@@ -328,6 +381,7 @@ public class Board {
 			}
 			// Secret Passageway found. Add secretPassageway Destination Char to Room object
 			else {
+				grid[row][col].setIsSecretPassage(true);
 				// Sets current cell's passageway variable
 				grid[row][col].setSecretPassage(result[col].charAt(1));
 				// Sets current rooms passageway variable
@@ -441,8 +495,8 @@ public class Board {
 
 				// if yes, check if on left edge
 				if (col == 0) {
-					addWalkwayAdj(currCell, Direction.RIGHT); // This is probably bad practice but I think it will
-																// work
+					addWalkwayAdj(currCell, Direction.RIGHT); 
+																
 					addWalkwayAdj(currCell, Direction.DOWN);
 				}
 				// check if on right edge
@@ -569,46 +623,41 @@ public class Board {
 	}
 	
 	//return first disapproval card that matching to suggesting card from other players, except the suggesting player 
-	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3, Player suggestingPlayer)
-	{
+	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3, Player suggestingPlayer) {
 		Card disprovedCard = null;
 		
-		for (int i = 0; i <playerList.size(); i++) 
-		{
+		for (int i = 0; i <playerList.size(); i++) {
 			Player player = playerList.get(i); 
 			
-			if (player != suggestingPlayer)
-			{
+			if (player != suggestingPlayer) {
 				disprovedCard = player.disproveSuggestion(suggestedCard1, sugguestedCard2, suggestedCard3); 
 				
-				if (disprovedCard != null)
-				{
+				if (disprovedCard != null) {
 					break; // no need to look further when we have a disproved card 
 				}
-
 			}
 		}
 		
 		return disprovedCard; 
 	}
 
-	//dealing cards to every player one at a time 
+	// dealing cards to every player one at a time 
 	public void dealCards() {
-		// shuffle card
 		Collections.shuffle(dealtDeck);
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
-				player.updateHand(dealtDeck.remove(0));
+				Color playerColor = player.getPlayerColor(); 
+				Card dealtCard = dealtDeck.remove(0); 
+				dealtCard.setCardColor(playerColor);
+				player.updateHand(dealtCard);
 			}
 		}
-
 	}
 
 
 
 	public Boolean checkAccusation(Card Room, Card Person, Card Weapon) {
 		Solution solution = getSolution();
-
 		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person)
 				&& solution.getWeapon().equals(Weapon)) {
 			return true;
@@ -670,32 +719,33 @@ public class Board {
 		return playerList;
 	}
 
-	public Set <BoardCell> getTargetList()
-	{
+	public Set <BoardCell> getTargetList() {
 		return this.targets; 
 	}
-	public Map<Character, Room> getRoomMap()
-	{
+	public Map<Character, Room> getRoomMap() {
 		return roomMap; 
 	}
 	
-	public ArrayList<Card> getRoomDeck()
-	{
+	public ArrayList<Card> getRoomDeck() {
 		return roomDeck; 
 	}
 
+	
 	public void movePlayer(int i, int j, Player player) {
 		player.setPlayerLocation(i, j);
 		
 	}
 	
+	
 	public static Solution getSolution() {
 		return solution;
 	}
 	
+	
 	public Player getPlayersTurn() {
 		return playerTurn;
 	}
+	
 	
 	public void nextTurn() {
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
@@ -705,6 +755,7 @@ public class Board {
 			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn())+1);
 		}
 	}
+	
 	
 	public void setPlayersTurn(Player playersTurn) {
 		this.playerTurn = playersTurn;
@@ -734,33 +785,29 @@ public class Board {
 		setGameForTest();
 	}
 	
+	
 	public void setGameForTest() {
-
 		createSolutionForTest();
 		dealCardsForTest();
-
 	}
 	
+	
 	private void dealCardsForTest() {
-
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
-				player.updateHand(dealtDeck.remove(0));
-
+				Color playerColor = player.getPlayerColor(); 
+				Card dealtCard = dealtDeck.remove(0); 
+				dealtCard.setCardColor(playerColor);
+				player.updateHand(dealtCard);
 			}
 		}
 	}
 	
+	
 	private void createSolutionForTest() {
-
-		// We can keep these because this displays out solution
-		// System.out.println("Solution");
-		// System.out.println(peopleDeck.get(0) + " " + roomDeck.get(0) + " " +
-		// weaponDeck.get(0));
 
 		// initialized solution to be the first person, first room, first weapon
 		Board.solution = new Solution(peopleDeck.get(0), roomDeck.get(0), weaponDeck.get(0));
-
 		// update dealtStack after removing solution cards
 		dealtDeck.addAll(fullDeck);
 		dealtDeck.remove(peopleDeck.get(0));
@@ -776,6 +823,8 @@ public class Board {
 		String Die = "" + randomDie; 
 		return Die; 
 	}
+
+	
 
 
 }

@@ -43,7 +43,7 @@ public class computerPlayer extends Player {
 
 		Board board = Board.getInstance();
 
-		for (Card weaponCard : board.weaponDeck) { // Loop through all the weapons we have
+		for (Card weaponCard : board.getWeaponDeck()) { // Loop through all the weapons we have
 			ArrayList<Card> seenWeapons = seenMap.get(CardType.WEAPON);
 
 			if (!seenWeapons.contains(weaponCard) && !hand.contains(weaponCard)) {
@@ -53,7 +53,7 @@ public class computerPlayer extends Player {
 	
 		}
 
-		for (Card personCard : board.peopleDeck) { // Loop through all the weapons we have
+		for (Card personCard : board.getPeopleDeck()) { // Loop through all the weapons we have
 			ArrayList<Card> seenPeople = seenMap.get(CardType.PERSON);
 
 			if (!seenPeople.contains(personCard) && !hand.contains(personCard)) {

@@ -31,7 +31,7 @@ import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JPanel {
 	private JTextField turn;
-	private JTextField roll;
+	private JTextField roll; //TODO: removed the unused variables
 	private JTextField guess = new JTextField();
 	private JTextField guessResult = new JTextField();
 	private Board board = Board.getInstance();
@@ -47,9 +47,18 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		addMouseListener(new movePlayerClick());
+
+		
+		//int currRoll = roll ;
+
+		
+//		board.calcTargets(
+//				board.getCell(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol()),
+//				roll);
+		
 	}
 
+	//Constructor for top half of the Jpanel
 	private JPanel createTopPanel() {
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(1, 4));
@@ -57,6 +66,9 @@ public class GameControlPanel extends JPanel {
 		topPanel.add(whoseTurn);
 		JPanel roll = roll();
 		topPanel.add(roll);
+		
+
+		
 		ButtonGroup group = new ButtonGroup();
 		JButton next = new JButton("NEXT!");
 		next.addActionListener(new NextButtonListener());
@@ -75,7 +87,7 @@ public class GameControlPanel extends JPanel {
 
 			humanPlayer player = (humanPlayer) board.getPlayer(0);
 
-			//Checks if the player has moved or made an acc
+			// Checks if the player has moved or made an acc
 			if (player.getIsHasPlayerACC() || player.getIsHasPlayerMoved()) {
 
 				// This is basic psudocode that were going to be working through
@@ -84,16 +96,26 @@ public class GameControlPanel extends JPanel {
 //					calcTagets
 //					update game control panel
 
-				// This works but well implment it later
 				board.nextTurn(); // Switchs to the next player in list
 				playersTurn = board.getPlayersTurn().getPlayerName();
 				playersColor = board.getPlayersTurn().getPlayerColor();
 				playersNameText.setText(playersTurn);
-				
-				
+
 				playersNameText.setBackground(playersColor);
-				String randomRoll = board.rollDie();
-				rollText.setText(randomRoll);
+
+				// Roll dice
+				int randomRoll = board.rollDie();
+				rollText.setText(String.valueOf(randomRoll));
+
+				// calcTargets
+				// Players location. roll.
+				System.out.println(
+						board.getCell(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol())
+								+ " " + randomRoll);
+				//TODO: This calc target works except for the 
+				board.calcTargets(
+						board.getCell(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol()),
+						randomRoll);
 
 			} else {
 				// This works
@@ -112,39 +134,6 @@ public class GameControlPanel extends JPanel {
 		}
 	}
 
-
-	private class movePlayerClick implements MouseListener {
-		humanPlayer player = (humanPlayer) board.getPlayer(0);
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-
-			// TODO: This doesn't work yet. Im not sure if this should be in here because it
-			// has to deal with the board drawing
-			if (board.clickContainsTarget(e.getX(), e.getY())) {
-				//TODO:include here where we move player
-				player.setHasPlayerMoved(true);
-			} else {
-				JOptionPane.showMessageDialog(null, "Please click on a vaild tile", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			}
-
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}// This should be left blank
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}// This should be left blank
-		@Override
-		public void mouseEntered(MouseEvent e) {
-		}// This should be left blank
-		@Override
-		public void mouseExited(MouseEvent e) {
-		} // This should be left blank
-	}
-
 	private JPanel whoseTurn() {
 		JPanel whoseTurn = new JPanel();
 		JLabel label = new JLabel("Who's Turn:");
@@ -160,7 +149,8 @@ public class GameControlPanel extends JPanel {
 	private JPanel roll() {
 		JPanel roll = new JPanel();
 		JLabel rollLabel = new JLabel("Roll:");
-		String die = board.rollDie();
+		int dieValue = board.rollDie();
+		String die = String.valueOf(dieValue);
 		rollText.setText(die);
 		roll.add(rollLabel);
 		roll.add(rollText);

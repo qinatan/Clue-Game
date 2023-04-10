@@ -675,9 +675,14 @@ public class Board extends JPanel {
 	public boolean clickContainsTarget(int mouseX, int mouseY) {
 
 		System.out.println(mouseX + " " + mouseY);
+	
+		
 		Object[] targetArray = targets.toArray();
 		// for every box that is a target
+		System.out.println(targetArray.length);
 		for (int i = 0; i < targets.size(); i++) {
+			
+			System.out.println(targetArray[i]);
 			// This should create a new rectangle at the location of the cell with the
 			// dimensions of a drawn cell
 			Rectangle rect = new Rectangle(((BoardCell) targetArray[i]).getRowNum(),
@@ -842,11 +847,12 @@ public class Board extends JPanel {
 	}
 
 	// TODO: This should be moved out of the for tests section
-	public String rollDie() {
+	public int rollDie() {
+		
 		Random randomRoll = new Random();
 		int randomDie = randomRoll.nextInt(6) + 1;
-		String Die = "" + randomDie;
-		return Die;
+		//String Die = "" + randomDie;
+		return randomDie;
 	}
 
 }

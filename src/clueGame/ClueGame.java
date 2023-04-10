@@ -1,6 +1,8 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -33,6 +35,8 @@ public class ClueGame extends JFrame {
 		setTitle("Clue");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		
+		addMouseListener(new movePlayerClick());
+		
 		//This is the splash panel.
 		//TODO: should this open after the game board?
 		JOptionPane.showMessageDialog(null, "You are " + board.getPlayer(0).getPlayerName() + ".\n Can you find the solution before the computers?", "Welcome to Clue",
@@ -43,6 +47,37 @@ public class ClueGame extends JFrame {
 	//@SuppressWarnings("unused")
 	private void updateDisplay() {
 		
+	}
+	
+	private class movePlayerClick implements MouseListener {
+		humanPlayer player = (humanPlayer) board.getPlayer(0);
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+
+			
+			if (board.clickContainsTarget(e.getX(), e.getY())) {
+				//TODO:include here where we move player
+				player.setHasPlayerMoved(true);
+			} else {
+				JOptionPane.showMessageDialog(null, "Please click on a vaild tile", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}// This should be left blank
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}// This should be left blank
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}// This should be left blank
+		@Override
+		public void mouseExited(MouseEvent e) {
+		} // This should be left blank
 	}
 	
 	// Main entry point for game

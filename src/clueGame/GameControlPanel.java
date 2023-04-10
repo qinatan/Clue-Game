@@ -47,7 +47,7 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		addMouseListener(new movePlayerClick()); 
+		addMouseListener(new movePlayerClick());
 	}
 
 	private JPanel createTopPanel() {
@@ -109,13 +109,19 @@ public class GameControlPanel extends JPanel {
 		}
 	}
 
-	//TODO: implement this
+	// TODO: implement this
 	private class movePlayerClick implements MouseListener {
 		humanPlayer player = (humanPlayer) board.getPlayer(0);
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			player.setHasPlayerMoved(true);
+
+			// TODO: This doesn't work yet. Im not sure if this should be in here because it
+			// has to deal with the board drawing
+			if (board.clickContainsTarget(e.getX(), e.getY())) {
+				player.setHasPlayerMoved(true);
+			}
+
 		}
 
 		@Override

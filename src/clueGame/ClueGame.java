@@ -27,7 +27,6 @@ public class ClueGame extends JFrame {
 		cardsPanel = new CardsPanel(); 
 		add(cardsPanel, BorderLayout.EAST);
 		
-		
 		// Set default frame size, title etc. 
 		setSize(750, 630); //630 was changed from 930 so that it fit on my screen
 		setTitle("Clue");

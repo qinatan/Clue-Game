@@ -94,7 +94,7 @@ public class GameControlPanel extends JPanel {
 
 			} else {
 				// This works
-				JOptionPane.showMessageDialog(null, "Please finish your turn", "Please finish your turn",
+				JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}

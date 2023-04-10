@@ -774,6 +774,11 @@ public class Board extends JPanel {
 	public void nextTurn() {
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
 			this.playerTurn = getPlayerList().get(0);
+			
+			humanPlayer player = (humanPlayer) getPlayer(0); //There might be a simpler way to do this
+			player.setHasPlayerACC(false);
+			player.setHasPlayerACC(false);
+			
 		} else {
 			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
 		}

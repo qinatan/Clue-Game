@@ -297,6 +297,7 @@ public class Board extends JPanel {
 		}
 	}
 
+	//Why does this method return a file and not just be void
 	private File gridSizeCalculator() throws FileNotFoundException, BadConfigFormatException {
 		// reads in file once to find numRows, numColumns
 		File layoutFile = new File(layoutConfig);
@@ -746,7 +747,11 @@ public class Board extends JPanel {
 		return playerTurn;
 	}
 	
-	
+	/*
+	 * Switches the current player to the next player in the PlayersList
+	 * also restarts the list when it gets to the bottom
+	 */
+	//TODO: These should be moved out of the only for tests sections as they are needed elsewhere
 	public void nextTurn() {
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
 			this.playerTurn = getPlayerList().get(0);
@@ -816,6 +821,7 @@ public class Board extends JPanel {
 
 	}
 	
+	//TODO: This should be moved out of the for tests section
 	public String rollDie()
 	{
 		Random randomRoll = new Random(); 

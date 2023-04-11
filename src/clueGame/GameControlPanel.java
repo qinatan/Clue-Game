@@ -63,7 +63,8 @@ public class GameControlPanel extends JPanel {
 		int currentRow = this.currPlayer.getPlayerCol(); 
 		int currentCol = this.currPlayer.getPlayerCol(); 
 		BoardCell currentCell = board.getCell(currentRow, currentCol); 
-		board.calcTargets(currentCell, rolledDice); 		
+		board.calcTargets(currentCell, rolledDice); 
+		//how to get repaint???
 	}
 	
 
@@ -89,9 +90,18 @@ public class GameControlPanel extends JPanel {
 				currPlayer.setRollNum();
 				rollText.setText(String.valueOf(currPlayer.getRollNum()));
 				board.calcTargets(currentLocation,currPlayer.getRollNum()); 
+				
 				if(currPlayer instanceof humanPlayer)
 				{
 					//display target 
+					//mark for drawing????
+					//repaint(); 
+					
+				}
+				else
+				{
+					//update player location 
+					//make animation??
 				}
 				
 			}

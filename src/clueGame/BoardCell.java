@@ -39,6 +39,7 @@ public class BoardCell {
 	private Boolean isSecretPassage = false;
 	private Character secretPassage = null;
 	private DoorDirection doorDirection;
+	private Boolean isTargetCell = false; 
 	
 
 	// This method will draw the initial board without room names or players
@@ -49,6 +50,7 @@ public class BoardCell {
 		Color skyblue = new Color(135, 206, 235); // Rooms will be sky blue
 		Color grey = new Color(192, 192, 192); // unused space will be grey
 		Color yellow = new Color(255, 255, 0); //walkway will be yellow 
+		Color highlight = new Color(128, 0, 128); 
 		int horOffset = width * columnNum; // calculates the offset of this cell
 		int vertOffset = height * rowNum; // calculates the offset of this cell
 		
@@ -96,6 +98,11 @@ public class BoardCell {
 				default:
 					break;
 					
+			}
+			if (isTargetCell)
+			{
+				g2.setColor(highlight); 
+				g.fillRect(horOffset, vertOffset, width, height);
 			}
 			
 		}
@@ -270,6 +277,11 @@ public class BoardCell {
 
 	public Set<BoardCell> getAdjList() {
 		return adjList;
+	}
+	
+	public void setIsTargetCell()
+	{
+		this.isTargetCell = true; 
 	}
 
 }

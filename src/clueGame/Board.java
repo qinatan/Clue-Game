@@ -582,12 +582,15 @@ public class Board extends JPanel {
 			visited.add(adjCell);
 			if (pathLength == 1) {
 				if (!adjCell.isOccupied()) {
+			
 					targets.add(adjCell);
+					adjCell.setIsTargetCell(); //flag for highlightCell
 					visited.remove(adjCell);
 				}
 			} else {
 				if (adjCell.isRoomCenter()) {
 					targets.add(adjCell);
+					adjCell.setIsTargetCell();
 					visited.remove(adjCell);
 				} else {
 					findAllTargets(adjCell, pathLength - 1);

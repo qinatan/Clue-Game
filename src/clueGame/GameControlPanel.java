@@ -48,14 +48,8 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-
 		currPlayer = board.getPlayersTurn();
-		// currPlay
-
-		//System.out.println(currPlayer.getCurrCell());
-		//TODO: This gets into an infinite loop
-		board.calcTargets(currPlayer.getCurrCell(), currPlayer.getRollNum());
-
+		board.calcTargets(currPlayer.getCurrCell(), currPlayer.getRollNum()); // Sets initial targets for human player
 	}
 
 	// Constructor for top half of the Jpanel
@@ -64,10 +58,8 @@ public class GameControlPanel extends JPanel {
 		topPanel.setLayout(new GridLayout(1, 4));
 		JPanel whoseTurn = whoseTurn();
 		topPanel.add(whoseTurn);
-
 		JPanel roll = rollPanel();
 		topPanel.add(roll);
-
 		ButtonGroup group = new ButtonGroup();
 		JButton next = new JButton("NEXT!");
 		next.addActionListener(new NextButtonListener());
@@ -83,8 +75,9 @@ public class GameControlPanel extends JPanel {
 	private class NextButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			// TODO: Maybe we can refactor line 79 to use currPlayer
 			humanPlayer player = (humanPlayer) board.getPlayer(0);
+			// TODO: what is ACC? maybe we can find a better name 
 			if (player.getIsHasPlayerACC() || player.getIsHasPlayerMoved()) {
 
 				board.nextTurn(); // turn to next player in the player list
@@ -94,16 +87,17 @@ public class GameControlPanel extends JPanel {
 				playersNameText.setText(nextPlayerName);
 				playersNameText.setBackground(playersColor);
 
-				// Roll dice
+				// TODO: lines 91-92 This duplicates what is being done in player.SetRollNum(), me thinks?
 				int randomRoll = board.rollDie();
 				rollText.setText(String.valueOf(randomRoll));
-
+				
+				board.calcTargets(currPlayer.getCurrCell(), currPlayer.getRollNum()); 
 				// calculate targets based on current boardCell and die number
-				int currentRow = currPlayer.getPlayerRow();
-				int currentCol = currPlayer.getPlayerCol();
-				BoardCell currentLocation = board.getCell(currentRow, currentCol);
-				board.calcTargets(currentLocation, randomRoll);
-				System.out.println(board.getTargets());
+			//	int currentRow = currPlayer.getPlayerRow();
+			//	int currentCol = currPlayer.getPlayerCol();
+			//	BoardCell currentLocation = board.getCell(currentRow, currentCol);
+			//	board.calcTargets(currentLocation, randomRoll);
+				System.out.println(board.getTargets().size());
 
 				// Update control panel
 

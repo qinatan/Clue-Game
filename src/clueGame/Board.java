@@ -52,7 +52,7 @@ public class Board extends JPanel {
 	private static Solution solution;
 	private Player playerTurn;
 
-	public int cellWidth, cellHeight; // TODO: change these to private with getters and setters
+	private int cellWidth, cellHeight; // TODO: change these to private with getters and setters
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -667,6 +667,15 @@ public class Board extends JPanel {
 			return false;
 		}
 	}
+	
+	// TODO: This should be moved out of the for tests section
+		public int rollDie() {
+			
+			Random randomRoll = new Random();
+			int randomDie = randomRoll.nextInt(6) + 1;
+			//String Die = "" + randomDie;
+			return randomDie;
+		}
 
 	/*
 	 * This method should be checking if the mouse is being clicked on a cell that
@@ -674,27 +683,31 @@ public class Board extends JPanel {
 	 */
 	public boolean clickContainsTarget(int mouseX, int mouseY) {
 
-		System.out.println(mouseX + " " + mouseY);
-	
 		
-		Object[] targetArray = targets.toArray();
-		// for every box that is a target
-		System.out.println(targetArray.length);
-		for (int i = 0; i < targets.size(); i++) {
-			
-			System.out.println(targetArray[i]);
-			// This should create a new rectangle at the location of the cell with the
-			// dimensions of a drawn cell
-			Rectangle rect = new Rectangle(((BoardCell) targetArray[i]).getRowNum(),
-					((BoardCell) targetArray[i]).getColumnNum(), cellWidth, cellHeight);
-			if (rect.contains(new Point(mouseX, mouseY))) {
-				return true;
+		for (BoardCell targetCell : targets)
+		{
+			//BoardCell cell = targetCell; 
+			int row = targetCell.getRowNum(); 
+			int col = targetCell.getColumnNum(); 
+			Rectangle rectangle = new Rectangle (row, col, cellWidth, cellHeight); 
+			if (rectangle.contains(new Point(mouseX, mouseY)))
+			{
+				return true; 
 			}
 		}
-		return false;
-	}
+		return false;		
+}
 
 	// ************** Methods for unit testing purposes only *************//
+	public int getCellWidth()
+	{
+		return this.cellWidth; 
+	}
+	
+	public  int getCellHeight()
+	{
+		return this.cellHeight; 
+	}
 	public int getNumPlayerCards() {
 		return peopleDeck.size();
 	}
@@ -746,9 +759,9 @@ public class Board extends JPanel {
 	}
 
 	// TODO: is this a duplicate with get targets?
-	public Set<BoardCell> getTargetList() {
-		return this.targets;
-	}
+//	public Set<BoardCell> getTargetList() {
+//		return this.targets;
+//	}
 
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;
@@ -778,6 +791,7 @@ public class Board extends JPanel {
 	// TODO: These should be moved out of the only for tests sections as they are
 	// needed elsewhere
 	public void nextTurn() {
+		// human player's turn if already iterate to the last player 
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
 			this.playerTurn = getPlayerList().get(0);
 			
@@ -786,7 +800,7 @@ public class Board extends JPanel {
 			player.setHasPlayerACC(false);
 			
 		} else {
-			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
+			this.playerTurn= getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
 		}
 	}
 
@@ -846,13 +860,6 @@ public class Board extends JPanel {
 
 	}
 
-	// TODO: This should be moved out of the for tests section
-	public int rollDie() {
-		
-		Random randomRoll = new Random();
-		int randomDie = randomRoll.nextInt(6) + 1;
-		//String Die = "" + randomDie;
-		return randomDie;
-	}
+	
 
 }

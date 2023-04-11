@@ -35,7 +35,8 @@ public class GameControlPanel extends JPanel {
 	private JTextField guess = new JTextField();
 	private JTextField guessResult = new JTextField();
 	private Board board = Board.getInstance();
-	private String playersTurn;
+	private computerPlayer nextPlayer; 
+	private String nextPlayerName;  
 	private JTextField playersNameText = new JTextField();
 	private Color playersColor;
 	private JTextField rollText = new JTextField();
@@ -86,36 +87,25 @@ public class GameControlPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 
 			humanPlayer player = (humanPlayer) board.getPlayer(0);
-
-			// Checks if the player has moved or made an acc
 			if (player.getIsHasPlayerACC() || player.getIsHasPlayerMoved()) {
 
-				// This is basic psudocode that were going to be working through
-//					next player 
-//					roll dice
-//					calcTagets
-//					update game control panel
-
-				board.nextTurn(); // Switchs to the next player in list
-				playersTurn = board.getPlayersTurn().getPlayerName();
-				playersColor = board.getPlayersTurn().getPlayerColor();
-				playersNameText.setText(playersTurn);
-
+				board.nextTurn(); // turn to next player in the player list 
+				nextPlayer = (computerPlayer) board.getPlayersTurn(); 
+				nextPlayerName = board.getPlayersTurn().getPlayerName();
+				playersColor = nextPlayer.getPlayerColor();
+				playersNameText.setText(nextPlayerName);
 				playersNameText.setBackground(playersColor);
 
 				// Roll dice
 				int randomRoll = board.rollDie();
 				rollText.setText(String.valueOf(randomRoll));
 
-				// calcTargets
-				// Players location. roll.
-				System.out.println(
-						board.getCell(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol())
-								+ " " + randomRoll);
-				//TODO: This calc target works except for the 
-				board.calcTargets(
-						board.getCell(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol()),
-						randomRoll);
+				//calculate targets based on current boardCell and die number 
+				int currentRow = nextPlayer.getPlayerRow(); 
+				int currentCol = nextPlayer.getPlayerCol(); 
+				BoardCell currentLocation = board.getCell(currentRow, currentCol); 
+				board.calcTargets(currentLocation, randomRoll); 
+				
 
 			} else {
 				// This works

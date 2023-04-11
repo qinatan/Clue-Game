@@ -3,6 +3,7 @@ package clueGame;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -55,19 +56,27 @@ public class ClueGame extends JFrame {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 
-			
-			if (board.clickContainsTarget(e.getX(), e.getY())) {
-				//TODO:include here where we move player
+			int mouseX = (int)e.getPoint().getX(); 
+			int mouseY = (int)e.getPoint().getY();
+			int cellWidth = board.getCellWidth(); 
+			int cellHeight = board.getCellHeight(); 
+			int row = (int) e.getPoint().getX() / cellWidth;
+			int col = (int) e.getPoint().getY()/ cellHeight; 
+			if (board.clickContainsTarget(mouseX, mouseY)) {
+			//update player location after they click one of the board cell on target list
+				player.setPlayerLocation(row, col);
 				player.setHasPlayerMoved(true);
-			} else {
-				JOptionPane.showMessageDialog(null, "Please click on a vaild tile", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			}
-
+			}	
+				
+			else {
+		 	JOptionPane.showMessageDialog(null, "Please click on a vaild tile", "Error",
+			JOptionPane.ERROR_MESSAGE);}
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
+		
+		
 		}// This should be left blank
 		@Override
 		public void mouseReleased(MouseEvent e) {
@@ -84,6 +93,7 @@ public class ClueGame extends JFrame {
 	public static void main(String[] args) {
 		ClueGame clueGame = new ClueGame();
 		clueGame.setVisible(true);
+		
 	}
 }
 

@@ -21,7 +21,7 @@ public class humanPlayer extends Player {
 	
 	private boolean hasPlayerMoved = false; // TODO: I think that this should be move to another class
 	private boolean hasPlayerACC = false; // TODO: This should be moved to a different class
-
+	
 	public humanPlayer(String playerName, String playerColor, String row, String col) {
 		super(playerName, playerColor, row, col);
 		

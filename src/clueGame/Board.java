@@ -796,8 +796,9 @@ public class Board extends JPanel {
 			this.playerTurn = getPlayerList().get(0);
 
 			humanPlayer player = (humanPlayer) getPlayer(0); // There might be a simpler way to do this
+			// TODO: These lines should be moved outside this if else block, so that they are always called. They also need to be called for Computer players
 			player.setHasPlayerACC(false);
-			player.setHasPlayerACC(false);
+			player.setHasPlayerMoved(false);
 
 		} else {
 			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);

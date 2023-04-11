@@ -90,7 +90,6 @@ public class GameControlPanel extends JPanel {
 				// TODO: lines 91-92 This duplicates what is being done in player.SetRollNum(), me thinks?
 				int randomRoll = board.rollDie();
 				rollText.setText(String.valueOf(randomRoll));
-				
 				board.calcTargets(currPlayer.getCurrCell(), currPlayer.getRollNum()); 
 				// calculate targets based on current boardCell and die number
 			//	int currentRow = currPlayer.getPlayerRow();
@@ -98,7 +97,6 @@ public class GameControlPanel extends JPanel {
 			//	BoardCell currentLocation = board.getCell(currentRow, currentCol);
 			//	board.calcTargets(currentLocation, randomRoll);
 				System.out.println(board.getTargets().size());
-
 				// Update control panel
 
 			} else {

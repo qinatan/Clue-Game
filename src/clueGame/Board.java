@@ -98,7 +98,6 @@ public class Board extends JPanel {
 		for (Player player : playerList) {
 			player.drawPlayer(cellWidth, cellHeight, g);
 		}
-
 	}
 
 	/*
@@ -584,13 +583,13 @@ public class Board extends JPanel {
 				if (!adjCell.isOccupied()) {
 			
 					targets.add(adjCell);
-					adjCell.setIsTargetCell(); //flag for highlightCell
+					adjCell.setIsTargetCell(true); //flag for highlightCell
 					visited.remove(adjCell);
 				}
 			} else {
 				if (adjCell.isRoomCenter()) {
 					targets.add(adjCell);
-					adjCell.setIsTargetCell();
+					adjCell.setIsTargetCell(true);
 					visited.remove(adjCell);
 				} else {
 					findAllTargets(adjCell, pathLength - 1);
@@ -688,14 +687,16 @@ public class Board extends JPanel {
 	 */
 	public boolean clickContainsTarget(int mouseX, int mouseY) {
 
+		
 		System.out.println(getTargets().size());
 		for (BoardCell targetCell : targets) {
-			System.out.println(targets);
+			//System.out.println(targets);
 			// BoardCell cell = targetCell;
 			int row = targetCell.getRowNum();
 			int col = targetCell.getColumnNum();
 			Rectangle rectangle = new Rectangle(row, col, cellWidth, cellHeight);
 			if (rectangle.contains(new Point(mouseX, mouseY))) {
+				System.out.println("here"); 
 				return true;
 			}
 		}
@@ -797,14 +798,14 @@ public class Board extends JPanel {
 		// human player's turn if already iterate to the last player
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
 			this.playerTurn = getPlayerList().get(0);
-
-			humanPlayer player = (humanPlayer) getPlayer(0); // There might be a simpler way to do this
-			// TODO: These lines should be moved outside this if else block, so that they are always called. They also need to be called for Computer players
-			player.setHasPlayerACC(false);
-			player.setHasPlayerMoved(false);
+			playerTurn.setHasPlayerACC(false);
+			playerTurn.setHasPlayerMoved(false);
 
 		} else {
 			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
+			playerTurn.setHasPlayerACC(false);
+			playerTurn.setHasPlayerMoved(false);
+
 		}
 	}
 

@@ -66,12 +66,19 @@ public class ClueGame extends JFrame {
 			int mouseY = (int) e.getPoint().getY();
 			int cellWidth = board.getCellWidth();
 			int cellHeight = board.getCellHeight();
-			int row = (int) e.getPoint().getX() / cellWidth;
-			int col = (int) e.getPoint().getY() / cellHeight;
-			if (board.clickContainsTarget(mouseX, mouseY)) {
+			int row = (int) (e.getPoint().getY() - 30) / cellHeight;
+			int col = (int) e.getPoint().getX() / cellWidth;
+			BoardCell cell = board.getCell(row, col); 
+	
+			if (board.getTargets().contains(cell)) {
 				// update player location after they click one of the board cell on target list
 				player.setPlayerLocation(row, col);
 				player.setHasPlayerMoved(true);
+				for (BoardCell targetCell : board.getTargets()) 
+				{
+					targetCell.setIsTargetCell(false);
+				}
+				repaint(); 
 			}
 
 			else {

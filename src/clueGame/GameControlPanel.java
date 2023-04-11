@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Set;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -49,6 +50,7 @@ public class GameControlPanel extends JPanel {
 		add(topPanel);
 		add(bottomPanel);
 		initialTurn(); // Human player is on the first turn 
+		repaint(); 
 	}
 	
 	
@@ -64,7 +66,7 @@ public class GameControlPanel extends JPanel {
 		int currentCol = this.currPlayer.getPlayerCol(); 
 		BoardCell currentCell = board.getCell(currentRow, currentCol); 
 		board.calcTargets(currentCell, rolledDice); 
-		//how to get repaint???
+		repaint(); 
 	}
 	
 
@@ -83,19 +85,18 @@ public class GameControlPanel extends JPanel {
 				playerColor = currPlayer.getPlayerColor(); 
 				playerNameText.setText(currPlayerName); 
 				playerNameText.setBackground(playerColor); 
-				int currentRow = currPlayer.getPlayerRow(); 
-				int currentCol = currPlayer.getPlayerRow(); 
-				BoardCell currentLocation = board.getCell(currentRow, currentCol); 
+				BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol()); 
 				//roll a dice 
 				currPlayer.setRollNum();
-				rollText.setText(String.valueOf(currPlayer.getRollNum()));
-				board.calcTargets(currentLocation,currPlayer.getRollNum()); 
+				int randomRoll = currPlayer.getRollNum(); 
+				rollText.setText(String.valueOf(randomRoll));
 				
+				//calculate target list based on current board cell and dice number 
+				board.calcTargets(currentLocation,randomRoll); 
 				if(currPlayer instanceof humanPlayer)
 				{
-					//display target 
-					//mark for drawing????
-					//repaint(); 
+					//repaint to highlight cells in target list 
+					repaint(); 
 					
 				}
 				else
@@ -105,30 +106,6 @@ public class GameControlPanel extends JPanel {
 				}
 				
 			}
-//			
-//			// TODO: Maybe we can refactor line 79 to use currPlayer
-//			humanPlayer player = (humanPlayer) board.getPlayer(0);
-//			// TODO: what is ACC? maybe we can find a better name 
-//			if (player.getIsHasPlayerACC() || player.getIsHasPlayerMoved()) {
-//
-//				board.nextTurn(); // turn to next player in the player list
-//				currPlayer = board.getPlayersTurn();
-//				currPlayerName = board.getPlayersTurn().getPlayerName();
-//				playersColor = currPlayer.getPlayerColor();
-//				playerNameText.setText(currPlayerName);
-//				playerNameText.setBackground(playersColor);
-//
-//				// TODO: lines 91-92 This duplicates what is being done in player.SetRollNum(), me thinks?
-//				int randomRoll = board.rollDie();
-//				rollText.setText(String.valueOf(randomRoll));
-//				board.calcTargets(currPlayer.getCurrCell(), currPlayer.getRollNum()); 
-//				// calculate targets based on current boardCell and die number
-//			//	int currentRow = currPlayer.getPlayerRow();
-//			//	int currentCol = currPlayer.getPlayerCol();
-//			//	BoardCell currentLocation = board.getCell(currentRow, currentCol);
-//			//	board.calcTargets(currentLocation, randomRoll);
-//				System.out.println(board.getTargets().size());
-//				// Update control panel
 			 else {
 				// This works
 				JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn",
@@ -233,8 +210,9 @@ public class GameControlPanel extends JPanel {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initializeForTest();
 		board.setPlayersTurn(board.getPlayerList().get(0));
-		GameControlPanel panel = new GameControlPanel(); // create the panel
+		
 		JFrame frame = new JFrame(); // create the frame
+		GameControlPanel panel = new GameControlPanel(); 
 		frame.add(panel, BorderLayout.CENTER);
 		frame.setSize(750, 180); // size the frame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
@@ -243,6 +221,7 @@ public class GameControlPanel extends JPanel {
 		// panel.setTurn(new ComputerPlayer("Col. Mustard", 0, 0, "orange"), 5);
 		panel.setGuess("I have no guess!");
 		panel.setGuessResult("So you have nothing?");
+		
 
 	}
 }

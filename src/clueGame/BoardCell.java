@@ -44,6 +44,7 @@ public class BoardCell {
 
 	// This method will draw the initial board without room names or players
 	public void drawBoardCell(int width, int height, Graphics g) {
+		
 		Graphics2D g2 = (Graphics2D) g; // cast g to Graphics2d object so we can use those methods
 		Board board = Board.getInstance();	
 		Color black = new Color(0,0,0); 
@@ -99,21 +100,22 @@ public class BoardCell {
 					break;
 					
 			}
-			if (isTargetCell)
-			{
-				g2.setColor(highlight); 
-				g.fillRect(horOffset, vertOffset, width, height);
-			}
-			
 		}
-	
+		
+		if (isTargetCell)
+		{
+			g2.setColor(highlight); 
+			g2.fillRect(horOffset, vertOffset, width, height);
+			//System.out.println("highlighted");
+		}
+			
 		if (isSecretPassage) {
 			g2.setColor(black); 
 			String secretePassage = " " +this.secretPassage; 
 			g2.drawString(secretePassage,  horOffset+10, vertOffset+10);
 		}	
 	}
-	
+
 	// Method draws room names over the board
 	
 	public void drawRoomNames(int width, int height, Graphics g) {
@@ -268,20 +270,24 @@ public class BoardCell {
 		adjList.add(cell);
 	}
 	
+	
+	
 	@Override
-	public String toString() {		
-		return "BoardCell [rowNum=" + rowNum + ", columnNum=" + columnNum
-				 + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
-				+ ", secretPassage= " + secretPassage + "]";
+	public String toString() {
+		return "BoardCell [columnNum=" + columnNum + ", rowNum=" + rowNum + ", isTargetCell=" + isTargetCell + "]";
 	}
 
 	public Set<BoardCell> getAdjList() {
 		return adjList;
 	}
 	
-	public void setIsTargetCell()
+	public void setIsTargetCell(Boolean repainted)
 	{
-		this.isTargetCell = true; 
+		this.isTargetCell = repainted; 
 	}
-
+	
+	public void repaint()
+	{
+		repaint(); 
+	}
 }

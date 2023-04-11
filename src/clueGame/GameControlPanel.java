@@ -31,12 +31,12 @@ import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JPanel {
 	private JTextField turn;
-	private JTextField roll; //TODO: removed the unused variables
+	private JTextField roll; // TODO: removed the unused variables
 	private JTextField guess = new JTextField();
 	private JTextField guessResult = new JTextField();
 	private Board board = Board.getInstance();
-	private computerPlayer nextPlayer; 
-	private String nextPlayerName;  
+	private Player currPlayer;
+	private String nextPlayerName;
 	private JTextField playersNameText = new JTextField();
 	private Color playersColor;
 	private JTextField rollText = new JTextField();
@@ -49,27 +49,26 @@ public class GameControlPanel extends JPanel {
 		add(topPanel);
 		add(bottomPanel);
 
-		
-		//int currRoll = roll ;
+		currPlayer = board.getPlayersTurn();
+		// currPlay
 
-		
+		//TODO: This gets into an infinite loop
 //		board.calcTargets(
-//				board.getCell(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol()),
-//				roll);
-		
+//				board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol()),
+//				currPlayer.getRollNum());
+
 	}
 
-	//Constructor for top half of the Jpanel
+	// Constructor for top half of the Jpanel
 	private JPanel createTopPanel() {
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(1, 4));
 		JPanel whoseTurn = whoseTurn();
 		topPanel.add(whoseTurn);
-		JPanel roll = roll();
-		topPanel.add(roll);
-		
 
-		
+		JPanel roll = rollPanel();
+		topPanel.add(roll);
+
 		ButtonGroup group = new ButtonGroup();
 		JButton next = new JButton("NEXT!");
 		next.addActionListener(new NextButtonListener());
@@ -89,10 +88,10 @@ public class GameControlPanel extends JPanel {
 			humanPlayer player = (humanPlayer) board.getPlayer(0);
 			if (player.getIsHasPlayerACC() || player.getIsHasPlayerMoved()) {
 
-				board.nextTurn(); // turn to next player in the player list 
-				nextPlayer = (computerPlayer) board.getPlayersTurn(); 
+				board.nextTurn(); // turn to next player in the player list
+				currPlayer = board.getPlayersTurn();
 				nextPlayerName = board.getPlayersTurn().getPlayerName();
-				playersColor = nextPlayer.getPlayerColor();
+				playersColor = currPlayer.getPlayerColor();
 				playersNameText.setText(nextPlayerName);
 				playersNameText.setBackground(playersColor);
 
@@ -100,12 +99,14 @@ public class GameControlPanel extends JPanel {
 				int randomRoll = board.rollDie();
 				rollText.setText(String.valueOf(randomRoll));
 
-				//calculate targets based on current boardCell and die number 
-				int currentRow = nextPlayer.getPlayerRow(); 
-				int currentCol = nextPlayer.getPlayerCol(); 
-				BoardCell currentLocation = board.getCell(currentRow, currentCol); 
-				board.calcTargets(currentLocation, randomRoll); 
-				
+				// calculate targets based on current boardCell and die number
+				int currentRow = currPlayer.getPlayerRow();
+				int currentCol = currPlayer.getPlayerCol();
+				BoardCell currentLocation = board.getCell(currentRow, currentCol);
+				board.calcTargets(currentLocation, randomRoll);
+				System.out.println(board.getTargets());
+
+				// Update control panel
 
 			} else {
 				// This works
@@ -127,8 +128,12 @@ public class GameControlPanel extends JPanel {
 	private JPanel whoseTurn() {
 		JPanel whoseTurn = new JPanel();
 		JLabel label = new JLabel("Who's Turn:");
+		// TODO: refactor into whats below
+		// currPlay.getName
+
 		String playersName = board.getPlayersTurn().getPlayerName();
 		Color playersColor = board.getPlayersTurn().getPlayerColor();
+		currPlayer = board.getPlayersTurn();
 		playersNameText.setText(playersName);
 		playersNameText.setBackground(playersColor);
 		whoseTurn.add(label);
@@ -136,12 +141,15 @@ public class GameControlPanel extends JPanel {
 		return whoseTurn;
 	}
 
-	private JPanel roll() {
+	private JPanel rollPanel() {
 		JPanel roll = new JPanel();
 		JLabel rollLabel = new JLabel("Roll:");
-		int dieValue = board.rollDie();
-		String die = String.valueOf(dieValue);
-		rollText.setText(die);
+
+//		int dieValue = board.rollDie();
+//		String die = String.valueOf(dieValue);
+//		rollText.setText(die);
+
+		rollText.setText(String.valueOf(currPlayer.getRollNum()));
 		roll.add(rollLabel);
 		roll.add(rollText);
 		return roll;

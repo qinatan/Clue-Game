@@ -32,6 +32,9 @@ public abstract class Player {
 	protected ArrayList<Card> hand = new ArrayList<Card>();
 	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList <Card>>();
 	public Card currRoom; 
+	
+	private int rollNum ; 
+	
 
 	public Player(String playerName, String playerColor, String row, String col) {
 		this.name = playerName;
@@ -98,6 +101,7 @@ public abstract class Player {
 
 	// *********** Other Methods ********* // 
 	
+	
 	public void drawPlayer(int width, int height, Graphics g) {
 		int horOffset = width * col;
 		int vertOffset = height * row;
@@ -106,14 +110,25 @@ public abstract class Player {
 		g.fillOval(horOffset, vertOffset, width, height); 
 	}
 	
-	
+
+	public int getRollNum() {
+		return rollNum;
+	}
+
+	public void setRollNum() {
+		Random randomRoll = new Random();
+		int randomDie = randomRoll.nextInt(6) + 1;
+		//String Die = "" + randomDie;
+		
+		this.rollNum = randomDie;
+	}
+
 	public void printHand() {
 		for (int i = 0; i < hand.size(); i++) {
 			System.out.println(hand.get(i));
 		}
 	}
 
-	// **** Other Methods ***************** // 
 	
 	// every player check if they have a card in hand to disprove a suggestedCard
 	//return null if they do not have 

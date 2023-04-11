@@ -282,7 +282,6 @@ public class Board extends JPanel {
 				gridCellClassifier(row, col, result);
 
 			}
-
 			row++;
 		}
 		myReader2.close();
@@ -326,7 +325,7 @@ public class Board extends JPanel {
 		return layoutFile;
 	}
 
-	/*
+	/**
 	 * checks if the second character is an arrow to a door location
 	 */
 	private boolean isDoorArrow(char arrow) {
@@ -337,7 +336,7 @@ public class Board extends JPanel {
 		}
 	}
 
-	/*
+	/**
 	 * Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 	 * isSecretPassageway. e.g. Takes in a room cell, sets isRoom = true
 	 * 
@@ -604,6 +603,7 @@ public class Board extends JPanel {
 	private void setGame() {
 		createSolution();
 		dealCards();
+
 	}
 
 	public void createSolution() {
@@ -663,19 +663,21 @@ public class Board extends JPanel {
 		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person)
 				&& solution.getWeapon().equals(Weapon)) {
 			return true;
+			
 		} else {
 			return false;
 		}
 	}
-	
+
 	// TODO: This should be moved out of the for tests section
-		public int rollDie() {
-			
-			Random randomRoll = new Random();
-			int randomDie = randomRoll.nextInt(6) + 1;
-			//String Die = "" + randomDie;
-			return randomDie;
-		}
+	// TODO: This was being moved into the player class
+	public int rollDie() {
+
+		Random randomRoll = new Random();
+		int randomDie = randomRoll.nextInt(6) + 1;
+		// String Die = "" + randomDie;
+		return randomDie;
+	}
 
 	/*
 	 * This method should be checking if the mouse is being clicked on a cell that
@@ -683,31 +685,29 @@ public class Board extends JPanel {
 	 */
 	public boolean clickContainsTarget(int mouseX, int mouseY) {
 
-		
-		for (BoardCell targetCell : targets)
-		{
-			//BoardCell cell = targetCell; 
-			int row = targetCell.getRowNum(); 
-			int col = targetCell.getColumnNum(); 
-			Rectangle rectangle = new Rectangle (row, col, cellWidth, cellHeight); 
-			if (rectangle.contains(new Point(mouseX, mouseY)))
-			{
-				return true; 
+		System.out.println(getTargets().size());
+		for (BoardCell targetCell : targets) {
+			System.out.println(targets);
+			// BoardCell cell = targetCell;
+			int row = targetCell.getRowNum();
+			int col = targetCell.getColumnNum();
+			Rectangle rectangle = new Rectangle(row, col, cellWidth, cellHeight);
+			if (rectangle.contains(new Point(mouseX, mouseY))) {
+				return true;
 			}
 		}
-		return false;		
-}
+		return false;
+	}
 
 	// ************** Methods for unit testing purposes only *************//
-	public int getCellWidth()
-	{
-		return this.cellWidth; 
+	public int getCellWidth() {
+		return this.cellWidth;
 	}
-	
-	public  int getCellHeight()
-	{
-		return this.cellHeight; 
+
+	public int getCellHeight() {
+		return this.cellHeight;
 	}
+
 	public int getNumPlayerCards() {
 		return peopleDeck.size();
 	}
@@ -784,23 +784,23 @@ public class Board extends JPanel {
 		return playerTurn;
 	}
 
-	/*
+	/**
 	 * Switches the current player to the next player in the PlayersList also
 	 * restarts the list when it gets to the bottom
 	 */
 	// TODO: These should be moved out of the only for tests sections as they are
 	// needed elsewhere
 	public void nextTurn() {
-		// human player's turn if already iterate to the last player 
+		// human player's turn if already iterate to the last player
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
 			this.playerTurn = getPlayerList().get(0);
-			
-			humanPlayer player = (humanPlayer) getPlayer(0); //There might be a simpler way to do this
+
+			humanPlayer player = (humanPlayer) getPlayer(0); // There might be a simpler way to do this
 			player.setHasPlayerACC(false);
 			player.setHasPlayerACC(false);
-			
+
 		} else {
-			this.playerTurn= getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
+			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
 		}
 	}
 
@@ -859,7 +859,5 @@ public class Board extends JPanel {
 		dealtDeck.remove(weaponDeck.get(0));
 
 	}
-
-	
 
 }

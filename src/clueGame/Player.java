@@ -29,11 +29,16 @@ public abstract class Player {
 	private Color playerColor;
 	private String color;
 	private int row, col;
-	protected ArrayList<Card> hand = new ArrayList<Card>();
-	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList <Card>>();
 	public Card currRoom; 
 	private BoardCell currCell;
 	private int rollNum ; 
+	
+	// check for both AI and human player 
+	private boolean hasPlayerMoved = false; 
+	private boolean hasPlayerACC = false;
+	
+	protected ArrayList<Card> hand = new ArrayList<Card>();
+	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList <Card>>();
 	
 	// TODO: Why does our constructor use String row, String col and not INT?
 	public Player(String playerName, String playerColor, String row, String col) {
@@ -63,6 +68,25 @@ public abstract class Player {
 			break;
 		}
 	}
+	
+	//************THESE were made to deal with game flow*********
+		//TODO: these need to be moved
+		public void setHasPlayerMoved (boolean ACC) {
+			hasPlayerMoved = ACC ; 
+		}
+		
+		//TODO: This needs to be moved
+		public void setHasPlayerACC (boolean ACC) {
+			hasPlayerACC = ACC  ;
+		}
+
+		public boolean getIsHasPlayerMoved() {
+			return hasPlayerMoved;
+		}
+
+		public boolean getIsHasPlayerACC() {
+			return hasPlayerACC;
+		}
 
 	// ******** getters & setters  ********* // 
 	public BoardCell getCurrCell() {
@@ -127,10 +151,8 @@ public abstract class Player {
 
 	public void setRollNum() {
 		Random randomRoll = new Random();
-		int randomDie = randomRoll.nextInt(6) + 1;
+		this.rollNum = randomRoll.nextInt(6) + 1;
 		//String Die = "" + randomDie;
-		
-		this.rollNum = randomDie;
 	}
 
 	public void printHand() {

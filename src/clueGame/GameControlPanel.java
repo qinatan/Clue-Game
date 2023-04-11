@@ -36,9 +36,9 @@ public class GameControlPanel extends JPanel {
 	private JTextField guessResult = new JTextField();
 	private Board board = Board.getInstance();
 	private Player currPlayer;
-	private String nextPlayerName;
-	private JTextField playersNameText = new JTextField();
-	private Color playersColor;
+	private String currPlayerName;
+	private JTextField playerNameText = new JTextField();
+	private Color playerColor;
 	private JTextField rollText = new JTextField();
 
 	// constructor
@@ -48,58 +48,78 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		currPlayer = board.getPlayersTurn();
-		board.calcTargets(currPlayer.getCurrCell(), currPlayer.getRollNum()); // Sets initial targets for human player
+		initialTurn(); // Human player is on the first turn 
 	}
-
-	// Constructor for top half of the Jpanel
-	private JPanel createTopPanel() {
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new GridLayout(1, 4));
-		JPanel whoseTurn = whoseTurn();
-		topPanel.add(whoseTurn);
-		JPanel roll = rollPanel();
-		topPanel.add(roll);
-		ButtonGroup group = new ButtonGroup();
-		JButton next = new JButton("NEXT!");
-		next.addActionListener(new NextButtonListener());
-		JButton makeAccusation = new JButton("Make Accusation");
-		makeAccusation.addActionListener(new makeAccusationButtonListener());
-		group.add(makeAccusation);
-		group.add(next);
-		topPanel.add(next);
-		topPanel.add(makeAccusation);
-		return topPanel;
+	
+	
+	private void initialTurn()
+	{
+		//human player is on the first turn 
+		this.currPlayer = board.getPlayersTurn();  
+		//human player roll a die 
+		this.currPlayer.setRollNum(); 
+		int rolledDice = currPlayer.getRollNum(); 
+		rollText.setText(String.valueOf(rolledDice));
+		int currentRow = this.currPlayer.getPlayerCol(); 
+		int currentCol = this.currPlayer.getPlayerCol(); 
+		BoardCell currentCell = board.getCell(currentRow, currentCol); 
+		board.calcTargets(currentCell, rolledDice); 		
 	}
+	
 
 	private class NextButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO: Maybe we can refactor line 79 to use currPlayer
-			humanPlayer player = (humanPlayer) board.getPlayer(0);
-			// TODO: what is ACC? maybe we can find a better name 
-			if (player.getIsHasPlayerACC() || player.getIsHasPlayerMoved()) {
-
-				board.nextTurn(); // turn to next player in the player list
-				currPlayer = board.getPlayersTurn();
-				nextPlayerName = board.getPlayersTurn().getPlayerName();
-				playersColor = currPlayer.getPlayerColor();
-				playersNameText.setText(nextPlayerName);
-				playersNameText.setBackground(playersColor);
-
-				// TODO: lines 91-92 This duplicates what is being done in player.SetRollNum(), me thinks?
-				int randomRoll = board.rollDie();
-				rollText.setText(String.valueOf(randomRoll));
-				board.calcTargets(currPlayer.getCurrCell(), currPlayer.getRollNum()); 
-				// calculate targets based on current boardCell and die number
-			//	int currentRow = currPlayer.getPlayerRow();
-			//	int currentCol = currPlayer.getPlayerCol();
-			//	BoardCell currentLocation = board.getCell(currentRow, currentCol);
-			//	board.calcTargets(currentLocation, randomRoll);
-				System.out.println(board.getTargets().size());
-				// Update control panel
-
-			} else {
+		
+			//when the click button clicked we should check if the current player finish their move 
+			if (currPlayer.getIsHasPlayerACC() || currPlayer.getIsHasPlayerMoved())
+			{
+				//switch to get next player in the list 
+				board.nextTurn(); 
+				//update current player 
+				currPlayer = board.getPlayersTurn(); 
+				currPlayerName = currPlayer.getPlayerName(); 
+				playerColor = currPlayer.getPlayerColor(); 
+				playerNameText.setText(currPlayerName); 
+				playerNameText.setBackground(playerColor); 
+				int currentRow = currPlayer.getPlayerRow(); 
+				int currentCol = currPlayer.getPlayerRow(); 
+				BoardCell currentLocation = board.getCell(currentRow, currentCol); 
+				//roll a dice 
+				currPlayer.setRollNum();
+				rollText.setText(String.valueOf(currPlayer.getRollNum()));
+				board.calcTargets(currentLocation,currPlayer.getRollNum()); 
+				if(currPlayer instanceof humanPlayer)
+				{
+					//display target 
+				}
+				
+			}
+//			
+//			// TODO: Maybe we can refactor line 79 to use currPlayer
+//			humanPlayer player = (humanPlayer) board.getPlayer(0);
+//			// TODO: what is ACC? maybe we can find a better name 
+//			if (player.getIsHasPlayerACC() || player.getIsHasPlayerMoved()) {
+//
+//				board.nextTurn(); // turn to next player in the player list
+//				currPlayer = board.getPlayersTurn();
+//				currPlayerName = board.getPlayersTurn().getPlayerName();
+//				playersColor = currPlayer.getPlayerColor();
+//				playerNameText.setText(currPlayerName);
+//				playerNameText.setBackground(playersColor);
+//
+//				// TODO: lines 91-92 This duplicates what is being done in player.SetRollNum(), me thinks?
+//				int randomRoll = board.rollDie();
+//				rollText.setText(String.valueOf(randomRoll));
+//				board.calcTargets(currPlayer.getCurrCell(), currPlayer.getRollNum()); 
+//				// calculate targets based on current boardCell and die number
+//			//	int currentRow = currPlayer.getPlayerRow();
+//			//	int currentCol = currPlayer.getPlayerCol();
+//			//	BoardCell currentLocation = board.getCell(currentRow, currentCol);
+//			//	board.calcTargets(currentLocation, randomRoll);
+//				System.out.println(board.getTargets().size());
+//				// Update control panel
+			 else {
 				// This works
 				JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn",
 						JOptionPane.ERROR_MESSAGE);
@@ -121,29 +141,43 @@ public class GameControlPanel extends JPanel {
 		JLabel label = new JLabel("Who's Turn:");
 		// TODO: refactor into whats below
 		// currPlay.getName
-
+		System.out.println(board.getPlayersTurn()); 
 		String playersName = board.getPlayersTurn().getPlayerName();
 		Color playersColor = board.getPlayersTurn().getPlayerColor();
 		currPlayer = board.getPlayersTurn();
-		playersNameText.setText(playersName);
-		playersNameText.setBackground(playersColor);
+		playerNameText.setText(playersName);
+		playerNameText.setBackground(playersColor);
 		whoseTurn.add(label);
-		whoseTurn.add(playersNameText);
+		whoseTurn.add(playerNameText);
 		return whoseTurn;
 	}
 
 	private JPanel rollPanel() {
 		JPanel roll = new JPanel();
 		JLabel rollLabel = new JLabel("Roll:");
-
-//		int dieValue = board.rollDie();
-//		String die = String.valueOf(dieValue);
-//		rollText.setText(die);
-
-		rollText.setText(String.valueOf(currPlayer.getRollNum()));
+		rollText.setText(" ");
 		roll.add(rollLabel);
 		roll.add(rollText);
 		return roll;
+	}
+	
+	private JPanel createTopPanel() {
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new GridLayout(1, 4));
+		JPanel whoseTurn = whoseTurn();
+		topPanel.add(whoseTurn);
+		JPanel roll = rollPanel();
+		topPanel.add(roll);
+		ButtonGroup group = new ButtonGroup();
+		JButton next = new JButton("NEXT!");
+		next.addActionListener(new NextButtonListener());
+		JButton makeAccusation = new JButton("Make Accusation");
+		makeAccusation.addActionListener(new makeAccusationButtonListener());
+		group.add(makeAccusation);
+		group.add(next);
+		topPanel.add(next);
+		topPanel.add(makeAccusation);
+		return topPanel;
 	}
 
 	private JPanel createBottomPanel() {
@@ -173,6 +207,8 @@ public class GameControlPanel extends JPanel {
 		bottomLeftPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess")); // Only using this for testing
 		return bottomLeftPanel;
 	}
+	
+	
 
 	public void setGuess(String guess) {
 		this.guess.setText(guess);

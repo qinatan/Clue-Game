@@ -32,14 +32,15 @@ public abstract class Player {
 	protected ArrayList<Card> hand = new ArrayList<Card>();
 	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList <Card>>();
 	public Card currRoom; 
-	
+	private BoardCell currCell;
 	private int rollNum ; 
 	
-
+	// TODO: Why does our constructor use String row, String col and not INT?
 	public Player(String playerName, String playerColor, String row, String col) {
 		this.name = playerName;
 		this.row = Integer.parseInt(row);
 		this.col = Integer.parseInt(col);
+		currCell = new BoardCell(this.row, this.col);
 		this.color = playerColor;
 		switch (playerColor) {
 		case "Red":
@@ -64,6 +65,15 @@ public abstract class Player {
 	}
 
 	// ******** getters & setters  ********* // 
+	public BoardCell getCurrCell() {
+		return currCell;
+	}
+
+	public void setCurrCell(BoardCell currCell) {
+		this.currCell = currCell;
+	}
+
+	
 	public String getPlayerName() {
 		return this.name;
 	}

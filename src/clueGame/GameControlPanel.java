@@ -52,10 +52,9 @@ public class GameControlPanel extends JPanel {
 		currPlayer = board.getPlayersTurn();
 		// currPlay
 
+		//System.out.println(currPlayer.getCurrCell());
 		//TODO: This gets into an infinite loop
-//		board.calcTargets(
-//				board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol()),
-//				currPlayer.getRollNum());
+		board.calcTargets(currPlayer.getCurrCell(), currPlayer.getRollNum());
 
 	}
 

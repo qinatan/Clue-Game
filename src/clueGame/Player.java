@@ -152,7 +152,7 @@ public abstract class Player {
 	public void setRollNum() {
 		Random randomRoll = new Random();
 		this.rollNum = randomRoll.nextInt(6) + 1;
-		//String Die = "" + randomDie;
+		
 	}
 
 	public void printHand() {

@@ -42,7 +42,7 @@ public class Board extends JPanel {
 	private Set<BoardCell> targets;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private ArrayList<Card> fullDeck, dealtDeck, peopleDeck, roomDeck, weaponDeck;
-	private ArrayList<Player> playerList;
+	private static ArrayList<Player> playerList;
 	private String layoutConfig, setupConfig;
 	private final static int TYPE = 0;
 	private final static int NAME = 1;
@@ -758,7 +758,7 @@ public class Board extends JPanel {
 		return numComputerPlayers;
 	}
 
-	public ArrayList<Player> getPlayerList() {
+	public static ArrayList<Player> getPlayerList() {
 		return playerList;
 	}
 

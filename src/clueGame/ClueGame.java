@@ -37,6 +37,8 @@ public class ClueGame extends JFrame {
 
 		addMouseListener(new movePlayerClick());
 
+		initialTurn() ; 
+		
 		setVisible(true);
 	
 		// This is the splash panel.
@@ -50,18 +52,26 @@ public class ClueGame extends JFrame {
 		//intial roll
 	}
 	
-	/*
-	public static void initialTurn()
+	
+	public void initialTurn()
 	{
 		//human player is on the first turn 
-		currPlayer = Board.getPlayersTurn();  
+		currPlayer =  Board.getPlayerList().get(0) ; 
+		
+		
 		//human player roll a die 
 		currPlayer.setRollNum(); 
 		int currentRow = currPlayer.getPlayerRow(); 
 		int currentCol = currPlayer.getPlayerCol(); 
-		BoardCell currentCell = board.getCell(currentRow, currentCol); 
+		BoardCell currentCell = board.getCell(currentRow, currentCol);
+		
+		this.currPlayer.setRollNum(); 
+		
+		int rolledDice = currPlayer.getRollNum(); 
+		//System.out.print(rolledDice);
+		board.calcTargets(currentCell, rolledDice); 
 		repaint(); 
-	}*/
+	}
 
 	// This method will drive display updates.
 	// @SuppressWarnings("unused")

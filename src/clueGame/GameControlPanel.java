@@ -49,28 +49,28 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		initialTurn(); // Human player is on the first turn 
+		//initialTurn(); // Human player is on the first turn 
 		int rolledDice = currPlayer.getRollNum(); 
 		rollText.setText(String.valueOf(rolledDice));
 		//board.calcTargets(currentCell, rolledDice); 
 		repaint(); 
 	}
 	
-	// TODO: Move initialTurn(), and most other logic out of this class and into ClueGame.java
-	private void initialTurn()
-	{
-		//human player is on the first turn 
-		this.currPlayer = board.getPlayersTurn();  
-		//human player roll a die 
-		this.currPlayer.setRollNum(); 
-		int rolledDice = currPlayer.getRollNum(); 
-		rollText.setText(String.valueOf(rolledDice));
-		int currentRow = this.currPlayer.getPlayerRow(); 
-		int currentCol = this.currPlayer.getPlayerCol(); 
-		BoardCell currentCell = board.getCell(currentRow, currentCol); 
-		board.calcTargets(currentCell, rolledDice); 
-		repaint(); 
-	}
+//	// TODO: Move initialTurn(), and most other logic out of this class and into ClueGame.java
+//	private void initialTurn()
+//	{
+//		//human player is on the first turn 
+//		this.currPlayer = board.getPlayersTurn();  
+//		//human player roll a die 
+//		this.currPlayer.setRollNum(); 
+//		int rolledDice = currPlayer.getRollNum(); 
+//		rollText.setText(String.valueOf(rolledDice));
+//		int currentRow = this.currPlayer.getPlayerRow(); 
+//		int currentCol = this.currPlayer.getPlayerCol(); 
+//		BoardCell currentCell = board.getCell(currentRow, currentCol); 
+//		board.calcTargets(currentCell, rolledDice); 
+//		repaint(); 
+//	}
 
 
 	private class NextButtonListener implements ActionListener {

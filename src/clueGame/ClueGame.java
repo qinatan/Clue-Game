@@ -1,6 +1,8 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Set;
@@ -37,6 +39,10 @@ public class ClueGame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 
 		addMouseListener(new movePlayerClick());
+		
+		
+		//addButtonListener(controlPanel.getNextButton()) ; 
+		controlPanel.getNextButton().addActionListener(new NextButtonListener()) ; 
 
 
 		setVisible(true);
@@ -72,7 +78,20 @@ public class ClueGame extends JFrame {
 		// Call repaint
 	}
 
-	private class movePlayerClick implements MouseListener {
+	private class NextButtonListener implements ActionListener {
+		@Override
+		// TODO: Most of this logic should be held in a function in ClueGame
+		public void actionPerformed(ActionEvent e) {
+
+			
+			nextButtonPressedLogic() ; 
+
+		}
+
+	}
+
+	
+		private class movePlayerClick implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -122,8 +141,6 @@ public class ClueGame extends JFrame {
 	 * This is where the logic of the next button pressed should be held
 	 */
 	public void nextButtonPressedLogic() {
-		
-
 		
 		// when the click button clicked we should check if the current player finish
 		// their move

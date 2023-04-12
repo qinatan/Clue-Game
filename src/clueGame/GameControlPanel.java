@@ -43,8 +43,9 @@ public class GameControlPanel extends JPanel {
 	private JTextField playerNameText = new JTextField();
 	private Color playerColor;
 	private JTextField rollText = new JTextField();
-	
-	private JButton nextButton ; 
+
+	private JButton nextButton;
+	private JButton ACCButton; 
 
 	// constructor
 	public GameControlPanel() {
@@ -58,63 +59,12 @@ public class GameControlPanel extends JPanel {
 		repaint();
 	}
 
-//	private class NextButtonListener implements ActionListener {
-//		@Override
-//		// TODO: Most of this logic should be held in a function in ClueGame
-//		public void actionPerformed(ActionEvent e) {
-//
-//			ClueGame clueGame = new ClueGame();
-//			clueGame.nextButtonPressedLogic() ; 
-////			
-////			
-////			// when the click button clicked we should check if the current player finish
-////			// their move
-////			if (currPlayer.getIsHasPlayerACC() || currPlayer.getIsHasPlayerMoved()) {
-////				// switch to get next player in the list
-////				board.nextTurn();
-////				// update current player
-////				currPlayer = board.getPlayersTurn();
-////				currPlayerName = currPlayer.getPlayerName();
-////				playerColor = currPlayer.getPlayerColor();
-////				playerNameText.setText(currPlayerName);
-////				playerNameText.setBackground(playerColor);
-////				BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
-////				// roll a dice
-////				currPlayer.setRollNum();
-////				int randomRoll = currPlayer.getRollNum();
-////				rollText.setText(String.valueOf(randomRoll));
-////
-////				// calculate target list based on current board cell and dice number
-////				board.calcTargets(currentLocation, randomRoll);
-////				if (currPlayer instanceof humanPlayer) {
-////					// repaint to highlight cells in target list
-////					repaint();
-////
-////				} else {
-////					// update player location
-////					// make animation??
-////				}
-////
-////			} else {
-////				// This works
-////				JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn",
-////						JOptionPane.ERROR_MESSAGE);
-////			}
-//		}
-//
-//	}
-
-	private class makeAccusationButtonListener implements ActionListener {
-		Player player = board.getPlayer(0);
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			player.setHasPlayerACC(true);
-		}
+	public JButton getNextButton() {
+		return nextButton;
 	}
 	
-	public JButton getNextButton() {
-		return nextButton ; 
+	public JButton getACCButton() {
+		return ACCButton ; 
 	}
 
 	private JPanel whoseTurn() {
@@ -151,12 +101,11 @@ public class GameControlPanel extends JPanel {
 		topPanel.add(roll);
 		ButtonGroup group = new ButtonGroup();
 		JButton next = new JButton("NEXT!");
-		nextButton = next ; 
-		//next.addActionListener(new NextButtonListener());
-		
-		
+		nextButton = next; // This is here so that we can keep a lot of our old code
+
 		JButton makeAccusation = new JButton("Make Accusation");
-		makeAccusation.addActionListener(new makeAccusationButtonListener());
+		ACCButton = makeAccusation ;  //This is needed for code continuity
+		//makeAccusation.addActionListener(new makeAccusationButtonListener());
 		group.add(makeAccusation);
 		group.add(next);
 		topPanel.add(next);

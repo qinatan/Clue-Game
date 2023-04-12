@@ -13,7 +13,7 @@ public class ClueGame extends JFrame {
 	Board board = Board.getInstance();
 	CardsPanel cardsPanel;
 	GameControlPanel controlPanel;
-	public static Player currPlayer; //TODO: make this private
+	public static Player currPlayer; // TODO: make this private
 
 	// Default constructor
 	public ClueGame() {
@@ -39,11 +39,9 @@ public class ClueGame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 
 		addMouseListener(new movePlayerClick());
-		
-		
-		//addButtonListener(controlPanel.getNextButton()) ; 
-		controlPanel.getNextButton().addActionListener(new NextButtonListener()) ; 
 
+		controlPanel.getNextButton().addActionListener(new NextButtonListener());
+		controlPanel.getACCButton().addActionListener(new ACCButtonListener());
 
 		setVisible(true);
 
@@ -80,18 +78,12 @@ public class ClueGame extends JFrame {
 
 	private class NextButtonListener implements ActionListener {
 		@Override
-		// TODO: Most of this logic should be held in a function in ClueGame
 		public void actionPerformed(ActionEvent e) {
-
-			
-			nextButtonPressedLogic() ; 
-
+			nextButtonPressedLogic();
 		}
-
 	}
 
-	
-		private class movePlayerClick implements MouseListener {
+	private class movePlayerClick implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -141,23 +133,27 @@ public class ClueGame extends JFrame {
 	 * This is where the logic of the next button pressed should be held
 	 */
 	public void nextButtonPressedLogic() {
-		
+
 		// when the click button clicked we should check if the current player finish
 		// their move
+		
+		//This proves that the ACC button is working correctly
+		System.out.println(currPlayer.getIsHasPlayerACC() + " " + currPlayer.getIsHasPlayerMoved()) ; 
 		if (currPlayer.getIsHasPlayerACC() || currPlayer.getIsHasPlayerMoved()) {
 			// switch to get next player in the list
 			board.nextTurn();
 			// update current player
 			currPlayer = board.getPlayersTurn();
-		//	currPlayerName = currPlayer.getPlayerName();
-		//	playerColor = currPlayer.getPlayerColor();
-		//	playerNameText.setText(currPlayerName);
-			//playerNameText.setBackground(playerColor);
+			// currPlayerName = currPlayer.getPlayerName();
+			// playerColor = currPlayer.getPlayerColor();
+			// playerNameText.setText(currPlayerName);
+			// playerNameText.setBackground(playerColor);
 			BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
+
 			// roll a dice
 			currPlayer.setRollNum();
 			int randomRoll = currPlayer.getRollNum();
-			//rollText.setText(String.valueOf(randomRoll));
+			// rollText.setText(String.valueOf(randomRoll));
 			currPlayer.setRollNum();
 			// calculate target list based on current board cell and dice number
 			board.calcTargets(currentLocation, randomRoll);
@@ -172,11 +168,26 @@ public class ClueGame extends JFrame {
 
 		} else {
 			// This works
-			JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn", JOptionPane.ERROR_MESSAGE);
 		}
-		
+
 	}
+
+	private class ACCButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			ACCButtonPressedLogic();
+
+		}
+	}
+
+	public void ACCButtonPressedLogic() {
+		System.out.print("here");
+		currPlayer.setHasPlayerACC(true);
+		System.out.print(currPlayer.getIsHasPlayerACC());
+	}
+
 	// Main entry point for game
 	public static void main(String[] args) {
 		ClueGame ThisClueGame = new ClueGame();

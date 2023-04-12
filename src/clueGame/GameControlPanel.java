@@ -30,6 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+//import clueGame.java ; 
+
 public class GameControlPanel extends JPanel {
 	private JTextField turn;
 	private JTextField roll; // TODO: removed the unused variables
@@ -49,11 +51,7 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		// initialTurn(); // Human player is on the first turn
-		//int rolledDice = currPlayer.getRollNum();
-		//System.out.print(rolledDice);
-		//rollText.setText(String.valueOf(rolledDice));
-		// board.calcTargets(currentCell, rolledDice);
+
 		rollText.setText(String.valueOf(ClueGame.currPlayer.getRollNum()));
 		repaint();
 	}
@@ -63,40 +61,45 @@ public class GameControlPanel extends JPanel {
 		// TODO: Most of this logic should be held in a function in ClueGame
 		public void actionPerformed(ActionEvent e) {
 
-			// when the click button clicked we should check if the current player finish
-			// their move
-			if (currPlayer.getIsHasPlayerACC() || currPlayer.getIsHasPlayerMoved()) {
-				// switch to get next player in the list
-				board.nextTurn();
-				// update current player
-				currPlayer = board.getPlayersTurn();
-				currPlayerName = currPlayer.getPlayerName();
-				playerColor = currPlayer.getPlayerColor();
-				playerNameText.setText(currPlayerName);
-				playerNameText.setBackground(playerColor);
-				BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
-				// roll a dice
-				currPlayer.setRollNum();
-				int randomRoll = currPlayer.getRollNum();
-				rollText.setText(String.valueOf(randomRoll));
-
-				// calculate target list based on current board cell and dice number
-				board.calcTargets(currentLocation, randomRoll);
-				if (currPlayer instanceof humanPlayer) {
-					// repaint to highlight cells in target list
-					repaint();
-
-				} else {
-					// update player location
-					// make animation??
-				}
-
-			} else {
-				// This works
-				JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn",
-						JOptionPane.ERROR_MESSAGE);
-			}
+			ClueGame clueGame = new ClueGame();
+			clueGame.nextButtonPressedLogic() ; 
+//			
+//			
+//			// when the click button clicked we should check if the current player finish
+//			// their move
+//			if (currPlayer.getIsHasPlayerACC() || currPlayer.getIsHasPlayerMoved()) {
+//				// switch to get next player in the list
+//				board.nextTurn();
+//				// update current player
+//				currPlayer = board.getPlayersTurn();
+//				currPlayerName = currPlayer.getPlayerName();
+//				playerColor = currPlayer.getPlayerColor();
+//				playerNameText.setText(currPlayerName);
+//				playerNameText.setBackground(playerColor);
+//				BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
+//				// roll a dice
+//				currPlayer.setRollNum();
+//				int randomRoll = currPlayer.getRollNum();
+//				rollText.setText(String.valueOf(randomRoll));
+//
+//				// calculate target list based on current board cell and dice number
+//				board.calcTargets(currentLocation, randomRoll);
+//				if (currPlayer instanceof humanPlayer) {
+//					// repaint to highlight cells in target list
+//					repaint();
+//
+//				} else {
+//					// update player location
+//					// make animation??
+//				}
+//
+//			} else {
+//				// This works
+//				JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn",
+//						JOptionPane.ERROR_MESSAGE);
+//			}
 		}
+
 	}
 
 	private class makeAccusationButtonListener implements ActionListener {
@@ -113,7 +116,7 @@ public class GameControlPanel extends JPanel {
 		JLabel label = new JLabel("Who's Turn:");
 		// TODO: refactor into whats below
 		// currPlay.getName
-		System.out.println(board.getPlayersTurn());
+		// System.out.println(board.getPlayersTurn());
 		String playersName = board.getPlayersTurn().getPlayerName();
 		Color playersColor = board.getPlayersTurn().getPlayerColor();
 		currPlayer = board.getPlayersTurn();

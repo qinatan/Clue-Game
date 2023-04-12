@@ -38,7 +38,6 @@ public class ClueGame extends JFrame {
 
 		addMouseListener(new movePlayerClick());
 
-		
 
 		setVisible(true);
 
@@ -46,10 +45,6 @@ public class ClueGame extends JFrame {
 		JOptionPane.showMessageDialog(null,
 				"You are " + board.getPlayer(0).getPlayerName() + ".\n Can you find the solution before the computers?",
 				"Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
-
-		// calculate targets based on current boardCell and die number
-		// board.calcTargets(board.getCell(board.getPlayer(0).getRowNum(),
-		// currPlayer.getColNum()), ABORT);
 
 	}
 
@@ -123,9 +118,51 @@ public class ClueGame extends JFrame {
 		} // This should be left blank
 	}
 
+	/**
+	 * This is where the logic of the next button pressed should be held
+	 */
+	public void nextButtonPressedLogic() {
+		
+
+		
+		// when the click button clicked we should check if the current player finish
+		// their move
+		if (currPlayer.getIsHasPlayerACC() || currPlayer.getIsHasPlayerMoved()) {
+			// switch to get next player in the list
+			board.nextTurn();
+			// update current player
+			currPlayer = board.getPlayersTurn();
+		//	currPlayerName = currPlayer.getPlayerName();
+		//	playerColor = currPlayer.getPlayerColor();
+		//	playerNameText.setText(currPlayerName);
+			//playerNameText.setBackground(playerColor);
+			BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
+			// roll a dice
+			currPlayer.setRollNum();
+			int randomRoll = currPlayer.getRollNum();
+			//rollText.setText(String.valueOf(randomRoll));
+			currPlayer.setRollNum();
+			// calculate target list based on current board cell and dice number
+			board.calcTargets(currentLocation, randomRoll);
+			if (currPlayer instanceof humanPlayer) {
+				// repaint to highlight cells in target list
+				repaint();
+
+			} else {
+				// update player location
+				// make animation??
+			}
+
+		} else {
+			// This works
+			JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
 	// Main entry point for game
 	public static void main(String[] args) {
-		ClueGame clueGame = new ClueGame();
+		ClueGame ThisClueGame = new ClueGame();
 
 	}
 }

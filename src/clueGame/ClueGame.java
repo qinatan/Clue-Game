@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Set;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -12,10 +11,11 @@ public class ClueGame extends JFrame {
 	Board board = Board.getInstance();
 	CardsPanel cardsPanel;
 	GameControlPanel controlPanel;
+	private Player currPlayer;
 
 	// Default constructor
 	public ClueGame() {
-
+	
 		// Create board panel and add it to frame
 		Board board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
@@ -49,6 +49,19 @@ public class ClueGame extends JFrame {
 		
 		//intial roll
 	}
+	
+	/*
+	public static void initialTurn()
+	{
+		//human player is on the first turn 
+		currPlayer = Board.getPlayersTurn();  
+		//human player roll a die 
+		currPlayer.setRollNum(); 
+		int currentRow = currPlayer.getPlayerRow(); 
+		int currentCol = currPlayer.getPlayerCol(); 
+		BoardCell currentCell = board.getCell(currentRow, currentCol); 
+		repaint(); 
+	}*/
 
 	// This method will drive display updates.
 	// @SuppressWarnings("unused")
@@ -57,7 +70,6 @@ public class ClueGame extends JFrame {
 	}
 
 	private class movePlayerClick implements MouseListener {
-		humanPlayer player = (humanPlayer) board.getPlayer(0);
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -72,8 +84,8 @@ public class ClueGame extends JFrame {
 	
 			if (board.getTargets().contains(cell)) {
 				// update player location after they click one of the board cell on target list
-				player.setPlayerLocation(row, col);
-				player.setHasPlayerMoved(true);
+				currPlayer.setPlayerLocation(row, col);
+				currPlayer.setHasPlayerMoved(true);
 				for (BoardCell targetCell : board.getTargets()) 
 				{
 					targetCell.setIsTargetCell(false);

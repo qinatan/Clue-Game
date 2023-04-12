@@ -803,8 +803,8 @@ public class Board extends JPanel {
 
 		} else {
 			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
-			playerTurn.setHasPlayerACC(false);
-			playerTurn.setHasPlayerMoved(false);
+			//playerTurn.setHasPlayerACC(false);
+			//playerTurn.setHasPlayerMoved(false);
 
 		}
 	}

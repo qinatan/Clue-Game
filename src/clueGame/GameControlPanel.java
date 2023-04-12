@@ -50,10 +50,13 @@ public class GameControlPanel extends JPanel {
 		add(topPanel);
 		add(bottomPanel);
 		initialTurn(); // Human player is on the first turn 
+		int rolledDice = currPlayer.getRollNum(); 
+		rollText.setText(String.valueOf(rolledDice));
+		//board.calcTargets(currentCell, rolledDice); 
 		repaint(); 
 	}
 	
-	
+	// TODO: Move initialTurn(), and most other logic out of this class and into ClueGame.java
 	private void initialTurn()
 	{
 		//human player is on the first turn 
@@ -68,10 +71,11 @@ public class GameControlPanel extends JPanel {
 		board.calcTargets(currentCell, rolledDice); 
 		repaint(); 
 	}
-	
+
 
 	private class NextButtonListener implements ActionListener {
 		@Override
+		// TODO: Most of this logic should be held in a function in ClueGame
 		public void actionPerformed(ActionEvent e) {
 		
 			//when the click button clicked we should check if the current player finish their move 
@@ -115,7 +119,7 @@ public class GameControlPanel extends JPanel {
 	}
 
 	private class makeAccusationButtonListener implements ActionListener {
-		humanPlayer player = (humanPlayer) board.getPlayer(0);
+		Player player = board.getPlayer(0);
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

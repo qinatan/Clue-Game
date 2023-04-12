@@ -11,15 +11,16 @@ public class ClueGame extends JFrame {
 	Board board = Board.getInstance();
 	CardsPanel cardsPanel;
 	GameControlPanel controlPanel;
-	private Player currPlayer;
+	public static Player currPlayer; //TODO: make this private
 
 	// Default constructor
 	public ClueGame() {
-	
+
 		// Create board panel and add it to frame
 		Board board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();
+		initialTurn();
 		add(board, BorderLayout.CENTER);
 
 		// Create game panel and add it to frame
@@ -37,46 +38,43 @@ public class ClueGame extends JFrame {
 
 		addMouseListener(new movePlayerClick());
 
-		initialTurn() ; 
 		
+
 		setVisible(true);
-	
+
 		// This is the splash panel.
 		JOptionPane.showMessageDialog(null,
 				"You are " + board.getPlayer(0).getPlayerName() + ".\n Can you find the solution before the computers?",
 				"Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
-		
-		//calculate targets based on current boardCell and die number 
-		//board.calcTargets(board.getCell(board.getPlayer(0).getRowNum(), currPlayer.getColNum()), ABORT);
-		
-		//intial roll
+
+		// calculate targets based on current boardCell and die number
+		// board.calcTargets(board.getCell(board.getPlayer(0).getRowNum(),
+		// currPlayer.getColNum()), ABORT);
+
 	}
-	
-	
-	public void initialTurn()
-	{
-		//human player is on the first turn 
-		currPlayer =  Board.getPlayerList().get(0) ; 
-		
-		
-		//human player roll a die 
-		currPlayer.setRollNum(); 
-		int currentRow = currPlayer.getPlayerRow(); 
-		int currentCol = currPlayer.getPlayerCol(); 
+
+	public void initialTurn() {
+		// human player is on the first turn
+		currPlayer = Board.getPlayerList().get(0);
+
+		// human player roll a die
+		currPlayer.setRollNum();
+		int currentRow = currPlayer.getPlayerRow();
+		int currentCol = currPlayer.getPlayerCol();
 		BoardCell currentCell = board.getCell(currentRow, currentCol);
-		
-		this.currPlayer.setRollNum(); 
-		
-		int rolledDice = currPlayer.getRollNum(); 
-		//System.out.print(rolledDice);
-		board.calcTargets(currentCell, rolledDice); 
-		repaint(); 
+
+		this.currPlayer.setRollNum();
+
+		int rolledDice = currPlayer.getRollNum();
+		// System.out.print(rolledDice);
+		board.calcTargets(currentCell, rolledDice);
+		repaint();
 	}
 
 	// This method will drive display updates.
 	// @SuppressWarnings("unused")
 	private void updateDisplay() {
-		//Call repaint
+		// Call repaint
 	}
 
 	private class movePlayerClick implements MouseListener {
@@ -90,17 +88,16 @@ public class ClueGame extends JFrame {
 			int cellHeight = board.getCellHeight();
 			int row = (int) (e.getPoint().getY() - 30) / cellHeight;
 			int col = (int) e.getPoint().getX() / cellWidth;
-			BoardCell cell = board.getCell(row, col); 
-	
+			BoardCell cell = board.getCell(row, col);
+
 			if (board.getTargets().contains(cell)) {
 				// update player location after they click one of the board cell on target list
 				currPlayer.setPlayerLocation(row, col);
 				currPlayer.setHasPlayerMoved(true);
-				for (BoardCell targetCell : board.getTargets()) 
-				{
+				for (BoardCell targetCell : board.getTargets()) {
 					targetCell.setIsTargetCell(false);
 				}
-				repaint(); 
+				repaint();
 			}
 
 			else {
@@ -128,8 +125,7 @@ public class ClueGame extends JFrame {
 
 	// Main entry point for game
 	public static void main(String[] args) {
-		ClueGame clueGame =  new ClueGame();
-		
+		ClueGame clueGame = new ClueGame();
 
 	}
 }

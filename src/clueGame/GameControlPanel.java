@@ -62,7 +62,7 @@ public class GameControlPanel extends JPanel {
 		this.currPlayer.setRollNum(); 
 		int rolledDice = currPlayer.getRollNum(); 
 		rollText.setText(String.valueOf(rolledDice));
-		int currentRow = this.currPlayer.getPlayerCol(); 
+		int currentRow = this.currPlayer.getPlayerRow(); 
 		int currentCol = this.currPlayer.getPlayerCol(); 
 		BoardCell currentCell = board.getCell(currentRow, currentCol); 
 		board.calcTargets(currentCell, rolledDice); 

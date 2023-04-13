@@ -171,10 +171,9 @@ public class ClueGame extends JFrame {
 				
 				int targetRow = targetCell.getRowNum(); 
 				int targetCol = targetCell.getColumnNum(); 
-				//currPlayer.setPlayerLocation(targetRow, targetCol);
+				currPlayer.setPlayerLocation(targetRow, targetCol);
 				currPlayer.setHasPlayerMoved(true);
-				 
-				// make animation??
+				repaint(); 
 			}
 
 		} else {

@@ -671,38 +671,6 @@ public class Board extends JPanel {
 		}
 	}
 
-	// TODO: This should be moved out of the for tests section
-	// TODO: This was being moved into the player class
-	public int rollDie() {
-
-		Random randomRoll = new Random();
-		int randomDie = randomRoll.nextInt(6) + 1;
-		// String Die = "" + randomDie;
-		return randomDie;
-	}
-
-	/*
-	 * This method should be checking if the mouse is being clicked on a cell that
-	 * is in the targets list
-	 */
-	public boolean clickContainsTarget(int mouseX, int mouseY) {
-
-		
-		System.out.println(getTargets().size());
-		for (BoardCell targetCell : targets) {
-			//System.out.println(targets);
-			// BoardCell cell = targetCell;
-			int row = targetCell.getRowNum();
-			int col = targetCell.getColumnNum();
-			Rectangle rectangle = new Rectangle(row, col, cellWidth, cellHeight);
-			if (rectangle.contains(new Point(mouseX, mouseY))) {
-				System.out.println("here"); 
-				return true;
-			}
-		}
-		return false;
-	}
-
 	// ************** Methods for unit testing purposes only *************//
 	public int getCellWidth() {
 		return this.cellWidth;
@@ -761,11 +729,6 @@ public class Board extends JPanel {
 	public static ArrayList<Player> getPlayerList() {
 		return playerList;
 	}
-
-	// TODO: is this a duplicate with get targets?
-//	public Set<BoardCell> getTargetList() {
-//		return this.targets;
-//	}
 
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;

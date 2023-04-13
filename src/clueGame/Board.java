@@ -89,7 +89,7 @@ public class Board extends JPanel {
 		// Draw board cells and room names
 		for (BoardCell[] cells : grid) {
 			for (BoardCell c : cells) {
-				c.drawBoardCell(cellWidth, cellHeight, g);
+				c.drawBoardCell(cellWidth, cellHeight, g );
 				c.drawRoomNames(cellWidth, cellHeight, g);
 			}
 		}

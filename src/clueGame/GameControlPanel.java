@@ -35,9 +35,9 @@ import javax.swing.border.TitledBorder;
 public class GameControlPanel extends JPanel {
 	private JTextField guess = new JTextField();
 	private JTextField guessResult = new JTextField();
-	private JTextField playerNameText = new JTextField();
-	private JTextField rollText = new JTextField();
-
+	public JTextField playerNameText = new JTextField();
+	public JTextField rollText = new JTextField();
+	public JTextField playerColor = new JTextField(); 
 	private JButton nextButton;
 	private JButton ACCButton; 
 
@@ -51,7 +51,11 @@ public class GameControlPanel extends JPanel {
 		rollText.setText(String.valueOf(ClueGame.currPlayer.getRollNum()));
 		repaint();
 	}
-
+	
+	public void updateFieldText(String playerName, String playerColor, String rolledDice)
+	{
+		
+	}
 	public JButton getNextButton() {
 		return nextButton;
 	}

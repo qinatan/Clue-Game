@@ -98,6 +98,7 @@ public class ClueGame extends JFrame {
 				// update player location after they click one of the board cell on target list
 				currPlayer.setPlayerLocation(row, col);
 				currPlayer.setHasPlayerMoved(true);
+				
 				for (BoardCell targetCell : board.getTargets()) {
 					targetCell.setIsTargetCell(false);
 				}
@@ -140,20 +141,21 @@ public class ClueGame extends JFrame {
 		System.out.println(currPlayer.getIsHasPlayerACC() + " " + currPlayer.getIsHasPlayerMoved()) ; 
 		if (currPlayer.getIsHasPlayerACC() || currPlayer.getIsHasPlayerMoved()) {
 			// switch to get next player in the list
+			
+			
+			
 			board.nextTurn();
 			// update current player
 			currPlayer = board.getPlayersTurn();
-			//playerColor = currPlayer.getPlayerColor();
-			//playerNameText.setText(currPlayer.getPlayerName());
-			//playerNameText.setBackground(playerColor);
+			controlPanel.playerNameText.setText(currPlayer.getPlayerName());
+			controlPanel.playerNameText.setBackground(currPlayer.getPlayerColor());
 			BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
 
 			// roll a dice
 			currPlayer.setRollNum();
 			int randomRoll = currPlayer.getRollNum();
-			// rollText.setText(String.valueOf(randomRoll));
-			currPlayer.setRollNum();
-			// calculate target list based on current board cell and dice number
+			controlPanel.rollText.setText(String.valueOf(randomRoll));
+			//calculate target list based on current board cell and dice number
 			board.calcTargets(currentLocation, randomRoll);
 			if (currPlayer instanceof humanPlayer) {
 				// repaint to highlight cells in target list
@@ -161,6 +163,17 @@ public class ClueGame extends JFrame {
 
 			} else {
 				// update player location
+				BoardCell targetCell = ((computerPlayer) currPlayer).targetSelection(board.getTargets());
+				for (BoardCell cell : board.getTargets())
+				{
+					cell.setIsTargetCell(false);
+				}
+				
+				int targetRow = targetCell.getRowNum(); 
+				int targetCol = targetCell.getColumnNum(); 
+				//currPlayer.setPlayerLocation(targetRow, targetCol);
+				currPlayer.setHasPlayerMoved(true);
+				 
 				// make animation??
 			}
 
@@ -183,6 +196,11 @@ public class ClueGame extends JFrame {
 	public void ACCButtonPressedLogic() {
 		System.out.print("here");
 		currPlayer.setHasPlayerACC(true);
+		for (BoardCell targetCell: board.getTargets())
+		{
+			targetCell.setIsTargetCell(false);
+		}
+		repaint(); 
 		System.out.print(currPlayer.getIsHasPlayerACC());
 	}
 

@@ -61,9 +61,7 @@ public class ClueGame extends JFrame {
 		int currentRow = currPlayer.getPlayerRow();
 		int currentCol = currPlayer.getPlayerCol();
 		BoardCell currentCell = board.getCell(currentRow, currentCol);
-
-		this.currPlayer.setRollNum();
-
+		//this.currPlayer.setRollNum();
 		int rolledDice = currPlayer.getRollNum();
 		// System.out.print(rolledDice);
 		board.calcTargets(currentCell, rolledDice);
@@ -136,6 +134,7 @@ public class ClueGame extends JFrame {
 
 		// when the click button clicked we should check if the current player finish
 		// their move
+		System.out.println(currPlayer.toString());
 		
 		//This proves that the ACC button is working correctly
 		System.out.println(currPlayer.getIsHasPlayerACC() + " " + currPlayer.getIsHasPlayerMoved()) ; 
@@ -144,10 +143,9 @@ public class ClueGame extends JFrame {
 			board.nextTurn();
 			// update current player
 			currPlayer = board.getPlayersTurn();
-			// currPlayerName = currPlayer.getPlayerName();
-			// playerColor = currPlayer.getPlayerColor();
-			// playerNameText.setText(currPlayerName);
-			// playerNameText.setBackground(playerColor);
+			//playerColor = currPlayer.getPlayerColor();
+			//playerNameText.setText(currPlayer.getPlayerName());
+			//playerNameText.setBackground(playerColor);
 			BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
 
 			// roll a dice

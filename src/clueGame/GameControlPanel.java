@@ -33,15 +33,9 @@ import javax.swing.border.TitledBorder;
 //import clueGame.java ; 
 
 public class GameControlPanel extends JPanel {
-	private JTextField turn;
-	private JTextField roll; // TODO: removed the unused variables
 	private JTextField guess = new JTextField();
 	private JTextField guessResult = new JTextField();
-	private Board board = Board.getInstance();
-	private Player currPlayer;
-	private String currPlayerName;
 	private JTextField playerNameText = new JTextField();
-	private Color playerColor;
 	private JTextField rollText = new JTextField();
 
 	private JButton nextButton;
@@ -54,7 +48,6 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-
 		rollText.setText(String.valueOf(ClueGame.currPlayer.getRollNum()));
 		repaint();
 	}
@@ -72,10 +65,8 @@ public class GameControlPanel extends JPanel {
 		JLabel label = new JLabel("Who's Turn:");
 		// TODO: refactor into whats below
 		// currPlay.getName
-		// System.out.println(board.getPlayersTurn());
-		String playersName = board.getPlayersTurn().getPlayerName();
-		Color playersColor = board.getPlayersTurn().getPlayerColor();
-		currPlayer = board.getPlayersTurn();
+		String playersName = ClueGame.currPlayer.getPlayerName();
+		Color playersColor = ClueGame.currPlayer.getPlayerColor();
 		playerNameText.setText(playersName);
 		playerNameText.setBackground(playersColor);
 		whoseTurn.add(label);
@@ -86,7 +77,7 @@ public class GameControlPanel extends JPanel {
 	private JPanel rollPanel() {
 		JPanel roll = new JPanel();
 		JLabel rollLabel = new JLabel("Roll:");
-		rollText.setText(" ");
+		rollText.setText(String.valueOf(ClueGame.currPlayer.getRollNum()));
 		roll.add(rollLabel);
 		roll.add(rollText);
 		return roll;

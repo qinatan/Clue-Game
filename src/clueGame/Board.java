@@ -47,7 +47,8 @@ public class Board extends JPanel {
 	private final static int TYPE = 0;
 	private final static int NAME = 1;
 	private final static int SYMBOL = 2;
-	private final static int ROW = 3;
+	private final static int ROW = 3; // TODO: why are these rows and cols different from rows and cols above. One of
+										// these should be renamed
 	private final static int COLUMN = 4;
 	private static Solution solution;
 	private Player playerTurn;
@@ -89,7 +90,7 @@ public class Board extends JPanel {
 		// Draw board cells and room names
 		for (BoardCell[] cells : grid) {
 			for (BoardCell c : cells) {
-				c.drawBoardCell(cellWidth, cellHeight, g );
+				c.drawBoardCell(cellWidth, cellHeight, g);
 				c.drawRoomNames(cellWidth, cellHeight, g);
 			}
 		}
@@ -581,9 +582,9 @@ public class Board extends JPanel {
 			visited.add(adjCell);
 			if (pathLength == 1) {
 				if (!adjCell.isOccupied()) {
-			
+
 					targets.add(adjCell);
-					adjCell.setIsTargetCell(true); //flag for highlightCell
+					adjCell.setIsTargetCell(true); // flag for highlightCell
 					visited.remove(adjCell);
 				}
 			} else {
@@ -665,7 +666,7 @@ public class Board extends JPanel {
 		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person)
 				&& solution.getWeapon().equals(Weapon)) {
 			return true;
-			
+
 		} else {
 			return false;
 		}
@@ -766,8 +767,8 @@ public class Board extends JPanel {
 
 		} else {
 			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
-			//playerTurn.setHasPlayerACC(false);
-			//playerTurn.setHasPlayerMoved(false);
+			// playerTurn.setHasPlayerACC(false);
+			// playerTurn.setHasPlayerMoved(false);
 
 		}
 	}

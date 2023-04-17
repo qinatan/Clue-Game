@@ -61,7 +61,7 @@ public class ClueGame extends JFrame {
 		int currentRow = currPlayer.getPlayerRow();
 		int currentCol = currPlayer.getPlayerCol();
 		BoardCell currentCell = board.getCell(currentRow, currentCol);
-		//this.currPlayer.setRollNum();
+		// this.currPlayer.setRollNum();
 		int rolledDice = currPlayer.getRollNum();
 		// System.out.print(rolledDice);
 		board.calcTargets(currentCell, rolledDice);
@@ -90,24 +90,31 @@ public class ClueGame extends JFrame {
 			int mouseY = (int) e.getPoint().getY();
 			int cellWidth = board.getCellWidth();
 			int cellHeight = board.getCellHeight();
-			int row = (int) (e.getPoint().getY() - 30) / cellHeight;
-			int col = (int) e.getPoint().getX() / cellWidth;
-			BoardCell cell = board.getCell(row, col);
+			int col = (int) mouseX / cellWidth;
+			int row = (int) (mouseY - 30) / cellHeight;
 
-			if (board.getTargets().contains(cell)) {
-				// update player location after they click one of the board cell on target list
-				currPlayer.setPlayerLocation(row, col);
-				currPlayer.setHasPlayerMoved(true);
-				
-				for (BoardCell targetCell : board.getTargets()) {
-					targetCell.setIsTargetCell(false);
+			//TODO: This can be refactored to be more clean 
+			if (row > board.getNumRows() - 1 || col > board.getNumColumns() - 1) {
+				// This should do nothing
+				System.out.println(row + " " + col + " " + board.getNumRows() + " " + board.getNumColumns());
+			} else {
+				BoardCell cell = board.getCell(row, col);
+				if (board.getTargets().contains(cell)) {
+					// update player location after they click one of the board cell on target list
+					currPlayer.setPlayerLocation(row, col);
+					currPlayer.setHasPlayerMoved(true);
+
+					for (BoardCell targetCell : board.getTargets()) {
+						targetCell.setIsTargetCell(false);
+					}
+					repaint();
 				}
-				repaint();
-			}
 
-			else {
-				JOptionPane.showMessageDialog(null, "Please click on a vaild tile", "Error", JOptionPane.ERROR_MESSAGE);
-			}
+				else {
+					JOptionPane.showMessageDialog(null, "Please click on a vaild tile", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} // End of the new if else
 		}
 
 		@Override
@@ -136,14 +143,12 @@ public class ClueGame extends JFrame {
 		// when the click button clicked we should check if the current player finish
 		// their move
 		System.out.println(currPlayer.toString());
-		
-		//This proves that the ACC button is working correctly
-		System.out.println(currPlayer.getIsHasPlayerACC() + " " + currPlayer.getIsHasPlayerMoved()) ; 
+
+		// This proves that the ACC button is working correctly
+		System.out.println(currPlayer.getIsHasPlayerACC() + " " + currPlayer.getIsHasPlayerMoved());
 		if (currPlayer.getIsHasPlayerACC() || currPlayer.getIsHasPlayerMoved()) {
 			// switch to get next player in the list
-			
-			
-			
+
 			board.nextTurn();
 			// update current player
 			currPlayer = board.getPlayersTurn();
@@ -155,7 +160,7 @@ public class ClueGame extends JFrame {
 			currPlayer.setRollNum();
 			int randomRoll = currPlayer.getRollNum();
 			controlPanel.rollText.setText(String.valueOf(randomRoll));
-			//calculate target list based on current board cell and dice number
+			// calculate target list based on current board cell and dice number
 			board.calcTargets(currentLocation, randomRoll);
 			if (currPlayer instanceof humanPlayer) {
 				// repaint to highlight cells in target list
@@ -164,16 +169,15 @@ public class ClueGame extends JFrame {
 			} else {
 				// update player location
 				BoardCell targetCell = ((computerPlayer) currPlayer).targetSelection(board.getTargets());
-				for (BoardCell cell : board.getTargets())
-				{
+				for (BoardCell cell : board.getTargets()) {
 					cell.setIsTargetCell(false);
 				}
-				
-				int targetRow = targetCell.getRowNum(); 
-				int targetCol = targetCell.getColumnNum(); 
+
+				int targetRow = targetCell.getRowNum();
+				int targetCol = targetCell.getColumnNum();
 				currPlayer.setPlayerLocation(targetRow, targetCol);
 				currPlayer.setHasPlayerMoved(true);
-				repaint(); 
+				repaint();
 			}
 
 		} else {
@@ -195,11 +199,10 @@ public class ClueGame extends JFrame {
 	public void ACCButtonPressedLogic() {
 		System.out.print("here");
 		currPlayer.setHasPlayerACC(true);
-		for (BoardCell targetCell: board.getTargets())
-		{
+		for (BoardCell targetCell : board.getTargets()) {
 			targetCell.setIsTargetCell(false);
 		}
-		repaint(); 
+		repaint();
 		System.out.print(currPlayer.getIsHasPlayerACC());
 	}
 

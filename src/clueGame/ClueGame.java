@@ -68,6 +68,7 @@ public class ClueGame extends JFrame {
 		repaint();
 	}
 
+	//TODO: remove this method if it is being unsed
 	// This method will drive display updates.
 	// @SuppressWarnings("unused")
 	private void updateDisplay() {

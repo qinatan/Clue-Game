@@ -104,12 +104,14 @@ public class BoardCell {
 		
 		if (isTargetCell)
 		{
+			
 			g2.setColor(highlight); 
 			g2.fillRect(horOffset, vertOffset, width, height);
 			//System.out.println("highlighted");
 		}
 			
 		if (isSecretPassage) {
+			//TODO: this should be changed so that we can see the secret passages better
 			g2.setColor(black); 
 			String secretePassage = " " +this.secretPassage; 
 			g2.drawString(secretePassage,  horOffset+10, vertOffset+10);

@@ -98,6 +98,7 @@ public class Board extends JPanel {
 					BoardCell centerCell = thisRoom.getCenterCell();
 					if (targets.contains(centerCell)) {
 						c.setIsTargetCell(true);
+						targets.add(c) ; 
 					}
 
 				}

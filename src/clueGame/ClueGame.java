@@ -111,11 +111,13 @@ public class ClueGame extends JFrame {
 
 					for (BoardCell targetCell : board.getTargets()) {
 						targetCell.setIsTargetCell(false);
+
 					}
+					board.getTargets().clear();
 					repaint();
 				} else if (board.getTargets().contains(cell) && cell.isRoom()) { // Else if it is a target cell but not
-																					// a center or a
-					// walkway
+																					// a center or a walkway
+
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
 					currPlayer.setPlayerLocation(thisRoomCenter.getRowNum(), thisRoomCenter.getColumnNum());
 					currPlayer.setHasPlayerMoved(true);
@@ -123,6 +125,7 @@ public class ClueGame extends JFrame {
 					for (BoardCell targetCell : board.getTargets()) {
 						targetCell.setIsTargetCell(false);
 					}
+					board.getTargets().clear();
 					repaint();
 				}
 

@@ -90,6 +90,17 @@ public class Board extends JPanel {
 		// Draw board cells and room names
 		for (BoardCell[] cells : grid) {
 			for (BoardCell c : cells) {
+
+				if (c.isRoom() && playerTurn instanceof humanPlayer) {
+					// roomMap.containsKey(c.getCellSymbol();
+
+					Room thisRoom = roomMap.get(c.getCellSymbol());
+					BoardCell centerCell = thisRoom.getCenterCell();
+					if (targets.contains(centerCell)) {
+						c.setIsTargetCell(true);
+					}
+
+				}
 				c.drawBoardCell(cellWidth, cellHeight, g);
 				c.drawRoomNames(cellWidth, cellHeight, g);
 			}

@@ -120,6 +120,20 @@ public class ClueGame extends JFrame {
 
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
 					currPlayer.setPlayerLocation(thisRoomCenter.getRowNum(), thisRoomCenter.getColumnNum());
+
+					// TODO: This works currently but this might need to be changed when computers
+					// start getting moved when suggestions happen
+					for (Player thisPlayer : board.getPlayerList()) {
+						if (thisPlayer.getCurrCell() == currPlayer.getCurrCell()) {
+							currPlayer.drawOffset = 15;
+							break;
+						} else {
+							continue;
+						}
+					}
+//					if (thisRoomCenter.isOccupied()) {
+//						currPlayer.drawOffset = 15 ; 
+//					}
 					currPlayer.setHasPlayerMoved(true);
 					// TODO : there could be refactoring done here
 					for (BoardCell targetCell : board.getTargets()) {

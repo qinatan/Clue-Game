@@ -68,7 +68,7 @@ public class ClueGame extends JFrame {
 		repaint();
 	}
 
-	//TODO: remove this method if it is being unsed
+	// TODO: remove this method if it is being unsed
 	// This method will drive display updates.
 	// @SuppressWarnings("unused")
 	private void updateDisplay() {
@@ -94,17 +94,32 @@ public class ClueGame extends JFrame {
 			int col = (int) mouseX / cellWidth;
 			int row = (int) (mouseY - 30) / cellHeight;
 
-			//TODO: This can be refactored to be more clean 
+			// TODO: This can be refactored to be more clean
 			if (row > board.getNumRows() - 1 || col > board.getNumColumns() - 1) {
 				// This should do nothing
 				System.out.println(row + " " + col + " " + board.getNumRows() + " " + board.getNumColumns());
 			} else {
 				BoardCell cell = board.getCell(row, col);
-				if (board.getTargets().contains(cell)) {
+
+				// This reads if it is in the targets list and it is either a room center or a
+				// walkway
+				// TODO: this can probably get cleaned up
+				if (board.getTargets().contains(cell) && (cell.isRoomCenter() || cell.getCellSymbol() == 'W')) {
 					// update player location after they click one of the board cell on target list
 					currPlayer.setPlayerLocation(row, col);
 					currPlayer.setHasPlayerMoved(true);
 
+					for (BoardCell targetCell : board.getTargets()) {
+						targetCell.setIsTargetCell(false);
+					}
+					repaint();
+				} else if (board.getTargets().contains(cell) && cell.isRoom()) { // Else if it is a target cell but not
+																					// a center or a
+					// walkway
+					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
+					currPlayer.setPlayerLocation(thisRoomCenter.getRowNum(), thisRoomCenter.getColumnNum());
+					currPlayer.setHasPlayerMoved(true);
+					// TODO : there could be refactoring done here
 					for (BoardCell targetCell : board.getTargets()) {
 						targetCell.setIsTargetCell(false);
 					}

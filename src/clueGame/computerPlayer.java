@@ -42,11 +42,21 @@ public class computerPlayer extends Player {
 		// adds a the room were into the possible suggestions
 
 		Board board = Board.getInstance();
-
+	
 		for (Card weaponCard : board.getWeaponDeck()) { // Loop through all the weapons we have
+			
+			
 			ArrayList<Card> seenWeapons = seenMap.get(CardType.WEAPON);
-
-			if (!seenWeapons.contains(weaponCard) && !hand.contains(weaponCard)) {
+			if (seenWeapons == null)
+			{
+				Random randomWeapon = new Random(); 
+				int randWeapon = randomWeapon.nextInt(board.getWeaponDeck().size()); 
+				Card weapon = board.getWeaponDeck().get(randWeapon); 
+				finalSuggestion.add(weapon); 
+				
+			}
+			else if (!seenWeapons.contains(weaponCard) && !hand.contains(weaponCard)) 
+			{
 				possibleSuggestions.computeIfAbsent(CardType.WEAPON, k -> new ArrayList<>()).add(weaponCard);
 
 			}
@@ -55,8 +65,14 @@ public class computerPlayer extends Player {
 
 		for (Card personCard : board.getPeopleDeck()) { // Loop through all the weapons we have
 			ArrayList<Card> seenPeople = seenMap.get(CardType.PERSON);
-
-			if (!seenPeople.contains(personCard) && !hand.contains(personCard)) {
+			if (seenPeople == null)
+			{
+				Random randomPeople = new Random() ; 
+				int randPeople = randomPeople.nextInt(board.getPeopleDeck().size()); 
+				Card people = board.getPeopleDeck().get(randPeople); 
+				finalSuggestion.add(people); 
+			}
+			else if (!seenPeople.contains(personCard) && !hand.contains(personCard)) {
 				possibleSuggestions.computeIfAbsent(CardType.PERSON, k -> new ArrayList<>()).add(personCard);
 
 			}
@@ -80,7 +96,7 @@ public class computerPlayer extends Player {
 			}
 		}
 
-		return finalSuggestion;	
+		return finalSuggestion;
 	}
 	
 	//AI player select one target from targetList to move toward 
@@ -123,4 +139,12 @@ public class computerPlayer extends Player {
 		return targets.get(randomNumber); 
 		
 	}
+	
+//	ArrayList<Card> makeAccusation()
+//	{
+//		//how AI make accusation 
+//		//they have 
+//		return
+//		
+//	}
 }

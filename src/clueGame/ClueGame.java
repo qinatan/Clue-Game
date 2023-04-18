@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -90,6 +91,7 @@ public class ClueGame extends JFrame {
 					board.getPlayersTurn().setPlayerLocation(row, col);
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
+					board.getPlayersTurn().setDrawOffset(0);
 					
 				} else if (board.getTargets().contains(cell) && cell.isRoom()) {				
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
@@ -104,7 +106,7 @@ public class ClueGame extends JFrame {
 							continue;
 						}
 					}
-
+					
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
 				}
@@ -150,7 +152,6 @@ public class ClueGame extends JFrame {
 	public void nextButtonPressedLogic() {
 		if (board.getPlayersTurn().getIsHasPlayerACC() || board.getPlayersTurn().getIsHasPlayerMoved()) {
 			// switch to get next player in the list
-
 			board.nextTurn();
 			controlPanel.getPlayerNameText().setText(board.getPlayersTurn().getPlayerName());
 			controlPanel.getPlayerNameText().setBackground(board.getPlayersTurn().getPlayerColor());
@@ -169,6 +170,12 @@ public class ClueGame extends JFrame {
 			} else {
 				// update player location
 				BoardCell targetCell = ((computerPlayer) board.getPlayersTurn()).targetSelection(board.getTargets());
+				if (targetCell.isRoom())
+				{
+					ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion(); 
+					String guess = suggestedCards.get(0).getCardName() + " " + suggestedCards.get(1).getCardName() + suggestedCards.get(2).getCardName(); 
+					controlPanel.setGuess(guess);
+				}
 				for (BoardCell cell : board.getTargets()) {
 					cell.setIsTargetCell(false);
 				}

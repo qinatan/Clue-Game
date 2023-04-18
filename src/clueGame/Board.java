@@ -44,15 +44,14 @@ public class Board extends JPanel {
 	private ArrayList<Card> fullDeck, dealtDeck, peopleDeck, roomDeck, weaponDeck;
 	private static ArrayList<Player> playerList;
 	private String layoutConfig, setupConfig;
-	private final static int TYPECHAR = 0;
-	private final static int NAMECHAR = 1;
-	private final static int SYMBOLCHAR = 2;
-	private final static int ROWCHAR = 3; // TODO: why are these rows and cols different from rows and cols above. One of
-	private final static int COLCHAR = 4;
+	private static final int TYPECHAR = 0;
+	private static final int NAMECHAR = 1;
+	private static final int SYMBOLCHAR = 2;
+	private static final int ROWCHAR = 3; 
+	private static final int COLCHAR = 4;
 	private static Solution solution;
 	private Player playerTurn;
-
-	private int cellWidth, cellHeight; // TODO: change these to private with getters and setters
+	private int cellWidth, cellHeight;
 
 	// constructor is private to ensure only one can be created
 	private Board() {

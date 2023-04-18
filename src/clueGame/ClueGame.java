@@ -14,7 +14,6 @@ public class ClueGame extends JFrame {
 	Board board = Board.getInstance();
 	CardsPanel cardsPanel;
 	GameControlPanel controlPanel;
-	//private Player currPlayer;
 
 	// Default constructor
 	public ClueGame() {

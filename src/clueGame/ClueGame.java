@@ -94,6 +94,7 @@ public class ClueGame extends JFrame {
 				} else if (board.getTargets().contains(cell) && cell.isRoom()) {				
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
 					board.getPlayersTurn().setPlayerLocation(thisRoomCenter.getRowNum(), thisRoomCenter.getColumnNum());
+					board.getPlayersTurn().makeSuggestion(); 
 
 					for (Player thisPlayer : board.getPlayerList()) {
 						if (thisPlayer.getCurrCell() == board.getPlayersTurn().getCurrCell()) {

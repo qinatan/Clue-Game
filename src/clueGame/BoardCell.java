@@ -55,18 +55,18 @@ public class BoardCell {
 		int horOffset = width * columnNum; // calculates the offset of this cell
 		int vertOffset = height * rowNum; // calculates the offset of this cell
 		
-		if (isRoom) {
+		if (Boolean.TRUE.equals(isRoom)) {
 			g2.setColor(skyblue);
 			g2.fillRect(horOffset, vertOffset, width, height);
 		}
 		
-		else if (isUnused) {
+		else if (Boolean.TRUE.equals(isUnused)) {
 			g2.setColor(black); // Set Color MUST come before fill/draw
 			g2.setStroke(new BasicStroke(2));
 			g2.fillRect(horOffset, vertOffset, width, height);
 		}
 		
-		else if (isWalkway) {
+		else if (Boolean.TRUE.equals(isWalkway)) {
 			g2.setColor(black); 
 			g2.drawRect(horOffset, vertOffset, width, height);
 			g2.setColor(grey);
@@ -74,7 +74,7 @@ public class BoardCell {
 		}
 	
 		
-		if (isDoorway) {
+		if (Boolean.TRUE.equals(isDoorway)) {
 			
 			switch (doorDirection) {
 				case UP:
@@ -102,14 +102,14 @@ public class BoardCell {
 			}
 		}
 		
-		if (isTargetCell)
+		if (Boolean.TRUE.equals(isTargetCell))
 		{
 			
 			g2.setColor(highlight); 
 			g2.fillRect(horOffset, vertOffset, width, height);
 		}
 			
-		if (isSecretPassage) {
+		if (Boolean.TRUE.equals(isSecretPassage)) {
 			g2.setColor(black); 
 			String secretePassage = " " +this.secretPassage; 
 			g2.drawString(secretePassage,  horOffset+10, vertOffset+10);
@@ -122,7 +122,7 @@ public class BoardCell {
 		Board board = Board.getInstance();
 		int horOffset = width * columnNum;
 		int vertOffset = height * rowNum;
-		if (this.isLabel()) {
+		if (Boolean.TRUE.equals(this.isLabel())) {
 			String roomLabel = board.getRoomMap().get(cellSymbol).getName(); 
 			Color pink = new Color(255, 192, 203); 
 			Color black = new Color(0,0,0); 

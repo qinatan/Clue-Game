@@ -1,3 +1,14 @@
+/**
+ * 
+ * This class tests the computer AI functions. 
+ * @author: Mike Eack
+ * @author: John Omalley 
+ * @author: Qina Tan 
+ * @start Date: 4/9/2023
+ * @collaborator: none 
+ * @resources: none  
+ */
+
 package tests;
 
 import org.junit.jupiter.api.Test; // Must always include this to declare Junit5
@@ -26,27 +37,24 @@ class ComputerAITest {
 	}
 
 	@Test
-	public void CPUSelectTarget() {
-		//Assert.fail(); 
+	public void CPUSelectTarget() { 
 		
 		// Tests that CPUPlayer selects randomly if no rooms in seenList
 		// get the second player from playerList
-		computerPlayer CPUPlayer = (computerPlayer) board.getPlayerList().get(1);
+		computerPlayer cpuPlayer = (computerPlayer) board.getPlayerList().get(1);
 		int row = 10;
 		int col = 8;
 		// get the second player's start location as a known board cell
-		BoardCell CPUstartLocation = board.getCell(row, col);
-		board.movePlayer(10, 8, CPUPlayer); 
-		//computerPlayer CPUPlayer = new computerPlayer("TestOne", "RED", "10", "8");
+		BoardCell cpuStartLocation = board.getCell(row, col);
+		board.movePlayer(10, 8, cpuPlayer); 
+
 		// find target list rolling 2 from start location -- target list contains no
 		// room
 		// we do not which specific location will be selected -- but test to make sure
 		// it is one of the location in target list
-		board.findAllTargets(CPUstartLocation, 2);
-		//System.out.println("Target List = ");
-		//System.out.println(board.getTargetList().toString());
-		Set<BoardCell> CPUTargetList = board.getTargets(); 
-		BoardCell targetLocation = CPUPlayer.targetSelection(CPUTargetList);
+		board.findAllTargets(cpuStartLocation, 2);
+		Set<BoardCell> cpuTargetList = board.getTargets(); 
+		BoardCell targetLocation = cpuPlayer.targetSelection(cpuTargetList);
 		
 
 		boolean firstLocation = false;
@@ -55,7 +63,7 @@ class ComputerAITest {
 		boolean forthLocation = false;
 		boolean fifthLocation = false;
 		for (int i = 0; i < 100; i++) {
-			targetLocation = CPUPlayer.targetSelection(CPUTargetList);
+			targetLocation = cpuPlayer.targetSelection(cpuTargetList);
 			
 			if (targetLocation.getRowNum() == 8 && targetLocation.getColumnNum() == 8) {
 				firstLocation = true;
@@ -84,7 +92,7 @@ class ComputerAITest {
 		Assert.assertTrue(thirdLocation);
 		Assert.assertTrue(forthLocation);
 		Assert.assertTrue(fifthLocation);
-		Assert.assertTrue(CPUTargetList.contains(targetLocation));
+		Assert.assertTrue(cpuTargetList.contains(targetLocation));
 
 		
 		// #2 Test whether the player always selects a room that it has not seen from targets
@@ -97,7 +105,7 @@ class ComputerAITest {
 		forthLocation = false;
 		fifthLocation = false;
 		for (int i = 0; i < 100; i++) {
-			targetLocation = CPUPlayer.targetSelection(CPUTargetList);
+			targetLocation = cpuPlayer.targetSelection(cpuTargetList);
 			
 			if (targetLocation.getRowNum() == 11 && targetLocation.getColumnNum() == 3) {
 				firstLocation = true;
@@ -128,7 +136,7 @@ class ComputerAITest {
 		
 		
 		// #3 Test that all targets are randomly chosen
-		CPUPlayer.addToSeenMap(CardType.ROOM, new Card(CardType.ROOM, "Garage"));																// should have a random component so this test
+		cpuPlayer.addToSeenMap(CardType.ROOM, new Card(CardType.ROOM, "Garage"));																// should have a random component so this test
 																		
 		
 		// Test for if the room is seen go to a random location 
@@ -140,7 +148,7 @@ class ComputerAITest {
 		forthLocation = false;
 		fifthLocation = false;
 		for (int i = 0; i < 100; i++) {
-			targetLocation = CPUPlayer.targetSelection(CPUTargetList);
+			targetLocation = cpuPlayer.targetSelection(cpuTargetList);
 			
 			if (targetLocation.getRowNum() == 11 && targetLocation.getColumnNum() == 3) {
 				firstLocation = true;
@@ -172,40 +180,35 @@ class ComputerAITest {
 
 	@SuppressWarnings("null")
 	@Test
-	public void CPUSuggestion() {
+	public void cpuSuggestion() {
 		// Room matches current location
-		Player YubabaCpuPlayer = board.getPlayerList().get(1);
+		Player yubabaCpuPlayer = board.getPlayerList().get(1);
 
 
 		// Set players location to plant room
-		YubabaCpuPlayer.setPlayerLocation(24, 10); // row 24, col 10 = plant room center
+		yubabaCpuPlayer.setPlayerLocation(24, 10); // row 24, col 10 = plant room center
 		Card currRoom = new Card(CardType.ROOM, "Plant Room");
-		YubabaCpuPlayer.currRoom = currRoom; // sets currRoom to plant room
+		yubabaCpuPlayer.currRoom = currRoom; // sets currRoom to plant room
 
 		// Not seen Weapon: Extension Cord
-		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Dog Bone"));
-		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Broken DVD"));
-		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Wrench"));
-		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Venus Fly Trap"));
-		YubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Dumbbell"));
+		yubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Dog Bone"));
+		yubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Broken DVD"));
+		yubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Wrench"));
+		yubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Venus Fly Trap"));
+		yubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Dumbbell"));
 
 		// Not seen person: Chi O
-		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Yubaba"));
-		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Zeniba"));
-		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "No-Face"));
-		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Boh"));
-		YubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "River Spirit"));
+		yubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Yubaba"));
+		yubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Zeniba"));
+		yubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "No-Face"));
+		yubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Boh"));
+		yubabaCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "River Spirit"));
 
 		// Only Player Yubaba, and Weapon Extension Cord not in seen list
 		// Expect Yubaba to guess: Person: Yubaba, Weapon: Extension Cord, Room: Plant
 		// Room
-		ArrayList<Card> suggestion = YubabaCpuPlayer.makeSuggestion();
+		ArrayList<Card> suggestion = yubabaCpuPlayer.makeSuggestion();
 		Assert.assertTrue(suggestion.size() == 3);
-
-		// This prints the suggestions made
-//		for (Card card : suggestion) {
-//			System.out.println(card.toString());
-//		}
 
 		// This test that the CPU suggests the not seen Person
 		Assert.assertTrue(suggestion.contains(new Card(CardType.PERSON, "Chihiro Ogino")));
@@ -218,21 +221,21 @@ class ComputerAITest {
 
 		// Section for testing if for multiple unseen cards
 		// Creates a new player
-		Player NoFaceCpuPlayer = board.getPlayerList().get(3);
-		NoFaceCpuPlayer.setPlayerLocation(24, 10); // row 24, col 10 = plant room center
-		NoFaceCpuPlayer.currRoom = currRoom; // sets currRoom to plant room
+		Player noFaceCpuPlayer = board.getPlayerList().get(3);
+		noFaceCpuPlayer.setPlayerLocation(24, 10); // row 24, col 10 = plant room center
+		noFaceCpuPlayer.currRoom = currRoom; // sets currRoom to plant room
 
 		// Not seen Weapon: Extension Cord, Dog Bone
-		NoFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Broken DVD"));
-		NoFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Wrench"));
-		NoFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Venus Fly Trap"));
-		NoFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Dumbbell"));
+		noFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Broken DVD"));
+		noFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Wrench"));
+		noFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Venus Fly Trap"));
+		noFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Dumbbell"));
 
 		// Not seen person: Chi O, Yubaba
-		NoFaceCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Zeniba"));
-		NoFaceCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "No-Face"));
-		NoFaceCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Boh"));
-		NoFaceCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "River Spirit"));
+		noFaceCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Zeniba"));
+		noFaceCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "No-Face"));
+		noFaceCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "Boh"));
+		noFaceCpuPlayer.addToSeenMap(CardType.PERSON, new Card(CardType.PERSON, "River Spirit"));
 
 		boolean seenFirstWeapon = false;
 		boolean seenSecondWeapon = false;
@@ -241,7 +244,7 @@ class ComputerAITest {
 		boolean seenSecondPerson = false;
 		
 		for (int i = 0; i < 100; i++) {
-			ArrayList<Card> multiSuggestion = NoFaceCpuPlayer.makeSuggestion();
+			ArrayList<Card> multiSuggestion = noFaceCpuPlayer.makeSuggestion();
 
 			if (multiSuggestion.contains(new Card(CardType.WEAPON, "Extension Cord"))) {
 				seenFirstWeapon = true;

@@ -44,16 +44,14 @@ public class Board extends JPanel {
 	private ArrayList<Card> fullDeck, dealtDeck, peopleDeck, roomDeck, weaponDeck;
 	private static ArrayList<Player> playerList;
 	private String layoutConfig, setupConfig;
-	private final static int TYPE = 0;
-	private final static int NAME = 1;
-	private final static int SYMBOL = 2;
-	private final static int ROW = 3; // TODO: why are these rows and cols different from rows and cols above. One of
-										// these should be renamed
-	private final static int COLUMN = 4;
+	private static final int TYPECHAR = 0;
+	private static final int NAMECHAR = 1;
+	private static final int SYMBOLCHAR = 2;
+	private static final int ROWCHAR = 3; 
+	private static final int COLCHAR = 4;
 	private static Solution solution;
 	private Player playerTurn;
-
-	private int cellWidth, cellHeight; // TODO: change these to private with getters and setters
+	private int cellWidth, cellHeight;
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -92,8 +90,6 @@ public class Board extends JPanel {
 			for (BoardCell c : cells) {
 
 				if (c.isRoom() && playerTurn instanceof humanPlayer) {
-					// roomMap.containsKey(c.getCellSymbol();
-
 					Room thisRoom = roomMap.get(c.getCellSymbol());
 					BoardCell centerCell = thisRoom.getCenterCell();
 					if (targets.contains(centerCell)) {
@@ -185,7 +181,7 @@ public class Board extends JPanel {
 
 			// If not a comment, split by ", "
 			String[] result = line.split(", ");
-			String itemType = result[TYPE];
+			String itemType = result[TYPECHAR];
 
 			if (!itemType.equals("Room") && !itemType.equals("Space") && !itemType.equals("Player")
 					&& !itemType.equals("Weapon")) {
@@ -197,14 +193,14 @@ public class Board extends JPanel {
 
 			// create a new card for each object except "Space"
 			if (!itemType.contains("Space")) {
-				newCard = new Card(result[NAME], result[TYPE]);
+				newCard = new Card(result[NAMECHAR], result[TYPECHAR]);
 				fullDeck.add(newCard);
 			}
 
 			if (itemType.contains("Room") || itemType.contains("Space")) {
-				Character roomSymbol = result[SYMBOL].charAt(0);
+				Character roomSymbol = result[SYMBOLCHAR].charAt(0);
 				// Creates a new room for each line of setup file
-				Room room = new Room(result[NAME], roomSymbol);
+				Room room = new Room(result[NAMECHAR], roomSymbol);
 				// Adds each room to roomMap
 				roomMap.put(roomSymbol, room);
 				if (newCard != null) {
@@ -214,7 +210,7 @@ public class Board extends JPanel {
 				peopleDeck.add(newCard);
 				Player newPlayer = null;
 				// human player
-				if (result[NAME].contains("Chihiro Ogino")) {
+				if (result[NAMECHAR].contains("Chihiro Ogino")) {
 					newPlayer = newHumanPlayer(result);
 
 				} else { // computer players
@@ -232,13 +228,13 @@ public class Board extends JPanel {
 
 	private Player newHumanPlayer(String[] result) {
 		Player newPlayer;
-		newPlayer = new humanPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+		newPlayer = new humanPlayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
 		return newPlayer;
 	}
 
 	private Player newComputerPlayer(String[] result) {
 		Player newPlayer;
-		newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+		newPlayer = new computerPlayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
 		return newPlayer;
 	}
 
@@ -683,6 +679,22 @@ public class Board extends JPanel {
 			return false;
 		}
 	}
+	
+	public void nextTurn() {
+		// human player's turn if already iterate to the last player
+		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
+			this.playerTurn = getPlayerList().get(0);
+			playerTurn.setHasPlayerACC(false);
+			playerTurn.setHasPlayerMoved(false);
+
+		} else {
+			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
+		}
+	}
+
+	public void setPlayersTurn(Player playersTurn) {
+		this.playerTurn = playersTurn;
+	}
 
 	// ************** Methods for unit testing purposes only *************//
 	public int getCellWidth() {
@@ -764,39 +776,14 @@ public class Board extends JPanel {
 		return playerTurn;
 	}
 
-	/**
-	 * Switches the current player to the next player in the PlayersList also
-	 * restarts the list when it gets to the bottom
-	 */
-	// TODO: These should be moved out of the only for tests sections as they are
-	// needed elsewhere
-	public void nextTurn() {
-		// human player's turn if already iterate to the last player
-		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
-			this.playerTurn = getPlayerList().get(0);
-			playerTurn.setHasPlayerACC(false);
-			playerTurn.setHasPlayerMoved(false);
-
-		} else {
-			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
-			// playerTurn.setHasPlayerACC(false);
-			// playerTurn.setHasPlayerMoved(false);
-
-		}
-	}
-
-	public void setPlayersTurn(Player playersTurn) {
-		this.playerTurn = playersTurn;
-	}
-
 	public void initializeForTest() {
-		targets = new HashSet<BoardCell>();
-		playerList = new ArrayList<Player>();
-		fullDeck = new ArrayList<Card>();
-		dealtDeck = new ArrayList<Card>();
-		peopleDeck = new ArrayList<Card>();
-		roomDeck = new ArrayList<Card>();
-		weaponDeck = new ArrayList<Card>();
+		targets = new HashSet<>();
+		playerList = new ArrayList<>();
+		fullDeck = new ArrayList<>();
+		dealtDeck = new ArrayList<>();
+		peopleDeck = new ArrayList<>();
+		roomDeck = new ArrayList<>();
+		weaponDeck = new ArrayList<>();
 
 		try {
 			loadSetupConfig();

@@ -32,11 +32,8 @@ public abstract class Player {
 	public Card currRoom;
 	private BoardCell currCell;
 	private int rollNum;
-
-	// TODO: change this to private
-	public int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in
-								// the current room center
-
+	private int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in the current room center
+							
 	// check for both AI and human player
 	private boolean hasPlayerMoved = false;
 	private boolean hasPlayerACC = false;
@@ -44,7 +41,6 @@ public abstract class Player {
 	protected ArrayList<Card> hand = new ArrayList<Card>();
 	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList<Card>>();
 
-	// TODO: Why does our constructor use String row, String col and not INT?
 	public Player(String playerName, String playerColor, String row, String col) {
 		this.name = playerName;
 		this.row = Integer.parseInt(row);
@@ -73,7 +69,7 @@ public abstract class Player {
 		}
 	}
 
-	// ************THESE were made to deal with game flow*********
+	// ************ THESE were made to deal with game flow *********
 	// TODO: these need to be moved
 	public void setHasPlayerMoved(boolean ACC) {
 		hasPlayerMoved = ACC;
@@ -128,6 +124,15 @@ public abstract class Player {
 	public Map<CardType, ArrayList<Card>> getSeenMap() {
 		return seenMap;
 	}
+	
+	public int getDrawOffset() {
+		return drawOffset;
+	}
+
+	public void setDrawOffset(int drawOffset) {
+		this.drawOffset = drawOffset;
+	}
+
 
 	// *********************************** //
 

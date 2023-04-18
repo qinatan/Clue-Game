@@ -1,7 +1,7 @@
 /**
  * 
  * This class is the main driver for the GUI elements and the game
- * @author: Mike Eact 
+ * @author: Mike Eack
  * @author: John Omalley 
  * @author: Qina Tan 
  * @start Date: 4/9/2023
@@ -30,16 +30,18 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-//import clueGame.java ; 
+
 
 public class GameControlPanel extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private JTextField guess = new JTextField();
 	private JTextField guessResult = new JTextField();
-	public JTextField playerNameText = new JTextField();
-	public JTextField rollText = new JTextField();
-	public JTextField playerColor = new JTextField(); 
+	private JTextField playerNameText = new JTextField();
+	private JTextField rollText = new JTextField();
 	private JButton nextButton;
-	private JButton ACCButton; 
+	private JButton accButton; 
+	private Player currPlayer; 
+	Board board = Board.getInstance();
 
 	// constructor
 	public GameControlPanel() {
@@ -48,29 +50,27 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		rollText.setText(String.valueOf(ClueGame.currPlayer.getRollNum()));
+		
+		currPlayer = board.getPlayersTurn();
+		rollText.setText(String.valueOf(currPlayer.getRollNum()));
 		repaint();
-	}
-	
-	public void updateFieldText(String playerName, String playerColor, String rolledDice)
-	{
 		
 	}
+	
 	public JButton getNextButton() {
 		return nextButton;
 	}
 	
 	public JButton getACCButton() {
-		return ACCButton ; 
+		return accButton ; 
 	}
 
 	private JPanel whoseTurn() {
 		JPanel whoseTurn = new JPanel();
 		JLabel label = new JLabel("Who's Turn:");
-		// TODO: refactor into whats below
-		// currPlay.getName
-		String playersName = ClueGame.currPlayer.getPlayerName();
-		Color playersColor = ClueGame.currPlayer.getPlayerColor();
+		currPlayer = board.getPlayersTurn();
+		String playersName = currPlayer.getPlayerName();
+		Color playersColor = currPlayer.getPlayerColor();
 		playerNameText.setText(playersName);
 		playerNameText.setBackground(playersColor);
 		whoseTurn.add(label);
@@ -81,7 +81,7 @@ public class GameControlPanel extends JPanel {
 	private JPanel rollPanel() {
 		JPanel roll = new JPanel();
 		JLabel rollLabel = new JLabel("Roll:");
-		rollText.setText(String.valueOf(ClueGame.currPlayer.getRollNum()));
+		rollText.setText(String.valueOf(currPlayer.getRollNum()));
 		roll.add(rollLabel);
 		roll.add(rollText);
 		return roll;
@@ -99,8 +99,7 @@ public class GameControlPanel extends JPanel {
 		nextButton = next; // This is here so that we can keep a lot of our old code
 
 		JButton makeAccusation = new JButton("Make Accusation");
-		ACCButton = makeAccusation ;  //This is needed for code continuity
-		//makeAccusation.addActionListener(new makeAccusationButtonListener());
+		accButton = makeAccusation ;  //This is needed for code continuity
 		group.add(makeAccusation);
 		group.add(next);
 		topPanel.add(next);
@@ -121,7 +120,6 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomRightPanel() {
 		JPanel bottomRightPanel = new JPanel();
 		bottomRightPanel.setLayout(new GridLayout(1, 0));
-		// JTextField someText = new JTextField("I have no guess");
 		bottomRightPanel.add(guess);
 		bottomRightPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess Result")); // Only using this for testing
 		return bottomRightPanel;
@@ -130,7 +128,6 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomLeftPanel() {
 		JPanel bottomLeftPanel = new JPanel();
 		bottomLeftPanel.setLayout(new GridLayout(1, 0));
-		// JTextField someText = new JTextField("You have question?");
 		bottomLeftPanel.add(guessResult);
 		bottomLeftPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess")); // Only using this for testing
 		return bottomLeftPanel;
@@ -143,6 +140,23 @@ public class GameControlPanel extends JPanel {
 	public void setGuessResult(String guessResult) {
 		this.guessResult.setText(guessResult);
 	}
+	
+	public void setPlayerNameText(JTextField playerNameText) {
+		this.playerNameText = playerNameText;
+	}
+
+	public JTextField getPlayerNameText() {
+		return playerNameText;
+	}
+	
+	public JTextField getRollText() {
+		return rollText;
+	}
+
+	public void setRollText(JTextField rollText) {
+		this.rollText = rollText;
+	}
+
 
 	public static void main(String[] args) {
 		Board board = Board.getInstance();
@@ -157,7 +171,6 @@ public class GameControlPanel extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		frame.setVisible(true);
 		// test filling the data
-		// panel.setTurn(new ComputerPlayer("Col. Mustard", 0, 0, "orange"), 5);
 		panel.setGuess("I have no guess!");
 		panel.setGuessResult("So you have nothing?");
 

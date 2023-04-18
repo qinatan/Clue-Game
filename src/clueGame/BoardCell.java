@@ -110,7 +110,6 @@ public class BoardCell {
 		}
 			
 		if (isSecretPassage) {
-			//TODO: this should be changed so that we can see the secret passages better
 			g2.setColor(black); 
 			String secretePassage = " " +this.secretPassage; 
 			g2.drawString(secretePassage,  horOffset+10, vertOffset+10);

@@ -76,41 +76,26 @@ public class ClueGame extends JFrame {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 
-			int mouseX = (int) e.getPoint().getX();
-			int mouseY = (int) e.getPoint().getY();
 			int cellWidth = board.getCellWidth();
 			int cellHeight = board.getCellHeight();
-			int col = (int) mouseX / cellWidth;
-			int row = (int) (mouseY - 30) / cellHeight;
+			int col =(int) e.getPoint().getX() / cellWidth;
+			int row = ((int) e.getPoint().getY() - 30) / cellHeight;
 
-			// TODO: This can be refactored to be more clean
-			if (row > board.getNumRows() - 1 || col > board.getNumColumns() - 1) {
-				// This should do nothing
-				System.out.println(row + " " + col + " " + board.getNumRows() + " " + board.getNumColumns());
-			} else {
+			if (!(row > board.getNumRows() - 1 || col > board.getNumColumns() - 1)) {
 				BoardCell cell = board.getCell(row, col);
 
 				// This reads if it is in the targets list and it is either a room center or a
 				// walkway
-				// TODO: this can probably get cleaned up
 				if (board.getTargets().contains(cell) && (cell.isRoomCenter() || cell.getCellSymbol() == 'W')) {
 					// update player location after they click one of the board cell on target list
 					board.getPlayersTurn().setPlayerLocation(row, col);
 					board.getPlayersTurn().setHasPlayerMoved(true);
-
-					for (BoardCell targetCell : board.getTargets()) {
-						targetCell.setIsTargetCell(false);
-
-					}
-					board.getTargets().clear();
-					repaint();
-				} else if (board.getTargets().contains(cell) && cell.isRoom()) {
-																				
+					clearTargetCells();
+					
+				} else if (board.getTargets().contains(cell) && cell.isRoom()) {				
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
 					board.getPlayersTurn().setPlayerLocation(thisRoomCenter.getRowNum(), thisRoomCenter.getColumnNum());
 
-					// TODO: This works currently but this might need to be changed when computers
-					// start getting moved when suggestions happen
 					for (Player thisPlayer : board.getPlayerList()) {
 						if (thisPlayer.getCurrCell() == board.getPlayersTurn().getCurrCell()) {
 							board.getPlayersTurn().drawOffset = 15;
@@ -121,19 +106,24 @@ public class ClueGame extends JFrame {
 					}
 
 					board.getPlayersTurn().setHasPlayerMoved(true);
-					// TODO : there could be refactoring done here
-					for (BoardCell targetCell : board.getTargets()) {
-						targetCell.setIsTargetCell(false);
-					}
-					board.getTargets().clear();
-					repaint();
+					clearTargetCells();
 				}
 
 				else {
 					JOptionPane.showMessageDialog(null, "Please click on a vaild tile", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
-			} // End of the new if else
+			}
+			
+		}
+	
+
+		private void clearTargetCells() {
+			for (BoardCell targetCell : board.getTargets()) {
+				targetCell.setIsTargetCell(false);
+			}
+			board.getTargets().clear();
+			repaint();
 		}
 
 		@Override

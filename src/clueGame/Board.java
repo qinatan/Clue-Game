@@ -92,8 +92,6 @@ public class Board extends JPanel {
 			for (BoardCell c : cells) {
 
 				if (c.isRoom() && playerTurn instanceof humanPlayer) {
-					// roomMap.containsKey(c.getCellSymbol();
-
 					Room thisRoom = roomMap.get(c.getCellSymbol());
 					BoardCell centerCell = thisRoom.getCenterCell();
 					if (targets.contains(centerCell)) {

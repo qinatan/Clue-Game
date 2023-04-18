@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -168,6 +169,13 @@ public class ClueGame extends JFrame {
 			} else {
 				// update player location
 				BoardCell targetCell = ((computerPlayer) board.getPlayersTurn()).targetSelection(board.getTargets());
+				if (targetCell.isRoom())
+				{
+					ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion(); 
+					//String guess = suggestCards.get(0).getCardName() + " " + suggestCards.get(1).getCardName()
+					String guess = suggestedCards.toString(); 
+					System.out.println(guess); 
+				}
 				for (BoardCell cell : board.getTargets()) {
 					cell.setIsTargetCell(false);
 				}

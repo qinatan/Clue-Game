@@ -42,11 +42,21 @@ public class computerPlayer extends Player {
 		// adds a the room were into the possible suggestions
 
 		Board board = Board.getInstance();
-
+	
 		for (Card weaponCard : board.getWeaponDeck()) { // Loop through all the weapons we have
+			
+			
 			ArrayList<Card> seenWeapons = seenMap.get(CardType.WEAPON);
-
-			if (!seenWeapons.contains(weaponCard) && !hand.contains(weaponCard)) {
+			if (seenWeapons == null)
+			{
+				Random randomWeapon = new Random(); 
+				int randWeapon = randomWeapon.nextInt(); 
+				Card weapon = board.getWeaponDeck().get(randWeapon); 
+				finalSuggestion.add(weapon); 
+				
+			}
+			else if (!seenWeapons.contains(weaponCard) && !hand.contains(weaponCard)) 
+			{
 				possibleSuggestions.computeIfAbsent(CardType.WEAPON, k -> new ArrayList<>()).add(weaponCard);
 
 			}
@@ -123,4 +133,12 @@ public class computerPlayer extends Player {
 		return targets.get(randomNumber); 
 		
 	}
+	
+//	ArrayList<Card> makeAccusation()
+//	{
+//		//how AI make accusation 
+//		//they have 
+//		return
+//		
+//	}
 }

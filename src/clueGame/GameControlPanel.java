@@ -39,8 +39,9 @@ public class GameControlPanel extends JPanel {
 	private JTextField playerNameText = new JTextField();
 	private JTextField rollText = new JTextField();
 	private JButton nextButton;
-	private JButton ACCButton; 
+	private JButton accButton; 
 	private Player currPlayer; 
+	Board board = Board.getInstance();
 
 	// constructor
 	public GameControlPanel() {
@@ -49,8 +50,8 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		ClueGame clueGame = new ClueGame();
-		currPlayer = clueGame.getCurrPlayer();
+		
+		currPlayer = board.getPlayersTurn();
 		rollText.setText(String.valueOf(currPlayer.getRollNum()));
 		repaint();
 		
@@ -61,12 +62,13 @@ public class GameControlPanel extends JPanel {
 	}
 	
 	public JButton getACCButton() {
-		return ACCButton ; 
+		return accButton ; 
 	}
 
 	private JPanel whoseTurn() {
 		JPanel whoseTurn = new JPanel();
 		JLabel label = new JLabel("Who's Turn:");
+		currPlayer = board.getPlayersTurn();
 		String playersName = currPlayer.getPlayerName();
 		Color playersColor = currPlayer.getPlayerColor();
 		playerNameText.setText(playersName);
@@ -97,7 +99,7 @@ public class GameControlPanel extends JPanel {
 		nextButton = next; // This is here so that we can keep a lot of our old code
 
 		JButton makeAccusation = new JButton("Make Accusation");
-		ACCButton = makeAccusation ;  //This is needed for code continuity
+		accButton = makeAccusation ;  //This is needed for code continuity
 		group.add(makeAccusation);
 		group.add(next);
 		topPanel.add(next);
@@ -126,7 +128,6 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomLeftPanel() {
 		JPanel bottomLeftPanel = new JPanel();
 		bottomLeftPanel.setLayout(new GridLayout(1, 0));
-		// JTextField someText = new JTextField("You have question?");
 		bottomLeftPanel.add(guessResult);
 		bottomLeftPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess")); // Only using this for testing
 		return bottomLeftPanel;

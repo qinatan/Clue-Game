@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class ClueGame extends JFrame {
+	private static final long serialVersionUID = 1L;
 	Board board = Board.getInstance();
 	CardsPanel cardsPanel;
 	GameControlPanel controlPanel;
@@ -61,18 +62,9 @@ public class ClueGame extends JFrame {
 		int currentRow = currPlayer.getPlayerRow();
 		int currentCol = currPlayer.getPlayerCol();
 		BoardCell currentCell = board.getCell(currentRow, currentCol);
-		// this.currPlayer.setRollNum();
-		int rolledDice = currPlayer.getRollNum();
-		// System.out.print(rolledDice);
+		int rolledDice = currPlayer.getRollNum();		
 		board.calcTargets(currentCell, rolledDice);
 		repaint();
-	}
-
-	// TODO: remove this method if it is being unsed
-	// This method will drive display updates.
-	// @SuppressWarnings("unused")
-	private void updateDisplay() {
-		// Call repaint
 	}
 
 	private class NextButtonListener implements ActionListener {
@@ -115,9 +107,8 @@ public class ClueGame extends JFrame {
 					}
 					board.getTargets().clear();
 					repaint();
-				} else if (board.getTargets().contains(cell) && cell.isRoom()) { // Else if it is a target cell but not
-																					// a center or a walkway
-
+				} else if (board.getTargets().contains(cell) && cell.isRoom()) {
+																				
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
 					currPlayer.setPlayerLocation(thisRoomCenter.getRowNum(), thisRoomCenter.getColumnNum());
 
@@ -131,9 +122,7 @@ public class ClueGame extends JFrame {
 							continue;
 						}
 					}
-//					if (thisRoomCenter.isOccupied()) {
-//						currPlayer.drawOffset = 15 ; 
-//					}
+
 					currPlayer.setHasPlayerMoved(true);
 					// TODO : there could be refactoring done here
 					for (BoardCell targetCell : board.getTargets()) {

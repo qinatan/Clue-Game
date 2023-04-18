@@ -185,14 +185,14 @@ public class ClueGame extends JFrame {
 			board.nextTurn();
 			// update current player
 			currPlayer = board.getPlayersTurn();
-			controlPanel.playerNameText.setText(currPlayer.getPlayerName());
-			controlPanel.playerNameText.setBackground(currPlayer.getPlayerColor());
+			controlPanel.getPlayerNameText().setText(currPlayer.getPlayerName());
+			controlPanel.getPlayerNameText().setBackground(currPlayer.getPlayerColor());
 			BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
 
 			// roll a dice
 			currPlayer.setRollNum();
 			int randomRoll = currPlayer.getRollNum();
-			controlPanel.rollText.setText(String.valueOf(randomRoll));
+			controlPanel.getRollText().setText(String.valueOf(randomRoll));
 			// calculate target list based on current board cell and dice number
 			board.calcTargets(currentLocation, randomRoll);
 			if (currPlayer instanceof humanPlayer) {

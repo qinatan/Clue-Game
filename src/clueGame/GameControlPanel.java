@@ -33,11 +33,11 @@ import javax.swing.border.TitledBorder;
 
 
 public class GameControlPanel extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private JTextField guess = new JTextField();
 	private JTextField guessResult = new JTextField();
-	public JTextField playerNameText = new JTextField();
-	public JTextField rollText = new JTextField();
-	public JTextField playerColor = new JTextField(); 
+	private JTextField playerNameText = new JTextField();
+	private JTextField rollText = new JTextField();
 	private JButton nextButton;
 	private JButton ACCButton; 
 	private Player currPlayer; 
@@ -56,10 +56,6 @@ public class GameControlPanel extends JPanel {
 		
 	}
 	
-	public void updateFieldText(String playerName, String playerColor, String rolledDice)
-	{
-		
-	}
 	public JButton getNextButton() {
 		return nextButton;
 	}
@@ -71,8 +67,6 @@ public class GameControlPanel extends JPanel {
 	private JPanel whoseTurn() {
 		JPanel whoseTurn = new JPanel();
 		JLabel label = new JLabel("Who's Turn:");
-		// TODO: refactor into whats below
-		// currPlay.getName
 		String playersName = currPlayer.getPlayerName();
 		Color playersColor = currPlayer.getPlayerColor();
 		playerNameText.setText(playersName);
@@ -124,7 +118,6 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomRightPanel() {
 		JPanel bottomRightPanel = new JPanel();
 		bottomRightPanel.setLayout(new GridLayout(1, 0));
-		// JTextField someText = new JTextField("I have no guess");
 		bottomRightPanel.add(guess);
 		bottomRightPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess Result")); // Only using this for testing
 		return bottomRightPanel;
@@ -146,6 +139,23 @@ public class GameControlPanel extends JPanel {
 	public void setGuessResult(String guessResult) {
 		this.guessResult.setText(guessResult);
 	}
+	
+	public void setPlayerNameText(JTextField playerNameText) {
+		this.playerNameText = playerNameText;
+	}
+
+	public JTextField getPlayerNameText() {
+		return playerNameText;
+	}
+	
+	public JTextField getRollText() {
+		return rollText;
+	}
+
+	public void setRollText(JTextField rollText) {
+		this.rollText = rollText;
+	}
+
 
 	public static void main(String[] args) {
 		Board board = Board.getInstance();

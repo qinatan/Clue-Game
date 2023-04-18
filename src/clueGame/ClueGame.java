@@ -191,12 +191,12 @@ public class ClueGame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			ACCButtonPressedLogic();
+			accButtonPressedLogic();
 
 		}
 	}
 
-	public void ACCButtonPressedLogic() {
+	public void accButtonPressedLogic() {
 		System.out.print("here");
 		board.getPlayersTurn().setHasPlayerACC(true);
 		for (BoardCell targetCell : board.getTargets()) {

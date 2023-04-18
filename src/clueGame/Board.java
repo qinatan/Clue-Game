@@ -44,12 +44,11 @@ public class Board extends JPanel {
 	private ArrayList<Card> fullDeck, dealtDeck, peopleDeck, roomDeck, weaponDeck;
 	private static ArrayList<Player> playerList;
 	private String layoutConfig, setupConfig;
-	private final static int TYPE = 0;
-	private final static int NAME = 1;
-	private final static int SYMBOL = 2;
-	private final static int ROW = 3; // TODO: why are these rows and cols different from rows and cols above. One of
-										// these should be renamed
-	private final static int COLUMN = 4;
+	private final static int TYPECHAR = 0;
+	private final static int NAMECHAR = 1;
+	private final static int SYMBOLCHAR = 2;
+	private final static int ROWCHAR = 3; // TODO: why are these rows and cols different from rows and cols above. One of
+	private final static int COLCHAR = 4;
 	private static Solution solution;
 	private Player playerTurn;
 
@@ -183,7 +182,7 @@ public class Board extends JPanel {
 
 			// If not a comment, split by ", "
 			String[] result = line.split(", ");
-			String itemType = result[TYPE];
+			String itemType = result[TYPECHAR];
 
 			if (!itemType.equals("Room") && !itemType.equals("Space") && !itemType.equals("Player")
 					&& !itemType.equals("Weapon")) {
@@ -195,14 +194,14 @@ public class Board extends JPanel {
 
 			// create a new card for each object except "Space"
 			if (!itemType.contains("Space")) {
-				newCard = new Card(result[NAME], result[TYPE]);
+				newCard = new Card(result[NAMECHAR], result[TYPECHAR]);
 				fullDeck.add(newCard);
 			}
 
 			if (itemType.contains("Room") || itemType.contains("Space")) {
-				Character roomSymbol = result[SYMBOL].charAt(0);
+				Character roomSymbol = result[SYMBOLCHAR].charAt(0);
 				// Creates a new room for each line of setup file
-				Room room = new Room(result[NAME], roomSymbol);
+				Room room = new Room(result[NAMECHAR], roomSymbol);
 				// Adds each room to roomMap
 				roomMap.put(roomSymbol, room);
 				if (newCard != null) {
@@ -212,7 +211,7 @@ public class Board extends JPanel {
 				peopleDeck.add(newCard);
 				Player newPlayer = null;
 				// human player
-				if (result[NAME].contains("Chihiro Ogino")) {
+				if (result[NAMECHAR].contains("Chihiro Ogino")) {
 					newPlayer = newHumanPlayer(result);
 
 				} else { // computer players
@@ -230,13 +229,13 @@ public class Board extends JPanel {
 
 	private Player newHumanPlayer(String[] result) {
 		Player newPlayer;
-		newPlayer = new humanPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+		newPlayer = new humanPlayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
 		return newPlayer;
 	}
 
 	private Player newComputerPlayer(String[] result) {
 		Player newPlayer;
-		newPlayer = new computerPlayer(result[NAME], result[SYMBOL], result[ROW], result[COLUMN]);
+		newPlayer = new computerPlayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
 		return newPlayer;
 	}
 

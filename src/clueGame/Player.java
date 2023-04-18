@@ -29,14 +29,27 @@ public abstract class Player {
 	private Color playerColor;
 	private String color;
 	private int row, col;
-	protected ArrayList<Card> hand = new ArrayList<Card>();
-	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList <Card>>();
-	public Card currRoom; 
+	public Card currRoom;
+	private BoardCell currCell;
+	private int rollNum;
 
+	// TODO: change this to private
+	public int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in
+								// the current room center
+
+	// check for both AI and human player
+	private boolean hasPlayerMoved = false;
+	private boolean hasPlayerACC = false;
+
+	protected ArrayList<Card> hand = new ArrayList<Card>();
+	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList<Card>>();
+
+	// TODO: Why does our constructor use String row, String col and not INT?
 	public Player(String playerName, String playerColor, String row, String col) {
 		this.name = playerName;
 		this.row = Integer.parseInt(row);
 		this.col = Integer.parseInt(col);
+		currCell = new BoardCell(this.row, this.col);
 		this.color = playerColor;
 		switch (playerColor) {
 		case "Red":
@@ -60,7 +73,34 @@ public abstract class Player {
 		}
 	}
 
-	// ******** getters & setters  ********* // 
+	// ************THESE were made to deal with game flow*********
+	// TODO: these need to be moved
+	public void setHasPlayerMoved(boolean ACC) {
+		hasPlayerMoved = ACC;
+	}
+
+	// TODO: This needs to be moved
+	public void setHasPlayerACC(boolean ACC) {
+		hasPlayerACC = ACC;
+	}
+
+	public boolean getIsHasPlayerMoved() {
+		return hasPlayerMoved;
+	}
+
+	public boolean getIsHasPlayerACC() {
+		return hasPlayerACC;
+	}
+
+	// ******** getters & setters ********* //
+	public BoardCell getCurrCell() {
+		return currCell;
+	}
+
+	public void setCurrCell(BoardCell currCell) {
+		this.currCell = currCell;
+	}
+
 	public String getPlayerName() {
 		return this.name;
 	}
@@ -76,7 +116,7 @@ public abstract class Player {
 	public ArrayList<Card> getHand() {
 		return hand;
 	}
-	
+
 	public int getPlayerRow() {
 		return row;
 	}
@@ -84,8 +124,8 @@ public abstract class Player {
 	public int getPlayerCol() {
 		return col;
 	}
-	
-	public Map<CardType, ArrayList<Card>> getSeenMap (){
+
+	public Map<CardType, ArrayList<Card>> getSeenMap() {
 		return seenMap;
 	}
 
@@ -93,32 +133,39 @@ public abstract class Player {
 
 	// Abstract Methods
 	protected abstract void updateHand(Card card);
-	
+
 	public abstract ArrayList<Card> makeSuggestion();
 
-	// *********** Other Methods ********* // 
-	
+	// *********** Other Methods ********* //
+
 	public void drawPlayer(int width, int height, Graphics g) {
-		int horOffset = width * col;
+		int horOffset = width * col + drawOffset;
 		int vertOffset = height * row;
 		g.setColor(playerColor);
 		g.drawOval(horOffset, vertOffset, width, height);
-		g.fillOval(horOffset, vertOffset, width, height); 
+		g.fillOval(horOffset, vertOffset, width, height);
 	}
-	
-	
+
+	public int getRollNum() {
+		return rollNum;
+	}
+
+	public void setRollNum() {
+		Random randomRoll = new Random();
+		this.rollNum = randomRoll.nextInt(6) + 1;
+
+	}
+
 	public void printHand() {
 		for (int i = 0; i < hand.size(); i++) {
 			System.out.println(hand.get(i));
 		}
 	}
 
-	// **** Other Methods ***************** // 
-	
 	// every player check if they have a card in hand to disprove a suggestedCard
-	//return null if they do not have 
-	//return disapproval card if they have one 
-	//randomly pick one disapproval card if they have more than one 
+	// return null if they do not have
+	// return disapproval card if they have one
+	// randomly pick one disapproval card if they have more than one
 	public Card disproveSuggestion(Card suggestedCard1, Card suggestedCard2, Card suggestedCard3) {
 
 		ArrayList<Card> matchingCard = new ArrayList<Card>();
@@ -143,35 +190,31 @@ public abstract class Player {
 		}
 		return null;
 	}
-	
+
 	public void addToSeenMap(CardType cardType, Card seenCard) {
-		
-		if (seenMap.containsKey(cardType))
-		{
-			seenMap.get(cardType).add(seenCard); 
-		}
-		else
-		{
-			ArrayList<Card> seenCards = new ArrayList<Card>(); 
-			seenCards.add(seenCard); 
-			seenMap.put(cardType, seenCards); 
+
+		if (seenMap.containsKey(cardType)) {
+			seenMap.get(cardType).add(seenCard);
+		} else {
+			ArrayList<Card> seenCards = new ArrayList<Card>();
+			seenCards.add(seenCard);
+			seenMap.put(cardType, seenCards);
 		}
 
 	}
-	
+
 	// ********** TEST METHODS **************** //
-	// These methods should only be used to facilitate unit testing and never run in prod code //
-	
+	// These methods should only be used to facilitate unit testing and never run in
+	// prod code //
+
 	public void setPlayerLocation(int row, int col) {
 		this.row = row;
 		this.col = col;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Player [name=" + name + "]";
 	}
-
-
 
 }

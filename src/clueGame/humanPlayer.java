@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class humanPlayer extends Player {
-
+	
 	public humanPlayer(String playerName, String playerColor, String row, String col) {
 		super(playerName, playerColor, row, col);
 		
@@ -33,5 +33,7 @@ public class humanPlayer extends Player {
 	public ArrayList<Card> makeSuggestion() {
 		return null;
 	}
+	
+	
 
 }

@@ -45,7 +45,7 @@ class ComputerAITest {
 		board.findAllTargets(CPUstartLocation, 2);
 		//System.out.println("Target List = ");
 		//System.out.println(board.getTargetList().toString());
-		Set<BoardCell> CPUTargetList = board.getTargetList(); 
+		Set<BoardCell> CPUTargetList = board.getTargets(); 
 		BoardCell targetLocation = CPUPlayer.targetSelection(CPUTargetList);
 		
 

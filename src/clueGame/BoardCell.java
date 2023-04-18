@@ -39,16 +39,19 @@ public class BoardCell {
 	private Boolean isSecretPassage = false;
 	private Character secretPassage = null;
 	private DoorDirection doorDirection;
+	private Boolean isTargetCell = false; 
 	
 
 	// This method will draw the initial board without room names or players
 	public void drawBoardCell(int width, int height, Graphics g) {
+		
 		Graphics2D g2 = (Graphics2D) g; // cast g to Graphics2d object so we can use those methods
 		Board board = Board.getInstance();	
 		Color black = new Color(0,0,0); 
 		Color skyblue = new Color(135, 206, 235); // Rooms will be sky blue
 		Color grey = new Color(192, 192, 192); // unused space will be grey
 		Color yellow = new Color(255, 255, 0); //walkway will be yellow 
+		Color highlight = new Color(128, 0, 128); 
 		int horOffset = width * columnNum; // calculates the offset of this cell
 		int vertOffset = height * rowNum; // calculates the offset of this cell
 		
@@ -97,16 +100,24 @@ public class BoardCell {
 					break;
 					
 			}
-			
 		}
-	
+		
+		if (isTargetCell)
+		{
+			
+			g2.setColor(highlight); 
+			g2.fillRect(horOffset, vertOffset, width, height);
+			//System.out.println("highlighted");
+		}
+			
 		if (isSecretPassage) {
+			//TODO: this should be changed so that we can see the secret passages better
 			g2.setColor(black); 
 			String secretePassage = " " +this.secretPassage; 
 			g2.drawString(secretePassage,  horOffset+10, vertOffset+10);
 		}	
 	}
-	
+
 	// Method draws room names over the board
 	
 	public void drawRoomNames(int width, int height, Graphics g) {
@@ -261,15 +272,24 @@ public class BoardCell {
 		adjList.add(cell);
 	}
 	
+	
+	
 	@Override
-	public String toString() {		
-		return "BoardCell [rowNum=" + rowNum + ", columnNum=" + columnNum
-				 + ", isRoom=" + isRoom + ", isOccupied=" + isOccupied + ", isDoor=" + isDoorway
-				+ ", secretPassage= " + secretPassage + "]";
+	public String toString() {
+		return "BoardCell [columnNum=" + columnNum + ", rowNum=" + rowNum + ", isTargetCell=" + isTargetCell + "]";
 	}
 
 	public Set<BoardCell> getAdjList() {
 		return adjList;
 	}
-
+	
+	public void setIsTargetCell(Boolean repainted)
+	{
+		this.isTargetCell = repainted; 
+	}
+	
+	public void repaint()
+	{
+		repaint(); 
+	}
 }

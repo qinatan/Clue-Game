@@ -86,12 +86,13 @@ public class computerPlayer extends Player {
 	//AI player select one target from targetList to move toward 
 	//return the first room found in targetList if room is not in seenMap, or return random target location if no room exit or room is already in seenMap 
 	Random randomTarget = new Random();
+	
 	public BoardCell targetSelection(Set<BoardCell> targetList)
 	{
 		Board board = Board.getInstance(); 
 		ArrayList<BoardCell> targets = new ArrayList<BoardCell>(targetList); 
 		ArrayList<String> cardNames = new ArrayList<String>(); 
-		BoardCell targetLocation = null; 
+
 		ArrayList<Card> roomCards = seenMap.get(CardType.ROOM);
 		if (roomCards !=null)
 		{

@@ -13,15 +13,21 @@ import javax.swing.JPanel;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.*;
 import java.awt.Graphics;
 
 /**
  * Board
  * 
- * Board class contains variables that represent objects in the game board, and methods that organize the objects and handle movements of objects.
- * Board class is responsible for 1) loading setupConfigFile and initialized roomMap with the room name and room initial; 2) loading layoutConfigFile and indicate information of 
- * each cell in CSV file accordingly; 3)calculate adjacency of each cells according to game rules; 4) calculate the target of each cell according to the rolling die 5) handle suggestion from every player
+ * Board class contains variables that represent objects in the game board, and
+ * methods that organize the objects and handle movements of objects. Board
+ * class is responsible for 1) loading setupConfigFile and initialized roomMap
+ * with the room name and room initial; 2) loading layoutConfigFile and indicate
+ * information of each cell in CSV file accordingly; 3)calculate adjacency of
+ * each cells according to game rules; 4) calculate the target of each cell
+ * according to the rolling die 5) handle suggestion from every player
  * 
  * @author michaeleack
  * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
@@ -36,15 +42,18 @@ public class Board extends JPanel {
 	private Set<BoardCell> targets;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private ArrayList<Card> fullDeck, dealtDeck, peopleDeck, roomDeck, weaponDeck;
-	private ArrayList<Player> playerList;
+	private static ArrayList<Player> playerList;
 	private String layoutConfig, setupConfig;
 	private final static int TYPE = 0;
 	private final static int NAME = 1;
 	private final static int SYMBOL = 2;
-	private final static int ROW = 3;
+	private final static int ROW = 3; // TODO: why are these rows and cols different from rows and cols above. One of
+										// these should be renamed
 	private final static int COLUMN = 4;
 	private static Solution solution;
 	private Player playerTurn;
+
+	private int cellWidth, cellHeight; // TODO: change these to private with getters and setters
 
 	// constructor is private to ensure only one can be created
 	private Board() {
@@ -55,16 +64,15 @@ public class Board extends JPanel {
 	public static Board getInstance() {
 		return boardInstance;
 	}
-	
-	
+
 	public ArrayList<Card> getWeaponDeck() {
 		return weaponDeck;
 	}
-	
+
 	public void setRoomDeck(ArrayList<Card> roomDeck) {
 		this.roomDeck = roomDeck;
 	}
-	
+
 	public ArrayList<Card> getPeopleDeck() {
 		return peopleDeck;
 	}
@@ -75,28 +83,36 @@ public class Board extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);  // THIS MUST BE the first item within paintComponent
-		int cellWidth = (getWidth()) / cols; 
-		int cellHeight =(getHeight()) / rows;
-		
+		super.paintComponent(g); // THIS MUST BE the first item within paintComponent
+		cellWidth = (getWidth()) / cols;
+		cellHeight = (getHeight()) / rows;
+
 		// Draw board cells and room names
-		for (BoardCell[] cells : grid)
-		{
-			for (BoardCell c : cells)
-			{
-				c.drawBoardCell(cellWidth, cellHeight,g); 
-				c.drawRoomNames(cellWidth, cellHeight,g); 
+		for (BoardCell[] cells : grid) {
+			for (BoardCell c : cells) {
+
+				if (c.isRoom() && playerTurn instanceof humanPlayer) {
+					// roomMap.containsKey(c.getCellSymbol();
+
+					Room thisRoom = roomMap.get(c.getCellSymbol());
+					BoardCell centerCell = thisRoom.getCenterCell();
+					if (targets.contains(centerCell)) {
+						c.setIsTargetCell(true);
+						targets.add(c) ; 
+					}
+
+				}
+				c.drawBoardCell(cellWidth, cellHeight, g);
+				c.drawRoomNames(cellWidth, cellHeight, g);
 			}
 		}
 
 		// Draw players
-		for (Player player: playerList) {
+		for (Player player : playerList) {
 			player.drawPlayer(cellWidth, cellHeight, g);
 		}
-	
 	}
 
-	
 	/*
 	 * initialize the board (since we are using singleton pattern)
 	 */
@@ -108,7 +124,6 @@ public class Board extends JPanel {
 		peopleDeck = new ArrayList<Card>();
 		roomDeck = new ArrayList<Card>();
 		weaponDeck = new ArrayList<Card>();
-		
 
 		try {
 			loadSetupConfig();
@@ -120,13 +135,12 @@ public class Board extends JPanel {
 		} catch (FileNotFoundException | BadConfigFormatException e) {
 			e.printStackTrace();
 		}
-		
+
 		setPlayersTurn(getPlayerList().get(0));
 
 		setGame();
 	}
 
-	
 	public void setConfigFiles(String layoutConfig, String setupConfig) {
 		this.layoutConfig = "data/" + layoutConfig;
 		this.setupConfig = "data/" + setupConfig;
@@ -272,16 +286,14 @@ public class Board extends JPanel {
 					throw new BadConfigFormatException(
 							"Letter found in config file that is not a known room: " + result[col].charAt(0));
 				}
-				
+
 				grid[row][col].setCellSymbol(result[col]);
-			
+
 				// Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 				// isSecretPassageway, isRoomLabel
 				gridCellClassifier(row, col, result);
-			
-				
-			}
 
+			}
 			row++;
 		}
 		myReader2.close();
@@ -297,6 +309,7 @@ public class Board extends JPanel {
 		}
 	}
 
+	// Why does this method return a file and not just be void
 	private File gridSizeCalculator() throws FileNotFoundException, BadConfigFormatException {
 		// reads in file once to find numRows, numColumns
 		File layoutFile = new File(layoutConfig);
@@ -324,7 +337,7 @@ public class Board extends JPanel {
 		return layoutFile;
 	}
 
-	/*
+	/**
 	 * checks if the second character is an arrow to a door location
 	 */
 	private boolean isDoorArrow(char arrow) {
@@ -335,7 +348,7 @@ public class Board extends JPanel {
 		}
 	}
 
-	/*
+	/**
 	 * Sets boardCell variables: isDoor, isRoom, isRoomCenterCell,
 	 * isSecretPassageway. e.g. Takes in a room cell, sets isRoom = true
 	 * 
@@ -346,11 +359,11 @@ public class Board extends JPanel {
 		if (!result[col].equals("X") && result[col].charAt(0) != 'W') {
 			grid[row][col].setIsRoom(true);
 		}
-		
+
 		if (result[col].equals("X")) {
 			grid[row][col].setIsUnused(true);
 		}
-		
+
 		if (result[col].equals("W")) {
 			grid[row][col].setIsWalkway(true);
 		}
@@ -369,7 +382,7 @@ public class Board extends JPanel {
 				// Set this cell to the Room's labelCell
 				Room room = roomMap.get(result[col].charAt(0));
 				room.setLabelCell(grid[row][col]);
-				
+
 			}
 			// Center Cell Label Found
 			else if (result[col].charAt(1) == '*') {
@@ -495,8 +508,8 @@ public class Board extends JPanel {
 
 				// if yes, check if on left edge
 				if (col == 0) {
-					addWalkwayAdj(currCell, Direction.RIGHT); 
-																
+					addWalkwayAdj(currCell, Direction.RIGHT);
+
 					addWalkwayAdj(currCell, Direction.DOWN);
 				}
 				// check if on right edge
@@ -581,12 +594,15 @@ public class Board extends JPanel {
 			visited.add(adjCell);
 			if (pathLength == 1) {
 				if (!adjCell.isOccupied()) {
+
 					targets.add(adjCell);
+					adjCell.setIsTargetCell(true); // flag for highlightCell
 					visited.remove(adjCell);
 				}
 			} else {
 				if (adjCell.isRoomCenter()) {
 					targets.add(adjCell);
+					adjCell.setIsTargetCell(true);
 					visited.remove(adjCell);
 				} else {
 					findAllTargets(adjCell, pathLength - 1);
@@ -602,10 +618,11 @@ public class Board extends JPanel {
 	private void setGame() {
 		createSolution();
 		dealCards();
+
 	}
 
 	public void createSolution() {
-		Collections.shuffle(peopleDeck); 
+		Collections.shuffle(peopleDeck);
 		Collections.shuffle(roomDeck);
 		Collections.shuffle(weaponDeck);
 		Random random = new Random();
@@ -621,54 +638,61 @@ public class Board extends JPanel {
 		dealtDeck.remove(roomDeck.get(randomRoom));
 		dealtDeck.remove(weaponDeck.get(randomWeapon));
 	}
-	
-	//return first disapproval card that matching to suggesting card from other players, except the suggesting player 
-	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3, Player suggestingPlayer) {
+
+	// return first disapproval card that matching to suggesting card from other
+	// players, except the suggesting player
+	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3,
+			Player suggestingPlayer) {
 		Card disprovedCard = null;
-		
-		for (int i = 0; i <playerList.size(); i++) {
-			Player player = playerList.get(i); 
-			
+
+		for (int i = 0; i < playerList.size(); i++) {
+			Player player = playerList.get(i);
+
 			if (player != suggestingPlayer) {
-				disprovedCard = player.disproveSuggestion(suggestedCard1, sugguestedCard2, suggestedCard3); 
-				
+				disprovedCard = player.disproveSuggestion(suggestedCard1, sugguestedCard2, suggestedCard3);
+
 				if (disprovedCard != null) {
-					break; // no need to look further when we have a disproved card 
+					break; // no need to look further when we have a disproved card
 				}
 			}
 		}
-		
-		return disprovedCard; 
+
+		return disprovedCard;
 	}
 
-	// dealing cards to every player one at a time 
+	// dealing cards to every player one at a time
 	public void dealCards() {
 		Collections.shuffle(dealtDeck);
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
-				Color playerColor = player.getPlayerColor(); 
-				Card dealtCard = dealtDeck.remove(0); 
+				Color playerColor = player.getPlayerColor();
+				Card dealtCard = dealtDeck.remove(0);
 				dealtCard.setCardColor(playerColor);
 				player.updateHand(dealtCard);
 			}
 		}
 	}
 
-
-
 	public Boolean checkAccusation(Card Room, Card Person, Card Weapon) {
 		Solution solution = getSolution();
 		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person)
 				&& solution.getWeapon().equals(Weapon)) {
 			return true;
+
 		} else {
 			return false;
 		}
 	}
-	
-
 
 	// ************** Methods for unit testing purposes only *************//
+	public int getCellWidth() {
+		return this.cellWidth;
+	}
+
+	public int getCellHeight() {
+		return this.cellHeight;
+	}
+
 	public int getNumPlayerCards() {
 		return peopleDeck.size();
 	}
@@ -715,52 +739,56 @@ public class Board extends JPanel {
 		return numComputerPlayers;
 	}
 
-	public ArrayList<Player> getPlayerList() {
+	public static ArrayList<Player> getPlayerList() {
 		return playerList;
 	}
 
-	public Set <BoardCell> getTargetList() {
-		return this.targets; 
-	}
 	public Map<Character, Room> getRoomMap() {
-		return roomMap; 
-	}
-	
-	public ArrayList<Card> getRoomDeck() {
-		return roomDeck; 
+		return roomMap;
 	}
 
-	
+	public ArrayList<Card> getRoomDeck() {
+		return roomDeck;
+	}
+
 	public void movePlayer(int i, int j, Player player) {
 		player.setPlayerLocation(i, j);
-		
+
 	}
-	
-	
+
 	public static Solution getSolution() {
 		return solution;
 	}
-	
-	
+
 	public Player getPlayersTurn() {
 		return playerTurn;
 	}
-	
-	
+
+	/**
+	 * Switches the current player to the next player in the PlayersList also
+	 * restarts the list when it gets to the bottom
+	 */
+	// TODO: These should be moved out of the only for tests sections as they are
+	// needed elsewhere
 	public void nextTurn() {
+		// human player's turn if already iterate to the last player
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
 			this.playerTurn = getPlayerList().get(0);
-		}
-		else {
-			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn())+1);
+			playerTurn.setHasPlayerACC(false);
+			playerTurn.setHasPlayerMoved(false);
+
+		} else {
+			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
+			// playerTurn.setHasPlayerACC(false);
+			// playerTurn.setHasPlayerMoved(false);
+
 		}
 	}
-	
-	
+
 	public void setPlayersTurn(Player playersTurn) {
 		this.playerTurn = playersTurn;
 	}
-	
+
 	public void initializeForTest() {
 		targets = new HashSet<BoardCell>();
 		playerList = new ArrayList<Player>();
@@ -769,7 +797,7 @@ public class Board extends JPanel {
 		peopleDeck = new ArrayList<Card>();
 		roomDeck = new ArrayList<Card>();
 		weaponDeck = new ArrayList<Card>();
-		
+
 		try {
 			loadSetupConfig();
 		} catch (BadConfigFormatException | IOException e1) {
@@ -780,30 +808,27 @@ public class Board extends JPanel {
 		} catch (FileNotFoundException | BadConfigFormatException e) {
 			e.printStackTrace();
 		}
-		
+
 		setPlayersTurn(getPlayerList().get(0));
 		setGameForTest();
 	}
-	
-	
+
 	public void setGameForTest() {
 		createSolutionForTest();
 		dealCardsForTest();
 	}
-	
-	
+
 	private void dealCardsForTest() {
 		while (!dealtDeck.isEmpty()) {
 			for (Player player : playerList) {
-				Color playerColor = player.getPlayerColor(); 
-				Card dealtCard = dealtDeck.remove(0); 
+				Color playerColor = player.getPlayerColor();
+				Card dealtCard = dealtDeck.remove(0);
 				dealtCard.setCardColor(playerColor);
 				player.updateHand(dealtCard);
 			}
 		}
 	}
-	
-	
+
 	private void createSolutionForTest() {
 
 		// initialized solution to be the first person, first room, first weapon
@@ -815,16 +840,5 @@ public class Board extends JPanel {
 		dealtDeck.remove(weaponDeck.get(0));
 
 	}
-	
-	public String rollDie()
-	{
-		Random randomRoll = new Random(); 
-		int randomDie = randomRoll.nextInt(6) + 1;
-		String Die = "" + randomDie; 
-		return Die; 
-	}
-
-	
-
 
 }

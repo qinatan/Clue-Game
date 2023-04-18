@@ -171,7 +171,6 @@ public class GameControlPanel extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		frame.setVisible(true);
 		// test filling the data
-		// panel.setTurn(new ComputerPlayer("Col. Mustard", 0, 0, "orange"), 5);
 		panel.setGuess("I have no guess!");
 		panel.setGuessResult("So you have nothing?");
 

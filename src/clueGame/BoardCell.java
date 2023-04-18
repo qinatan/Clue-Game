@@ -107,7 +107,6 @@ public class BoardCell {
 			
 			g2.setColor(highlight); 
 			g2.fillRect(horOffset, vertOffset, width, height);
-			//System.out.println("highlighted");
 		}
 			
 		if (isSecretPassage) {
@@ -119,7 +118,6 @@ public class BoardCell {
 	}
 
 	// Method draws room names over the board
-	
 	public void drawRoomNames(int width, int height, Graphics g) {
 		
 		Board board = Board.getInstance();

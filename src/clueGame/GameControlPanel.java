@@ -1,7 +1,7 @@
 /**
  * 
  * This class is the main driver for the GUI elements and the game
- * @author: Mike Eact 
+ * @author: Mike Eack
  * @author: John Omalley 
  * @author: Qina Tan 
  * @start Date: 4/9/2023
@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-//import clueGame.java ; 
+
 
 public class GameControlPanel extends JPanel {
 	private JTextField guess = new JTextField();
@@ -40,6 +40,7 @@ public class GameControlPanel extends JPanel {
 	public JTextField playerColor = new JTextField(); 
 	private JButton nextButton;
 	private JButton ACCButton; 
+	private Player currPlayer; 
 
 	// constructor
 	public GameControlPanel() {
@@ -48,8 +49,11 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		rollText.setText(String.valueOf(ClueGame.currPlayer.getRollNum()));
+		ClueGame clueGame = new ClueGame();
+		currPlayer = clueGame.getCurrPlayer();
+		rollText.setText(String.valueOf(currPlayer.getRollNum()));
 		repaint();
+		
 	}
 	
 	public void updateFieldText(String playerName, String playerColor, String rolledDice)
@@ -69,8 +73,8 @@ public class GameControlPanel extends JPanel {
 		JLabel label = new JLabel("Who's Turn:");
 		// TODO: refactor into whats below
 		// currPlay.getName
-		String playersName = ClueGame.currPlayer.getPlayerName();
-		Color playersColor = ClueGame.currPlayer.getPlayerColor();
+		String playersName = currPlayer.getPlayerName();
+		Color playersColor = currPlayer.getPlayerColor();
 		playerNameText.setText(playersName);
 		playerNameText.setBackground(playersColor);
 		whoseTurn.add(label);
@@ -81,7 +85,7 @@ public class GameControlPanel extends JPanel {
 	private JPanel rollPanel() {
 		JPanel roll = new JPanel();
 		JLabel rollLabel = new JLabel("Roll:");
-		rollText.setText(String.valueOf(ClueGame.currPlayer.getRollNum()));
+		rollText.setText(String.valueOf(currPlayer.getRollNum()));
 		roll.add(rollLabel);
 		roll.add(rollText);
 		return roll;
@@ -100,7 +104,6 @@ public class GameControlPanel extends JPanel {
 
 		JButton makeAccusation = new JButton("Make Accusation");
 		ACCButton = makeAccusation ;  //This is needed for code continuity
-		//makeAccusation.addActionListener(new makeAccusationButtonListener());
 		group.add(makeAccusation);
 		group.add(next);
 		topPanel.add(next);

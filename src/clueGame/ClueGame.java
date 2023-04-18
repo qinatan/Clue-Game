@@ -13,7 +13,7 @@ public class ClueGame extends JFrame {
 	Board board = Board.getInstance();
 	CardsPanel cardsPanel;
 	GameControlPanel controlPanel;
-	public static Player currPlayer; // TODO: make this private
+	private Player currPlayer;
 
 	// Default constructor
 	public ClueGame() {
@@ -237,6 +237,14 @@ public class ClueGame extends JFrame {
 		}
 		repaint();
 		System.out.print(currPlayer.getIsHasPlayerACC());
+	}
+	
+	public Player getCurrPlayer() {
+		return currPlayer;
+	}
+
+	public void setCurrPlayer(Player currPlayer) {
+		this.currPlayer = currPlayer;
 	}
 
 	// Main entry point for game

@@ -97,7 +97,7 @@ public class ClueGame extends JFrame {
 
 					for (Player thisPlayer : board.getPlayerList()) {
 						if (thisPlayer.getCurrCell() == board.getPlayersTurn().getCurrCell()) {
-							board.getPlayersTurn().drawOffset = 15;
+							board.getPlayersTurn().setDrawOffset(15);
 							break;
 						} else {
 							continue;

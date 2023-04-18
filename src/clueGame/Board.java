@@ -679,6 +679,22 @@ public class Board extends JPanel {
 			return false;
 		}
 	}
+	
+	public void nextTurn() {
+		// human player's turn if already iterate to the last player
+		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
+			this.playerTurn = getPlayerList().get(0);
+			playerTurn.setHasPlayerACC(false);
+			playerTurn.setHasPlayerMoved(false);
+
+		} else {
+			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
+		}
+	}
+
+	public void setPlayersTurn(Player playersTurn) {
+		this.playerTurn = playersTurn;
+	}
 
 	// ************** Methods for unit testing purposes only *************//
 	public int getCellWidth() {
@@ -760,39 +776,14 @@ public class Board extends JPanel {
 		return playerTurn;
 	}
 
-	/**
-	 * Switches the current player to the next player in the PlayersList also
-	 * restarts the list when it gets to the bottom
-	 */
-	// TODO: These should be moved out of the only for tests sections as they are
-	// needed elsewhere
-	public void nextTurn() {
-		// human player's turn if already iterate to the last player
-		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
-			this.playerTurn = getPlayerList().get(0);
-			playerTurn.setHasPlayerACC(false);
-			playerTurn.setHasPlayerMoved(false);
-
-		} else {
-			this.playerTurn = getPlayerList().get(getPlayerList().indexOf(getPlayersTurn()) + 1);
-			// playerTurn.setHasPlayerACC(false);
-			// playerTurn.setHasPlayerMoved(false);
-
-		}
-	}
-
-	public void setPlayersTurn(Player playersTurn) {
-		this.playerTurn = playersTurn;
-	}
-
 	public void initializeForTest() {
-		targets = new HashSet<BoardCell>();
-		playerList = new ArrayList<Player>();
-		fullDeck = new ArrayList<Card>();
-		dealtDeck = new ArrayList<Card>();
-		peopleDeck = new ArrayList<Card>();
-		roomDeck = new ArrayList<Card>();
-		weaponDeck = new ArrayList<Card>();
+		targets = new HashSet<>();
+		playerList = new ArrayList<>();
+		fullDeck = new ArrayList<>();
+		dealtDeck = new ArrayList<>();
+		peopleDeck = new ArrayList<>();
+		roomDeck = new ArrayList<>();
+		weaponDeck = new ArrayList<>();
 
 		try {
 			loadSetupConfig();

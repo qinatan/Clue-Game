@@ -32,11 +32,8 @@ public abstract class Player {
 	public Card currRoom;
 	private BoardCell currCell;
 	private int rollNum;
-
-	// TODO: change this to private
-	public int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in
-								// the current room center
-
+	private int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in the current room center
+							
 	// check for both AI and human player
 	private boolean hasPlayerMoved = false;
 	private boolean hasPlayerACC = false;
@@ -127,6 +124,15 @@ public abstract class Player {
 	public Map<CardType, ArrayList<Card>> getSeenMap() {
 		return seenMap;
 	}
+	
+	public int getDrawOffset() {
+		return drawOffset;
+	}
+
+	public void setDrawOffset(int drawOffset) {
+		this.drawOffset = drawOffset;
+	}
+
 
 	// *********************************** //
 

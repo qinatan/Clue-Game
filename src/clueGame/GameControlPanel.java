@@ -120,7 +120,7 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomRightPanel() {
 		JPanel bottomRightPanel = new JPanel();
 		bottomRightPanel.setLayout(new GridLayout(1, 0));
-		bottomRightPanel.add(guess);
+		bottomRightPanel.add(guessResult);
 		bottomRightPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess Result")); // Only using this for testing
 		return bottomRightPanel;
 	}
@@ -128,7 +128,7 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomLeftPanel() {
 		JPanel bottomLeftPanel = new JPanel();
 		bottomLeftPanel.setLayout(new GridLayout(1, 0));
-		bottomLeftPanel.add(guessResult);
+		bottomLeftPanel.add(guess);
 		bottomLeftPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess")); // Only using this for testing
 		return bottomLeftPanel;
 	}

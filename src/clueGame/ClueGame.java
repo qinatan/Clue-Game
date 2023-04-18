@@ -172,9 +172,8 @@ public class ClueGame extends JFrame {
 				if (targetCell.isRoom())
 				{
 					ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion(); 
-					//String guess = suggestCards.get(0).getCardName() + " " + suggestCards.get(1).getCardName()
-					String guess = suggestedCards.toString(); 
-					System.out.println(guess); 
+					String guess = suggestedCards.get(0).getCardName() + " " + suggestedCards.get(1).getCardName() + suggestedCards.get(2).getCardName(); 
+					controlPanel.setGuess(guess);
 				}
 				for (BoardCell cell : board.getTargets()) {
 					cell.setIsTargetCell(false);

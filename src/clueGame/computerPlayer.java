@@ -50,7 +50,7 @@ public class computerPlayer extends Player {
 			if (seenWeapons == null)
 			{
 				Random randomWeapon = new Random(); 
-				int randWeapon = randomWeapon.nextInt(); 
+				int randWeapon = randomWeapon.nextInt(board.getWeaponDeck().size()); 
 				Card weapon = board.getWeaponDeck().get(randWeapon); 
 				finalSuggestion.add(weapon); 
 				
@@ -65,8 +65,14 @@ public class computerPlayer extends Player {
 
 		for (Card personCard : board.getPeopleDeck()) { // Loop through all the weapons we have
 			ArrayList<Card> seenPeople = seenMap.get(CardType.PERSON);
-
-			if (!seenPeople.contains(personCard) && !hand.contains(personCard)) {
+			if (seenPeople == null)
+			{
+				Random randomPeople = new Random() ; 
+				int randPeople = randomPeople.nextInt(board.getPeopleDeck().size()); 
+				Card people = board.getPeopleDeck().get(randPeople); 
+				finalSuggestion.add(people); 
+			}
+			else if (!seenPeople.contains(personCard) && !hand.contains(personCard)) {
 				possibleSuggestions.computeIfAbsent(CardType.PERSON, k -> new ArrayList<>()).add(personCard);
 
 			}
@@ -90,7 +96,7 @@ public class computerPlayer extends Player {
 			}
 		}
 
-		return finalSuggestion;	
+		return finalSuggestion;
 	}
 	
 	//AI player select one target from targetList to move toward 

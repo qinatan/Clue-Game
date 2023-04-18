@@ -78,9 +78,11 @@ public class Card implements Comparable<Card> {
 		return cardType.equals(that.cardType) && cardName.equals(that.cardName);
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "Card [cardName=" + cardName + ", cardType=" + cardType + "]";
+		return cardName + " ";
 	}
 
 	public void setDealCount() {

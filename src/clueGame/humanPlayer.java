@@ -67,14 +67,22 @@ public class humanPlayer extends Player {
 				new JLabel("Weapon"), weaponsBox };
 		int result = JOptionPane.showConfirmDialog(null, inputs, "Make Suggestion", JOptionPane.PLAIN_MESSAGE);
 
-		
-//		for (int l = 0 ; l < inputs.length ; l++) {
-//			System.out.println(inputs[l].get);
-//		}
-		//System.out.println(inputs.toString() + " " + result) ; 
-		System.out.println(roomsBox.getName() );
-		System.out.println(inputs );
-		System.out.println(result) ; 
+		// This should move the player that the human player suggested to the human
+		// players current room.
+		// TODO: this can be refactored to remove a line
+		String selectedPlayer = (String) playersBox.getSelectedItem();
+		String selectedRoom = (String) roomsBox.getSelectedItem();
+		String selectedWeapon = (String) weaponsBox.getSelectedItem();
+
+		for (Player player : Board.getPlayerList()) {
+			if (selectedPlayer.equals(player.getPlayerName())) {
+				System.out.println(selectedPlayer + " " + player.getPlayerName());
+				player.setPlayerLocation(getPlayerRow(), getPlayerCol());
+			}
+		}
+
+		System.out.println(selectedPlayer);
+
 		return null;
 	}
 

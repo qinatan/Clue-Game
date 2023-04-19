@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,57 +38,43 @@ public class humanPlayer extends Player {
 	@Override
 	public ArrayList<Card> makeSuggestion() {
 
-		String[] players = new String[board.getPlayerList().size()];
+		// TODO: Input here equals all the players in players list, instead of only the
+		// player that was selected.
+		// TODO: this is probably the next thing to work on.
 
+		// TODO: These loops could probably be redone. They are only needed to get the
+		// cards into a arrays of strings
+		String[] players = new String[board.getPlayerList().size()];
 		for (int i = 0; i < board.getPlayerList().size(); i++) {
 			players[i] = board.getPlayerList().get(i).getPlayerName();
 		}
 
-		// TODO: Input here equals all the players in players list, instead of only the player that was selected. 
-		// TODO: this is probably the next thing to work on. 
-		String input = (String) JOptionPane.showInputDialog(null, "Make Suggestion", "this suggestion",
-				JOptionPane.QUESTION_MESSAGE, null, // Use
-													// default
-													// icon
-				players, // Array of choices
-				board.getPlayerList().get(0).getPlayerName()); // Initial choice
-		
-		// This should move the player that the human player suggested to the human players current room.
-		for (Player player: Board.getPlayerList()) {
-			if (input.equals(player.getPlayerName()));
-			player.setPlayerLocation(getPlayerRow(), getPlayerCol());
+		String[] rooms = new String[board.getRoomDeck().size()];
+		for (int j = 0; j < board.getRoomDeck().size(); j++) {
+			rooms[j] = board.getRoomDeck().get(j).getCardName();
 		}
+
+		String[] weapons = new String[board.getWeaponDeck().size()];
+		for (int k = 0; k < board.getWeaponDeck().size(); k++) {
+			weapons[k] = board.getWeaponDeck().get(k).getCardName(); // There is also a to string method
+		}
+
+		JComboBox playersBox = new JComboBox(players);
+		JComboBox roomsBox = new JComboBox(rooms);
+		JComboBox weaponsBox = new JComboBox(weapons);
+
+		final JComponent[] inputs = new JComponent[] { new JLabel("Room"), roomsBox, new JLabel("Player"), playersBox,
+				new JLabel("Weapon"), weaponsBox };
+		int result = JOptionPane.showConfirmDialog(null, inputs, "Make Suggestion", JOptionPane.PLAIN_MESSAGE);
+
 		
-		//The duplication doesn't work
-	//	String input0 = (String) JOptionPane.showInputDialog(null, "Make Suggestion", "this suggestion",
-	//			JOptionPane.QUESTION_MESSAGE, null, // Use
-													// default
-													// icon
-	//			players, // Array of choices
-	//			board.getPlayerList().get(0).getPlayerName()); // Initial choice
-		
-		//********************************
-		
-//		JTextField firstName = new JTextField();
-//		JTextField lastName = new JTextField();
-//		JTextField password = new JTextField();
-//		final JComponent[] inputs = new JComponent[] {
-//		        new JLabel("First"),
-//		        firstName,
-//		        new JLabel("Last"),
-//		        lastName,
-//		        new JLabel("Password"),
-//		        password
-//		};
-//		int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
-//		if (result == JOptionPane.OK_OPTION) {
-//		    System.out.println("You entered " +
-//		            firstName.getText() + ", " +
-//		            lastName.getText() + ", " +
-//		            password.getText());
-//		} else {
-//		    System.out.println("User canceled / closed the dialog, result = " + result);
+//		for (int l = 0 ; l < inputs.length ; l++) {
+//			System.out.println(inputs[l].get);
 //		}
+		//System.out.println(inputs.toString() + " " + result) ; 
+		System.out.println(roomsBox.getName() );
+		System.out.println(inputs );
+		System.out.println(result) ; 
 		return null;
 	}
 

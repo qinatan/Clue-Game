@@ -171,20 +171,27 @@ public class ClueGame extends JFrame {
 			} 
 			// Else it's a CPU Player
 			else {
-				// update player location
+				
 				BoardCell targetCell = ((computerPlayer) board.getPlayersTurn()).targetSelection(board.getTargets());
+				// update player location
 				board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
 				if (targetCell.isRoom()) {
-					System.out.println("targetCell.isRoom() == True ");
 					ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion(); 
-					
-					//for (Card card: suggestedCards) {
-						//System.out.println(card.toString());
-					//}
-					System.out.println(suggestedCards.size());
-					
 					String guess = suggestedCards.get(0).getCardName() + " + " + suggestedCards.get(1).getCardName() + " + " + suggestedCards.get(2).getCardName(); 
 					controlPanel.setGuess(guess);
+				
+					// TODO: This code is literal trash
+					for (Card card : suggestedCards) {
+						if (card.getCardType().equals(CardType.PERSON)) {
+							ArrayList<Player> playerList = Board.getPlayerList();
+							for (Player player : playerList) {
+								if (player.getPlayerName().equals(card.getCardName())) {
+									player.setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
+								}
+							}
+							
+						}
+					}
 				}
 				for (BoardCell cell : board.getTargets()) {
 					cell.setIsTargetCell(false);

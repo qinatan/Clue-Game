@@ -43,6 +43,8 @@ public class humanPlayer extends Player {
 			players[i] = board.getPlayerList().get(i).getPlayerName();
 		}
 
+		// TODO: Input here equals all the players in players list, instead of only the player that was selected. 
+		// TODO: this is probably the next thing to work on. 
 		String input = (String) JOptionPane.showInputDialog(null, "Make Suggestion", "this suggestion",
 				JOptionPane.QUESTION_MESSAGE, null, // Use
 													// default
@@ -50,13 +52,19 @@ public class humanPlayer extends Player {
 				players, // Array of choices
 				board.getPlayerList().get(0).getPlayerName()); // Initial choice
 		
+		// This should move the player that the human player suggested to the human players current room.
+		for (Player player: Board.getPlayerList()) {
+			if (input.equals(player.getPlayerName()));
+			player.setPlayerLocation(getPlayerRow(), getPlayerCol());
+		}
+		
 		//The duplication doesn't work
-		String input0 = (String) JOptionPane.showInputDialog(null, "Make Suggestion", "this suggestion",
-				JOptionPane.QUESTION_MESSAGE, null, // Use
+	//	String input0 = (String) JOptionPane.showInputDialog(null, "Make Suggestion", "this suggestion",
+	//			JOptionPane.QUESTION_MESSAGE, null, // Use
 													// default
 													// icon
-				players, // Array of choices
-				board.getPlayerList().get(0).getPlayerName()); // Initial choice
+	//			players, // Array of choices
+	//			board.getPlayerList().get(0).getPlayerName()); // Initial choice
 		
 		//********************************
 		

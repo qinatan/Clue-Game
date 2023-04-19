@@ -79,9 +79,6 @@ public class computerPlayer extends Player {
 				finalSuggestion.add(cardList.get(0));
 			}
 		}
-		
-		System.out.println("possibleSuggestions = " + possibleSuggestions.toString());
-		System.out.println("finalSuggestions = " + finalSuggestion.toString());
 
 		return finalSuggestion;
 	}

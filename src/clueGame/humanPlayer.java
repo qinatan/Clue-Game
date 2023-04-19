@@ -38,8 +38,6 @@ public class humanPlayer extends Player {
 	@Override
 	public ArrayList<Card> makeSuggestion() {
 
-		// TODO: Input here equals all the players in players list, instead of only the
-		// player that was selected.
 		// TODO: this is probably the next thing to work on.
 
 		// TODO: These loops could probably be redone. They are only needed to get the
@@ -49,10 +47,7 @@ public class humanPlayer extends Player {
 			players[i] = board.getPlayerList().get(i).getPlayerName();
 		}
 
-		String[] rooms = new String[board.getRoomDeck().size()];
-		for (int j = 0; j < board.getRoomDeck().size(); j++) {
-			rooms[j] = board.getRoomDeck().get(j).getCardName();
-		}
+		String currRoom = board.getPlayersTurn().getCurrRoom().getName() ; 
 
 		String[] weapons = new String[board.getWeaponDeck().size()];
 		for (int k = 0; k < board.getWeaponDeck().size(); k++) {
@@ -60,7 +55,7 @@ public class humanPlayer extends Player {
 		}
 
 		JComboBox playersBox = new JComboBox(players);
-		JComboBox roomsBox = new JComboBox(rooms);
+		JTextField roomsBox = new JTextField(currRoom);
 		JComboBox weaponsBox = new JComboBox(weapons);
 
 		final JComponent[] inputs = new JComponent[] { new JLabel("Room"), roomsBox, new JLabel("Player"), playersBox,
@@ -71,7 +66,6 @@ public class humanPlayer extends Player {
 		// players current room.
 		// TODO: this can be refactored to remove a line
 		String selectedPlayer = (String) playersBox.getSelectedItem();
-		String selectedRoom = (String) roomsBox.getSelectedItem();
 		String selectedWeapon = (String) weaponsBox.getSelectedItem();
 
 		for (Player player : Board.getPlayerList()) {

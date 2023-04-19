@@ -28,9 +28,9 @@ public abstract class Player {
 	private String name;
 	private Color playerColor;
 	private String color;
-	private int row, col;
-	public Card currRoom;
-	private BoardCell currCell;
+	private int row, col; // TODO: These do virtually the same thing
+	private BoardCell currCell; // TODO: These do virtually the same thing
+	private Room currRoom;
 	private int rollNum;
 	private int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in the current room center
 							
@@ -41,7 +41,7 @@ public abstract class Player {
 	protected ArrayList<Card> hand = new ArrayList<Card>();
 	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList<Card>>();
 
-	public Player(String playerName, String playerColor, String row, String col) {
+	protected Player(String playerName, String playerColor, String row, String col) {
 		this.name = playerName;
 		this.row = Integer.parseInt(row);
 		this.col = Integer.parseInt(col);
@@ -132,6 +132,23 @@ public abstract class Player {
 	public void setDrawOffset(int drawOffset) {
 		this.drawOffset = drawOffset;
 	}
+	
+	public Room getCurrRoom() {
+		return currRoom;
+	}
+
+	public void setCurrRoom(Room currRoom) {
+		this.currRoom = currRoom;
+	}
+	
+	public Card getCurrRoomCard() {
+		Card roomCard = new Card(CardType.ROOM, currRoom.getName());
+		return roomCard;
+	}
+	
+	public void setCurrRoomCard(Card room) {
+		this.currRoom = new Room(room.getCardName());
+	}
 
 
 	// *********************************** //
@@ -207,15 +224,22 @@ public abstract class Player {
 		}
 
 	}
+	
+	public void setPlayerLocation(int row, int col) {
+		this.row = row;
+		this.col = col;	
+		Board board = Board.getInstance();
+		this.currCell = board.getCell(this.row, this.col);
+		if (currCell.isRoom()) {
+			currRoom = board.getRoomMap().get(currCell.getCellSymbol());
+		}
+	}
 
 	// ********** TEST METHODS **************** //
 	// These methods should only be used to facilitate unit testing and never run in
 	// prod code //
 
-	public void setPlayerLocation(int row, int col) {
-		this.row = row;
-		this.col = col;
-	}
+
 
 	@Override
 	public String toString() {

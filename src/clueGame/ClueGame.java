@@ -163,17 +163,27 @@ public class ClueGame extends JFrame {
 			controlPanel.getRollText().setText(String.valueOf(randomRoll));
 			// calculate target list based on current board cell and dice number
 			board.calcTargets(currentLocation, randomRoll);
+			// If Human Player
 			if (board.getPlayersTurn() instanceof humanPlayer) {
 				// repaint to highlight cells in target list
 				repaint();
 
-			} else {
+			} 
+			// Else it's a CPU Player
+			else {
 				// update player location
 				BoardCell targetCell = ((computerPlayer) board.getPlayersTurn()).targetSelection(board.getTargets());
-				if (targetCell.isRoom())
-				{
+				board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
+				if (targetCell.isRoom()) {
+					System.out.println("targetCell.isRoom() == True ");
 					ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion(); 
-					String guess = suggestedCards.get(0).getCardName() + " " + suggestedCards.get(1).getCardName() + suggestedCards.get(2).getCardName(); 
+					
+					//for (Card card: suggestedCards) {
+						//System.out.println(card.toString());
+					//}
+					System.out.println(suggestedCards.size());
+					
+					String guess = suggestedCards.get(0).getCardName() + " + " + suggestedCards.get(1).getCardName() + " + " + suggestedCards.get(2).getCardName(); 
 					controlPanel.setGuess(guess);
 				}
 				for (BoardCell cell : board.getTargets()) {
@@ -188,7 +198,6 @@ public class ClueGame extends JFrame {
 			}
 
 		} else {
-			// This works
 			JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn", JOptionPane.ERROR_MESSAGE);
 		}
 

@@ -84,8 +84,7 @@ public class Room {
 
 	@Override
 	public String toString() {
-		String string = "Name = " + Name + "passageRoom= " + passageRoom.toString();
-		return string;
+		return Name;
 	}
 	
 	

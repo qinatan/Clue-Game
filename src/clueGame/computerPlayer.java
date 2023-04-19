@@ -34,12 +34,12 @@ public class computerPlayer extends Player {
 
 	public ArrayList<Card> makeSuggestion() {
 		
-		ArrayList<Card> finalSuggestion = new ArrayList<Card>();
+		ArrayList<Card> finalSuggestion = new ArrayList<>();
 		HashMap<CardType, ArrayList<Card>> possibleSuggestions = new HashMap<CardType, ArrayList<Card>>();
 
 		// pick this players current room
-		possibleSuggestions.computeIfAbsent(CardType.ROOM, k -> new ArrayList<>()).add(this.currRoom);
-		// adds a the room were into the possible suggestions
+		possibleSuggestions.computeIfAbsent(CardType.ROOM, k -> new ArrayList<>()).add(this.getCurrRoomCard());
+		// adds the room we're in to the possible suggestions
 
 		Board board = Board.getInstance();
 	
@@ -47,36 +47,20 @@ public class computerPlayer extends Player {
 			
 			
 			ArrayList<Card> seenWeapons = seenMap.get(CardType.WEAPON);
-			if (seenWeapons == null)
-			{
-				Random randomWeapon = new Random(); 
-				int randWeapon = randomWeapon.nextInt(board.getWeaponDeck().size()); 
-				Card weapon = board.getWeaponDeck().get(randWeapon); 
-				finalSuggestion.add(weapon); 
-				
+			if (seenWeapons == null || !seenWeapons.contains(weaponCard)) {
+				if (!hand.contains(weaponCard)) {
+					possibleSuggestions.computeIfAbsent(CardType.WEAPON, k -> new ArrayList<>()).add(weaponCard);
+				}			
 			}
-			else if (!seenWeapons.contains(weaponCard) && !hand.contains(weaponCard)) 
-			{
-				possibleSuggestions.computeIfAbsent(CardType.WEAPON, k -> new ArrayList<>()).add(weaponCard);
-
-			}
-	
 		}
 
 		for (Card personCard : board.getPeopleDeck()) { // Loop through all the weapons we have
 			ArrayList<Card> seenPeople = seenMap.get(CardType.PERSON);
-			if (seenPeople == null)
-			{
-				Random randomPeople = new Random() ; 
-				int randPeople = randomPeople.nextInt(board.getPeopleDeck().size()); 
-				Card people = board.getPeopleDeck().get(randPeople); 
-				finalSuggestion.add(people); 
+			if (seenPeople == null || !seenPeople.contains(personCard)) {
+				if (!hand.contains(personCard)) {
+				possibleSuggestions.computeIfAbsent(CardType.PERSON,k -> new ArrayList<>()).add(personCard);
+				}
 			}
-			else if (!seenPeople.contains(personCard) && !hand.contains(personCard)) {
-				possibleSuggestions.computeIfAbsent(CardType.PERSON, k -> new ArrayList<>()).add(personCard);
-
-			}
-	
 		}
 
 
@@ -95,6 +79,9 @@ public class computerPlayer extends Player {
 				finalSuggestion.add(cardList.get(0));
 			}
 		}
+		
+		System.out.println("possibleSuggestions = " + possibleSuggestions.toString());
+		System.out.println("finalSuggestions = " + finalSuggestion.toString());
 
 		return finalSuggestion;
 	}

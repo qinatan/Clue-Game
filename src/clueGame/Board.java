@@ -817,7 +817,6 @@ public class Board extends JPanel {
 	}
 
 	private void createSolutionForTest() {
-
 		// initialized solution to be the first person, first room, first weapon
 		Board.solution = new Solution(peopleDeck.get(0), roomDeck.get(0), weaponDeck.get(0));
 		// update dealtStack after removing solution cards

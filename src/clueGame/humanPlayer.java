@@ -57,6 +57,7 @@ public class humanPlayer extends Player {
 													// icon
 				players, // Array of choices
 				board.getPlayerList().get(0).getPlayerName()); // Initial choice
+		
 		//********************************
 		
 //		JTextField firstName = new JTextField();

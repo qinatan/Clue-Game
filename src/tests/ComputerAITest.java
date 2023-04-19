@@ -188,7 +188,7 @@ class ComputerAITest {
 		// Set players location to plant room
 		yubabaCpuPlayer.setPlayerLocation(24, 10); // row 24, col 10 = plant room center
 		Card currRoom = new Card(CardType.ROOM, "Plant Room");
-		yubabaCpuPlayer.currRoom = currRoom; // sets currRoom to plant room
+		yubabaCpuPlayer.setCurrRoomCard(currRoom); // sets currRoom to plant room
 
 		// Not seen Weapon: Extension Cord
 		yubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Dog Bone"));
@@ -223,7 +223,7 @@ class ComputerAITest {
 		// Creates a new player
 		Player noFaceCpuPlayer = board.getPlayerList().get(3);
 		noFaceCpuPlayer.setPlayerLocation(24, 10); // row 24, col 10 = plant room center
-		noFaceCpuPlayer.currRoom = currRoom; // sets currRoom to plant room
+		noFaceCpuPlayer.setCurrRoomCard(currRoom); // sets currRoom to plant room
 
 		// Not seen Weapon: Extension Cord, Dog Bone
 		noFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Broken DVD"));

@@ -38,7 +38,7 @@ public class humanPlayer extends Player {
 	@Override
 	public ArrayList<Card> makeSuggestion() {
 
-		// TODO: this is probably the next thing to work on.
+		ArrayList<Card> suggestedCards = new ArrayList<Card>();
 
 		// TODO: These loops could probably be redone. They are only needed to get the
 		// cards into a arrays of strings
@@ -47,7 +47,7 @@ public class humanPlayer extends Player {
 			players[i] = board.getPlayerList().get(i).getPlayerName();
 		}
 
-		String currRoom = board.getPlayersTurn().getCurrRoom().getName() ; 
+		String currRoom = board.getPlayersTurn().getCurrRoom().getName();
 
 		String[] weapons = new String[board.getWeaponDeck().size()];
 		for (int k = 0; k < board.getWeaponDeck().size(); k++) {
@@ -70,14 +70,37 @@ public class humanPlayer extends Player {
 
 		for (Player player : Board.getPlayerList()) {
 			if (selectedPlayer.equals(player.getPlayerName())) {
-				System.out.println(selectedPlayer + " " + player.getPlayerName());
+
+				// Moves the player
 				player.setPlayerLocation(getPlayerRow(), getPlayerCol());
+
+				// Loop to find that players card
+				for (int q = 0; q < board.getPeopleDeck().size(); q++) {
+					if (board.getPeopleDeck().get(q).getCardName().equals(player.getPlayerName())) {
+
+						// TODO: this can be refactored to save a line
+						Card playerCard = board.getPeopleDeck().get(q);
+						suggestedCards.add(playerCard); // Adds that card to the suggested list
+					}
+				}
 			}
 		}
 
-		System.out.println(selectedPlayer);
+		// Getting the weapon Card
+		for (int w = 0; w < board.getWeaponDeck().size(); w++) {
+			if (board.getWeaponDeck().get(w).getCardName().equals(selectedWeapon)) {
+				suggestedCards.add(board.getWeaponDeck().get(w));
+			}
+		}
 
-		return null;
+		// Getting the room card
+		for (int w = 0; w < board.getRoomDeck().size(); w++) {
+			if (board.getRoomDeck().get(w).getCardName().equals(currRoom)) {
+				suggestedCards.add(board.getRoomDeck().get(w));
+			}
+		}
+
+		return suggestedCards;
 	}
 
 }

@@ -117,7 +117,7 @@ public class ClueGame extends JFrame {
 						// owncards.
 						Card disprovenCard = thisPlayer.disproveSuggestion(suggestionCards.get(0),
 								suggestionCards.get(1), suggestionCards.get(2));
-						
+
 						System.out.println(disprovenCard);
 						// This is where we handle the human disproven suggestions
 						if (disprovenCard != null) {
@@ -125,7 +125,8 @@ public class ClueGame extends JFrame {
 						} else {
 							controlPanel.setGuessResult("Suggestion Upheld");
 						}
-						//disprovenCard = null ; //Resets the disproven card. I don't think that this is needed.
+						// disprovenCard = null ; //Resets the disproven card. I don't think that this
+						// is needed.
 
 						if (thisPlayer.getCurrCell() == board.getPlayersTurn().getCurrCell()) {
 							board.getPlayersTurn().setDrawOffset(15);
@@ -247,6 +248,9 @@ public class ClueGame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
+			// TODO: this need to include a check so that the player cannont move and then
+			// make an accusation. This logic could be simmilar or included wiht the next
+			// button listener
 			accButtonPressedLogic();
 
 		}
@@ -258,20 +262,20 @@ public class ClueGame extends JFrame {
 		for (BoardCell targetCell : board.getTargets()) {
 			targetCell.setIsTargetCell(false);
 		}
+		// TODO: this doesn't repaint the room
 		repaint();
-		
+
 		String[] players = new String[board.getPlayerList().size()];
 		for (int i = 0; i < board.getPlayerList().size(); i++) {
 			players[i] = board.getPlayerList().get(i).getPlayerName();
 		}
 
-		//String currRoom = board.getPlayersTurn().getCurrRoom().getName();
+		// String currRoom = board.getPlayersTurn().getCurrRoom().getName();
 		String[] rooms = new String[board.getRoomDeck().size()];
 		for (int j = 0; j < board.getRoomDeck().size(); j++) {
 			rooms[j] = board.getRoomDeck().get(j).getCardName();
 		}
-		
-		
+
 		String[] weapons = new String[board.getWeaponDeck().size()];
 		for (int k = 0; k < board.getWeaponDeck().size(); k++) {
 			weapons[k] = board.getWeaponDeck().get(k).getCardName(); // There is also a to string method
@@ -284,6 +288,41 @@ public class ClueGame extends JFrame {
 		final JComponent[] inputs = new JComponent[] { new JLabel("Room"), roomsBox, new JLabel("Player"), playersBox,
 				new JLabel("Weapon"), weaponsBox };
 		int result = JOptionPane.showConfirmDialog(null, inputs, "Make Accusation", JOptionPane.PLAIN_MESSAGE);
+
+		ArrayList<Card> ACCCards = new ArrayList<Card>();
+
+		String selectedPlayer = (String) playersBox.getSelectedItem();
+		String selectedWeapon = (String) weaponsBox.getSelectedItem();
+		String selectedRoom = (String) roomsBox.getSelectedItem();
+		// Getting the weapon Card
+		for (int w = 0; w < board.getWeaponDeck().size(); w++) {
+			if (board.getWeaponDeck().get(w).getCardName().equals(selectedWeapon)) {
+				ACCCards.add(board.getWeaponDeck().get(w));
+			}
+		}
+
+		// Getting the room card
+		for (int w = 0; w < board.getRoomDeck().size(); w++) {
+			if (board.getRoomDeck().get(w).getCardName().equals(selectedRoom)) {
+				ACCCards.add(board.getRoomDeck().get(w));
+			}
+		}
+
+		// Getting the player card
+		for (int q = 0; q < board.getPeopleDeck().size(); q++) {
+			if (board.getPeopleDeck().get(q).getCardName().equals(selectedPlayer)) {
+
+				Card playerCard = board.getPeopleDeck().get(q);
+				ACCCards.add(playerCard); // Adds that card to the suggested list
+			}
+		}
+
+		// TODO: close the game after this
+		if (board.checkAccusation(ACCCards.get(0), ACCCards.get(1), ACCCards.get(2))) {
+			JOptionPane.showMessageDialog(null, "You Won!", "Congradulations", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "Sorry you Lost", "Loser", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 	// Main entry point for game

@@ -232,7 +232,23 @@ public abstract class Player {
 		this.currCell = board.getCell(this.row, this.col);
 		if (currCell.isRoom()) {
 			currRoom = board.getRoomMap().get(currCell.getCellSymbol());
+			//check the number of player in a room 
+			int playerInRoomCount = 0; 
+			for (Player player : board.getPlayerList())
+			{
+				if (player.currCell == currCell)
+				{
+					playerInRoomCount++; 
+			
+				}
+			}
+			setDrawOffset(15 * playerInRoomCount);			
 		}
+		
+		else
+		{
+			setDrawOffset(0);	
+		}	
 	}
 
 	// ********** TEST METHODS **************** //

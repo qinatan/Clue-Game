@@ -126,6 +126,7 @@ public class computerPlayer extends Player {
 	
 //	ArrayList<Card> makeAccusation()
 //	{
+		//weapon cards
 //		//how AI make accusation 
 //		//they have 
 //		return

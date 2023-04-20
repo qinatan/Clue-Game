@@ -99,7 +99,7 @@ public class ClueGame extends JFrame {
 					board.getPlayersTurn().setPlayerLocation(row, col);
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
-					board.getPlayersTurn().setDrawOffset(0);
+					//board.getPlayersTurn().setDrawOffset(0);
 
 				} else if (board.getTargets().contains(cell) && cell.isRoom()) {
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
@@ -107,33 +107,51 @@ public class ClueGame extends JFrame {
 
 					// Make suggestion
 					ArrayList<Card> suggestionCards = board.getPlayersTurn().makeSuggestion();
-
+					// call handle suggestion 
+					Card disprovalCard = board.handleSuggestion(suggestionCards.get(0), suggestionCards.get(1), suggestionCards.get(2), board.getPlayersTurn()); 
 					controlPanel.setGuess(
 							suggestionCards.get(0) + " " + suggestionCards.get(1) + " " + suggestionCards.get(2));
 
-					for (Player thisPlayer : board.getPlayerList()) {
-
-						// TODO: check to make sure the disprove suggestion doesn't return one of our
-						// owncards.
-						Card disprovenCard = thisPlayer.disproveSuggestion(suggestionCards.get(0),
-								suggestionCards.get(1), suggestionCards.get(2));
-
-						System.out.println(disprovenCard);
+//					for (Player thisPlayer : board.getPlayerList()) {
+//
+//						// TODO: check to make sure the disprove suggestion doesn't return one of our
+//						// owncards.
+//						Card disprovenCard = thisPlayer.disproveSuggestion(suggestionCards.get(0),
+//								suggestionCards.get(1), suggestionCards.get(2));
+//
+//						System.out.println(disprovenCard);
 						// This is where we handle the human disproven suggestions
-						if (disprovenCard != null) {
-							controlPanel.setGuessResult(disprovenCard.getCardName());
+						if (disprovalCard != null) {
+							controlPanel.setGuessResult(disprovalCard.getCardName());
 						} else {
 							controlPanel.setGuessResult("Suggestion Upheld");
 						}
 						// disprovenCard = null ; //Resets the disproven card. I don't think that this
 						// is needed.
-
-						if (thisPlayer.getCurrCell() == board.getPlayersTurn().getCurrCell()) {
-							board.getPlayersTurn().setDrawOffset(15);
-							break;
-						} else {
-							continue;
+						
+						// get the suggested to the room 
+						for (Card suggestedCard  : suggestionCards) {
+						
+							if (suggestedCard.getCardType() == CardType.PERSON){
+								String cardName = suggestedCard.getCardName(); 
+								for (Player player : board.getPlayerList()){
+									if (player.getPlayerName().equals(cardName)) {
+									
+										//move suggesred player to room 
+										
+										player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol()); 
+								}
+								
+							}
 						}
+						
+								
+//								if (thisPlayer .getCurrCell() == board.getPlayersTurn().getCurrCell()) {
+//							board.getPlayersTurn().setDrawOffset(15);
+//							break;
+//						} else {
+//							continue;
+//						}
 					}
 
 					board.getPlayersTurn().setHasPlayerMoved(true);
@@ -207,6 +225,7 @@ public class ClueGame extends JFrame {
 				BoardCell targetCell = ((computerPlayer) board.getPlayersTurn()).targetSelection(board.getTargets());
 				// update player location
 				board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
+				
 				if (targetCell.isRoom()) {
 					ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
 					String guess = suggestedCards.get(0).getCardName() + " + " + suggestedCards.get(1).getCardName()
@@ -322,6 +341,17 @@ public class ClueGame extends JFrame {
 			JOptionPane.showMessageDialog(null, "You Won!", "Congradulations", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			JOptionPane.showMessageDialog(null, "Sorry you Lost", "Loser", JOptionPane.INFORMATION_MESSAGE);
+			if (board.getPlayersTurn() instanceof computerPlayer)
+			{
+				//remove loser from player list??
+				//what happened with their cards in hand
+				
+			}
+		}
+		//this method close the GUI frame 
+		if (board.getPlayersTurn() instanceof humanPlayer )
+		{		
+			dispose(); 
 		}
 	}
 

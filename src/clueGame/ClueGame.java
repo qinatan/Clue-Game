@@ -243,6 +243,10 @@ public class ClueGame extends JFrame {
 						// This moves the selected player into the room
 						// This code is also on line 130 ish
 						// TODO: This method can be taken out and made into a separate function
+						// TODO : why do we have this double loop logic when the single line should also
+						// work. (line 143 ish)
+						// player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
+						// board.getPlayersTurn().getPlayerCol());
 						for (Card card : suggestedCards) {
 							if (card.getCardType().equals(CardType.PERSON)) {
 								ArrayList<Player> playerList = Board.getPlayerList();

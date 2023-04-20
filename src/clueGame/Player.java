@@ -225,27 +225,30 @@ public abstract class Player {
 
 	}
 
+	/**
+	 * This is the method that moved the players to any location on the board
+	 */
 	public void setPlayerLocation(int row, int col) {
 		this.row = row;
 		this.col = col;
-		Board board = Board.getInstance();
+		Board board = Board.getInstance(); //TODO: why is this in the method and not just in the player class
 		this.currCell = board.getCell(this.row, this.col);
-		if (currCell.isRoom()) {
+		int playerInRoomCount = 0; //I moved this out of the if statement 
+		if (currCell.isRoomCenter()) {
 			currRoom = board.getRoomMap().get(currCell.getCellSymbol());
 			// check the number of player in a room
-			int playerInRoomCount = 0;
+			
 			for (Player player : board.getPlayerList()) {
 				if (player.currCell == currCell) {
 					playerInRoomCount++;
-
 				}
 			}
-			setDrawOffset(15 * playerInRoomCount);
-		}
-
-		else {
+			setDrawOffset(15 * (playerInRoomCount -1));
+			
+		} else {
 			setDrawOffset(0);
 		}
+		System.out.println(getDrawOffset() + " " + playerInRoomCount + " " + currCell.isRoom() + " " + board.getPlayersTurn()) ; 
 	}
 
 	// ********** TEST METHODS **************** //
@@ -259,6 +262,6 @@ public abstract class Player {
 
 	public abstract boolean canMakeAccusation();
 
-	public abstract  ArrayList<Card> MakeAccusation();
+	public abstract ArrayList<Card> MakeAccusation();
 
 }

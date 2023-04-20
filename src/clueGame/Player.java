@@ -248,7 +248,7 @@ public abstract class Player {
 		} else {
 			setDrawOffset(0);
 		}
-		System.out.println(getDrawOffset() + " " + playerInRoomCount + " " + currCell.isRoom() + " " + board.getPlayersTurn()) ; 
+		System.out.println(getDrawOffset() + " " + playerInRoomCount + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
 	}
 
 	// ********** TEST METHODS **************** //

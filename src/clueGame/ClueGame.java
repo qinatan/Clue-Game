@@ -100,35 +100,28 @@ public class ClueGame extends JFrame {
 			if (!(row > board.getNumRows() - 1 || col > board.getNumColumns() - 1)) {
 				BoardCell cell = board.getCell(row, col);
 
-				// This reads if it is in the targets list and it is either a room center or a
-				// walkway
-				if (board.getTargets().contains(cell) && (cell.isRoomCenter() || cell.getCellSymbol() == 'W')) {
+				// Check that the clicked cell is a target walkway
+				if (board.getTargets().contains(cell) && cell.getCellSymbol() == 'W') {
 					// update player location after they click one of the board cell on target list
 					board.getPlayersTurn().setPlayerLocation(row, col);
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
-					// board.getPlayersTurn().setDrawOffset(0);
 
+					// Check if the target cell is a room
 				} else if (board.getTargets().contains(cell) && cell.isRoom()) {
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
 					board.getPlayersTurn().setPlayerLocation(thisRoomCenter.getRowNum(), thisRoomCenter.getColumnNum());
 
 					// Make suggestion
 					ArrayList<Card> suggestionCards = board.getPlayersTurn().makeSuggestion();
+
 					// call handle suggestion
 					Card disprovalCard = board.handleSuggestion(suggestionCards.get(0), suggestionCards.get(1),
 							suggestionCards.get(2), board.getPlayersTurn());
 					controlPanel.setGuess(
 							suggestionCards.get(0) + " " + suggestionCards.get(1) + " " + suggestionCards.get(2));
 
-//					for (Player thisPlayer : board.getPlayerList()) {
-//
-//						// TODO: check to make sure the disprove suggestion doesn't return one of our
-//						// owncards.
-//						Card disprovenCard = thisPlayer.disproveSuggestion(suggestionCards.get(0),
-//								suggestionCards.get(1), suggestionCards.get(2));
-//
-//						System.out.println(disprovenCard);
+//TODO: card colors need to be added here
 					// This is where we handle the human disproven suggestions
 					if (disprovalCard != null) {
 						controlPanel.setGuessResult(disprovalCard.getCardName());
@@ -138,30 +131,23 @@ public class ClueGame extends JFrame {
 					// disprovenCard = null ; //Resets the disproven card. I don't think that this
 					// is needed.
 
-					// get the suggested to the room
-					for (Card suggestedCard : suggestionCards) {
-
-						if (suggestedCard.getCardType() == CardType.PERSON) {
-							String cardName = suggestedCard.getCardName();
-							for (Player player : board.getPlayerList()) {
-								if (player.getPlayerName().equals(cardName)) {
-
-									// move suggesred player to room
-
-									player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
-											board.getPlayersTurn().getPlayerCol());
-								}
-
-							}
-						}
-
-//								if (thisPlayer .getCurrCell() == board.getPlayersTurn().getCurrCell()) {
-//							board.getPlayersTurn().setDrawOffset(15);
-//							break;
-//						} else {
-//							continue;
+					//This is not needed because make suggestion already moves the suggested player
+//					// get the suggested to the room
+//					for (Card suggestedCard : suggestionCards) {
+//
+//						if (suggestedCard.getCardType() == CardType.PERSON) {
+//							String cardName = suggestedCard.getCardName();
+//							for (Player player : board.getPlayerList()) {
+//								if (player.getPlayerName().equals(cardName)) {
+//
+//									// move suggesred player to room
+//									System.out.println("here");
+//									player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
+//											board.getPlayersTurn().getPlayerCol());
+//								}
+//							}
 //						}
-					}
+//					}
 
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
@@ -254,7 +240,7 @@ public class ClueGame extends JFrame {
 						board.getPlayersTurn().setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
 								board.getPlayersTurn().getPlayerCol());
 
-						//TODO: I dont think that this is needed because of the line above
+						// TODO: I dont think that this is needed because of the line above
 //						for (Card card : suggestedCards) {
 //							if (card.getCardType().equals(CardType.PERSON)) {
 //								ArrayList<Player> playerList = Board.getPlayerList();

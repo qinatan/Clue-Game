@@ -267,10 +267,12 @@ public class ClueGame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			// TODO: this need to include a check so that the player cannont move and then
-			// make an accusation. This logic could be simmilar or included wiht the next
-			// button listener
-			accButtonPressedLogic();
+			if (board.getPlayersTurn().getIsHasPlayerMoved()) {
+				JOptionPane.showMessageDialog(null, "You can't make an accusation because you have moved. \n Please finish your turn.", "Accusation", JOptionPane.ERROR_MESSAGE);
+			} else {
+				accButtonPressedLogic();
+			}
+			
 
 		}
 	}

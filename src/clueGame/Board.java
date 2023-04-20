@@ -47,7 +47,7 @@ public class Board extends JPanel {
 	private static final int TYPECHAR = 0;
 	private static final int NAMECHAR = 1;
 	private static final int SYMBOLCHAR = 2;
-	private static final int ROWCHAR = 3; 
+	private static final int ROWCHAR = 3;
 	private static final int COLCHAR = 4;
 	private static Solution solution;
 	private Player playerTurn;
@@ -94,7 +94,7 @@ public class Board extends JPanel {
 					BoardCell centerCell = thisRoom.getCenterCell();
 					if (targets.contains(centerCell)) {
 						c.setIsTargetCell(true);
-						targets.add(c) ; 
+						targets.add(c);
 					}
 
 				}
@@ -679,7 +679,7 @@ public class Board extends JPanel {
 			return false;
 		}
 	}
-	
+
 	public void nextTurn() {
 		// human player's turn if already iterate to the last player
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
@@ -694,6 +694,14 @@ public class Board extends JPanel {
 
 	public void setPlayersTurn(Player playersTurn) {
 		this.playerTurn = playersTurn;
+	}
+
+	// I don't know if this should be here or in the board
+	// This doesn't work yet
+	public void resetPlayersLocations() {
+		for (Player player : Board.getPlayerList()) {
+			player.setPlayerLocation(player.getPlayerCol(), player.getPlayerCol());
+		}
 	}
 
 	// ************** Methods for unit testing purposes only *************//

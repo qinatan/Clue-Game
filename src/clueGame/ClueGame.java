@@ -131,7 +131,7 @@ public class ClueGame extends JFrame {
 					// disprovenCard = null ; //Resets the disproven card. I don't think that this
 					// is needed.
 
-					//This is not needed because make suggestion already moves the suggested player
+					// This is not needed because make suggestion already moves the suggested player
 //					// get the suggested to the room
 //					for (Card suggestedCard : suggestionCards) {
 //
@@ -149,6 +149,7 @@ public class ClueGame extends JFrame {
 //						}
 //					}
 
+					//board.resetPlayersLocations();
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
 
@@ -268,7 +269,7 @@ public class ClueGame extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn", JOptionPane.ERROR_MESSAGE);
 		}
-
+		//board.resetPlayersLocations();
 	}
 
 	private class ACCButtonListener implements ActionListener {

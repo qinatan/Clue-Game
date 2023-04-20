@@ -234,6 +234,7 @@ public abstract class Player {
 		Board board = Board.getInstance(); //TODO: why is this in the method and not just in the player class
 		this.currCell = board.getCell(this.row, this.col);
 		int playerInRoomCount = 0; //I moved this out of the if statement 
+		setDrawOffset(0);// This doesn't really do anything
 		if (currCell.isRoomCenter()) {
 			currRoom = board.getRoomMap().get(currCell.getCellSymbol());
 			// check the number of player in a room
@@ -250,10 +251,12 @@ public abstract class Player {
 		}
 		System.out.println(getDrawOffset() + " " + playerInRoomCount + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
 	}
+	
+
 
 	// ********** TEST METHODS **************** //
 	// These methods should only be used to facilitate unit testing and never run in
-	// prod code //
+	// production code //
 
 	@Override
 	public String toString() {

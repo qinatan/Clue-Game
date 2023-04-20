@@ -236,6 +236,7 @@ public class ClueGame extends JFrame {
 
 					BoardCell targetCell = ((computerPlayer) board.getPlayersTurn())
 							.targetSelection(board.getTargets());
+
 					// update player location
 					board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
 
@@ -250,27 +251,30 @@ public class ClueGame extends JFrame {
 						// TODO: This method can be taken out and made into a separate function
 						// TODO : why do we have this double loop logic when the single line should also
 						// work. (line 143 ish)
-						// player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
-						// board.getPlayersTurn().getPlayerCol());
-						for (Card card : suggestedCards) {
-							if (card.getCardType().equals(CardType.PERSON)) {
-								ArrayList<Player> playerList = Board.getPlayerList();
-								for (Player player : playerList) {
-									if (player.getPlayerName().equals(card.getCardName())) {
-										player.setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
-									}
-								}
+						board.getPlayersTurn().setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
+								board.getPlayersTurn().getPlayerCol());
 
-							}
-						}
+						//TODO: I dont think that this is needed because of the line above
+//						for (Card card : suggestedCards) {
+//							if (card.getCardType().equals(CardType.PERSON)) {
+//								ArrayList<Player> playerList = Board.getPlayerList();
+//								for (Player player : playerList) {
+//									if (player.getPlayerName().equals(card.getCardName())) {
+//										player.setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
+//									}
+//								}
+//
+//							}
+//						}
 					}
 					for (BoardCell cell : board.getTargets()) {
 						cell.setIsTargetCell(false);
 					}
 
-					int targetRow = targetCell.getRowNum();
-					int targetCol = targetCell.getColumnNum();
-					board.getPlayersTurn().setPlayerLocation(targetRow, targetCol);
+					// TODO: Why do we have this here if we move the player right above this
+//					int targetRow = targetCell.getRowNum();
+//					int targetCol = targetCell.getColumnNum();
+//					board.getPlayersTurn().setPlayerLocation(targetRow, targetCol);
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					repaint();
 				}

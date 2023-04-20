@@ -76,10 +76,18 @@ public class ClueGame extends JFrame {
 		}
 	}
 
+	private void clearTargetCells() {
+		for (BoardCell targetCell : board.getTargets()) {
+			targetCell.setIsTargetCell(false);
+		}
+		board.getTargets().clear();
+		repaint();
+	}
+
 	private class movePlayerClick implements MouseListener {
 
-		@Override
-		public void mouseClicked(MouseEvent e) {
+		// TODO: this method should be moved outside of the mouse listener
+		private void mouseClickedLogic(MouseEvent e) {
 			// TODO: there are functions in here that could probably be moved out into their
 			// own functions
 
@@ -165,15 +173,11 @@ public class ClueGame extends JFrame {
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
-
 		}
 
-		private void clearTargetCells() {
-			for (BoardCell targetCell : board.getTargets()) {
-				targetCell.setIsTargetCell(false);
-			}
-			board.getTargets().clear();
-			repaint();
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// mouseClickedLogic(e);
 		}
 
 		@Override
@@ -183,7 +187,8 @@ public class ClueGame extends JFrame {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-		}// This should be left blank
+			mouseClickedLogic(e);
+		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {

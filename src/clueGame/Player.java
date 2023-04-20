@@ -32,8 +32,9 @@ public abstract class Player {
 	private BoardCell currCell; // TODO: These do virtually the same thing
 	private Room currRoom;
 	private int rollNum;
-	private int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in the current room center
-							
+	private int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in
+								// the current room center
+
 	// check for both AI and human player
 	private boolean hasPlayerMoved = false;
 	private boolean hasPlayerACC = false;
@@ -124,7 +125,7 @@ public abstract class Player {
 	public Map<CardType, ArrayList<Card>> getSeenMap() {
 		return seenMap;
 	}
-	
+
 	public int getDrawOffset() {
 		return drawOffset;
 	}
@@ -132,7 +133,7 @@ public abstract class Player {
 	public void setDrawOffset(int drawOffset) {
 		this.drawOffset = drawOffset;
 	}
-	
+
 	public Room getCurrRoom() {
 		return currRoom;
 	}
@@ -140,16 +141,15 @@ public abstract class Player {
 	public void setCurrRoom(Room currRoom) {
 		this.currRoom = currRoom;
 	}
-	
+
 	public Card getCurrRoomCard() {
 		Card roomCard = new Card(CardType.ROOM, currRoom.getName());
 		return roomCard;
 	}
-	
+
 	public void setCurrRoomCard(Card room) {
 		this.currRoom = new Room(room.getCardName());
 	}
-
 
 	// *********************************** //
 
@@ -224,42 +224,41 @@ public abstract class Player {
 		}
 
 	}
-	
+
 	public void setPlayerLocation(int row, int col) {
 		this.row = row;
-		this.col = col;	
+		this.col = col;
 		Board board = Board.getInstance();
 		this.currCell = board.getCell(this.row, this.col);
 		if (currCell.isRoom()) {
 			currRoom = board.getRoomMap().get(currCell.getCellSymbol());
-			//check the number of player in a room 
-			int playerInRoomCount = 0; 
-			for (Player player : board.getPlayerList())
-			{
-				if (player.currCell == currCell)
-				{
-					playerInRoomCount++; 
-			
+			// check the number of player in a room
+			int playerInRoomCount = 0;
+			for (Player player : board.getPlayerList()) {
+				if (player.currCell == currCell) {
+					playerInRoomCount++;
+
 				}
 			}
-			setDrawOffset(15 * playerInRoomCount);			
+			setDrawOffset(15 * playerInRoomCount);
 		}
-		
-		else
-		{
-			setDrawOffset(0);	
-		}	
+
+		else {
+			setDrawOffset(0);
+		}
 	}
 
 	// ********** TEST METHODS **************** //
 	// These methods should only be used to facilitate unit testing and never run in
 	// prod code //
 
-
-
 	@Override
 	public String toString() {
 		return "Player [name=" + name + "]";
 	}
+
+	public abstract boolean canMakeAccusation();
+
+	public abstract  ArrayList<Card> MakeAccusation();
 
 }

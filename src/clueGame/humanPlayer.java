@@ -103,4 +103,17 @@ public class humanPlayer extends Player {
 		return suggestedCards;
 	}
 
+	@Override
+	public boolean canMakeAccusation() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public  ArrayList<Card> MakeAccusation() {
+		return null;
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -99,7 +99,7 @@ public class ClueGame extends JFrame {
 					board.getPlayersTurn().setPlayerLocation(row, col);
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
-					//board.getPlayersTurn().setDrawOffset(0);
+					// board.getPlayersTurn().setDrawOffset(0);
 
 				} else if (board.getTargets().contains(cell) && cell.isRoom()) {
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
@@ -107,8 +107,9 @@ public class ClueGame extends JFrame {
 
 					// Make suggestion
 					ArrayList<Card> suggestionCards = board.getPlayersTurn().makeSuggestion();
-					// call handle suggestion 
-					Card disprovalCard = board.handleSuggestion(suggestionCards.get(0), suggestionCards.get(1), suggestionCards.get(2), board.getPlayersTurn()); 
+					// call handle suggestion
+					Card disprovalCard = board.handleSuggestion(suggestionCards.get(0), suggestionCards.get(1),
+							suggestionCards.get(2), board.getPlayersTurn());
 					controlPanel.setGuess(
 							suggestionCards.get(0) + " " + suggestionCards.get(1) + " " + suggestionCards.get(2));
 
@@ -120,32 +121,32 @@ public class ClueGame extends JFrame {
 //								suggestionCards.get(1), suggestionCards.get(2));
 //
 //						System.out.println(disprovenCard);
-						// This is where we handle the human disproven suggestions
-						if (disprovalCard != null) {
-							controlPanel.setGuessResult(disprovalCard.getCardName());
-						} else {
-							controlPanel.setGuessResult("Suggestion Upheld");
-						}
-						// disprovenCard = null ; //Resets the disproven card. I don't think that this
-						// is needed.
-						
-						// get the suggested to the room 
-						for (Card suggestedCard  : suggestionCards) {
-						
-							if (suggestedCard.getCardType() == CardType.PERSON){
-								String cardName = suggestedCard.getCardName(); 
-								for (Player player : board.getPlayerList()){
-									if (player.getPlayerName().equals(cardName)) {
-									
-										//move suggesred player to room 
-										
-										player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol()); 
+					// This is where we handle the human disproven suggestions
+					if (disprovalCard != null) {
+						controlPanel.setGuessResult(disprovalCard.getCardName());
+					} else {
+						controlPanel.setGuessResult("Suggestion Upheld");
+					}
+					// disprovenCard = null ; //Resets the disproven card. I don't think that this
+					// is needed.
+
+					// get the suggested to the room
+					for (Card suggestedCard : suggestionCards) {
+
+						if (suggestedCard.getCardType() == CardType.PERSON) {
+							String cardName = suggestedCard.getCardName();
+							for (Player player : board.getPlayerList()) {
+								if (player.getPlayerName().equals(cardName)) {
+
+									// move suggesred player to room
+
+									player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
+											board.getPlayersTurn().getPlayerCol());
 								}
-								
+
 							}
 						}
-						
-								
+
 //								if (thisPlayer .getCurrCell() == board.getPlayersTurn().getCurrCell()) {
 //							board.getPlayersTurn().setDrawOffset(15);
 //							break;
@@ -222,41 +223,49 @@ public class ClueGame extends JFrame {
 			// Else it's a CPU Player
 			else {
 
-				BoardCell targetCell = ((computerPlayer) board.getPlayersTurn()).targetSelection(board.getTargets());
-				// update player location
-				board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
-				
-				if (targetCell.isRoom()) {
-					ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
-					String guess = suggestedCards.get(0).getCardName() + " + " + suggestedCards.get(1).getCardName()
-							+ " + " + suggestedCards.get(2).getCardName();
-					controlPanel.setGuess(guess);
+				// If the computer can make an accusation it will
+				if (board.getPlayersTurn().canMakeAccusation()) {
+					// Make accusation
+					board.getPlayersTurn().MakeAccusation();
+				} else {
 
-					// TODO: This code is literal trash
-					// TODO: what is this trying to do
-					for (Card card : suggestedCards) {
-						if (card.getCardType().equals(CardType.PERSON)) {
-							ArrayList<Player> playerList = Board.getPlayerList();
-							for (Player player : playerList) {
-								if (player.getPlayerName().equals(card.getCardName())) {
-									player.setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
+					BoardCell targetCell = ((computerPlayer) board.getPlayersTurn())
+							.targetSelection(board.getTargets());
+					// update player location
+					board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
+
+					if (targetCell.isRoom()) {
+						ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
+						String guess = suggestedCards.get(0).getCardName() + " + " + suggestedCards.get(1).getCardName()
+								+ " + " + suggestedCards.get(2).getCardName();
+						controlPanel.setGuess(guess);
+
+						// This moves the selected player into the room
+						// This code is also on line 130 ish
+						// TODO: This method can be taken out and made into a separate function
+						for (Card card : suggestedCards) {
+							if (card.getCardType().equals(CardType.PERSON)) {
+								ArrayList<Player> playerList = Board.getPlayerList();
+								for (Player player : playerList) {
+									if (player.getPlayerName().equals(card.getCardName())) {
+										player.setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
+									}
 								}
-							}
 
+							}
 						}
 					}
-				}
-				for (BoardCell cell : board.getTargets()) {
-					cell.setIsTargetCell(false);
-				}
+					for (BoardCell cell : board.getTargets()) {
+						cell.setIsTargetCell(false);
+					}
 
-				int targetRow = targetCell.getRowNum();
-				int targetCol = targetCell.getColumnNum();
-				board.getPlayersTurn().setPlayerLocation(targetRow, targetCol);
-				board.getPlayersTurn().setHasPlayerMoved(true);
-				repaint();
+					int targetRow = targetCell.getRowNum();
+					int targetCol = targetCell.getColumnNum();
+					board.getPlayersTurn().setPlayerLocation(targetRow, targetCol);
+					board.getPlayersTurn().setHasPlayerMoved(true);
+					repaint();
+				}
 			}
-
 		} else {
 			JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn", JOptionPane.ERROR_MESSAGE);
 		}
@@ -268,11 +277,12 @@ public class ClueGame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 			if (board.getPlayersTurn().getIsHasPlayerMoved()) {
-				JOptionPane.showMessageDialog(null, "You can't make an accusation because you have moved. \n Please finish your turn.", "Accusation", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,
+						"You can't make an accusation because you have moved. \n Please finish your turn.",
+						"Accusation", JOptionPane.ERROR_MESSAGE);
 			} else {
 				accButtonPressedLogic();
 			}
-			
 
 		}
 	}
@@ -343,17 +353,15 @@ public class ClueGame extends JFrame {
 			JOptionPane.showMessageDialog(null, "You Won!", "Congradulations", JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			JOptionPane.showMessageDialog(null, "Sorry you Lost", "Loser", JOptionPane.INFORMATION_MESSAGE);
-			if (board.getPlayersTurn() instanceof computerPlayer)
-			{
-				//remove loser from player list??
-				//what happened with their cards in hand
-				
+			if (board.getPlayersTurn() instanceof computerPlayer) {
+				// remove loser from player list??
+				// what happened with their cards in hand
+
 			}
 		}
-		//this method close the GUI frame 
-		if (board.getPlayersTurn() instanceof humanPlayer )
-		{		
-			dispose(); 
+		// this method close the GUI frame
+		if (board.getPlayersTurn() instanceof humanPlayer) {
+			dispose();
 		}
 	}
 

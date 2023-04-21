@@ -91,7 +91,7 @@ public class ClueGame extends JFrame {
 		private void mouseClickedLogic(MouseEvent e) {
 			// TODO: there are functions in here that could probably be moved out into their
 			// own functions
-
+			board.resetPlayersLocations();
 			int cellWidth = board.getCellWidth();
 			int cellHeight = board.getCellHeight();
 			int col = (int) e.getPoint().getX() / cellWidth;
@@ -132,7 +132,7 @@ public class ClueGame extends JFrame {
 						controlPanel.setGuessResult("Suggestion Upheld", null);
 					}
 
-					//board.resetPlayersLocations();
+					
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
 
@@ -173,6 +173,9 @@ public class ClueGame extends JFrame {
 	 * This is where the logic of the next button pressed should be held
 	 */
 	public void nextButtonPressedLogic() {
+		
+		board.resetPlayersLocations();
+		
 		if (board.getPlayersTurn().getIsHasPlayerACC() || board.getPlayersTurn().getIsHasPlayerMoved()) {
 			// switch to get next player in the list
 			board.nextTurn();
@@ -266,9 +269,6 @@ public class ClueGame extends JFrame {
 	}
 
 	public void accButtonPressedLogic() {
-		
-		
-
 		String[] players = new String[board.getPlayerList().size()];
 		for (int i = 0; i < board.getPlayerList().size(); i++) {
 			players[i] = board.getPlayerList().get(i).getPlayerName();

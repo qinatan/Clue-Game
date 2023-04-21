@@ -85,6 +85,7 @@ public class computerPlayer extends Player {
 					if (player.getPlayerName().equals(suggestedCard.getCardName()))
 					{
 						player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol());
+						board.resetPlayersLocations();
 					}
 				}
 			}

@@ -72,6 +72,7 @@ public class humanPlayer extends Player {
 
 				// Moves the player
 				player.setPlayerLocation(getPlayerRow(), getPlayerCol());
+				board.resetPlayersLocations();
 
 				// Loop to find that players card
 				for (int q = 0; q < board.getPeopleDeck().size(); q++) {

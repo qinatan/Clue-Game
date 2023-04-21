@@ -32,8 +32,8 @@ public abstract class Player {
 	private BoardCell currCell; // TODO: These do virtually the same thing
 	private Room currRoom;
 	private int rollNum;
-	private int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in
-								// the current room center
+	private int drawOffset = 0;
+	Board board = Board.getInstance();
 
 	// check for both AI and human player
 	private boolean hasPlayerMoved = false;
@@ -228,31 +228,39 @@ public abstract class Player {
 		}
 
 	}
+	
+	public void resetPlayerLocation() {
+		
+		// If a player is in a room, check the room to see how many occupants are in it,
+		// Calculate a new offset based on numOccupants
+		if (Boolean.TRUE.equals(currCell.isRoomCenter())) {
+			currRoom = board.getRoomMap().get(currCell.getCellSymbol());
+			ArrayList <Player> occupants = currRoom.getOccupants();
+			int index = 0;
+			for (int i = 0 ; i < occupants.size(); i++) {
+				if (occupants.get(i).getPlayerName().equals(name)) {
+					index = i; 
+				}
+			}
+			setDrawOffset(index * 15);
+			
+		}
+		else {
+			setDrawOffset(0);
+		}
+		
+		System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
+	}
 
 	/**
-	 * This is the method that moved the players to any location on the board
+	 * This is the method that moves the players to any location on the board
 	 */
 	public void setPlayerLocation(int row, int col) {
 		this.row = row;
 		this.col = col;
-		Board board = Board.getInstance(); //TODO: why is this in the method and not just in the player class
 		this.currCell = board.getCell(this.row, this.col);
-		int playerInRoomCount = 0; //I moved this out of the if statement 
-		setDrawOffset(0);
-		if (Boolean.TRUE.equals(currCell.isRoomCenter())) {
-			currRoom = board.getRoomMap().get(currCell.getCellSymbol());
-			// check the number of player in a room
-			for (Player player : board.getPlayerList()) {
-				if (player.currCell == currCell) {
-					playerInRoomCount++;
-				}
-			}
-			setDrawOffset(15 * (playerInRoomCount -1));
-			
-		} else {
-			setDrawOffset(0);
-		}
-		System.out.println(getDrawOffset() + " " + playerInRoomCount + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
+		resetPlayerLocation();
+		System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
 	}
 	
 

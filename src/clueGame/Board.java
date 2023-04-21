@@ -699,12 +699,20 @@ public class Board extends JPanel {
 	}
 
 	// I don't know if this should be here or in the board
-	// This doesn't work yet
-	//public void resetPlayersLocations() {
-	//	for (Player player : Board.getPlayerList()) {
-	//		player.setPlayerLocation(player.getPlayerCol(), player.getPlayerCol());
-	//	}
-	//}
+	
+	public void resetPlayersLocations() {
+		// Update room state for all rooms
+		for (Room room: getRoomMap().values()) {
+			room.updateRoomState();
+		}
+		
+		// Update all player locations based on new roomStates
+		for (Player player: getPlayerList()) {
+			player.resetPlayerLocation();
+		}
+		
+		repaint();
+	}
 
 	// ************** Methods for unit testing purposes only *************//
 	public int getCellWidth() {

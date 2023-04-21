@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -177,6 +178,10 @@ public class ClueGame extends JFrame {
 			board.nextTurn();
 			controlPanel.getPlayerNameText().setText(board.getPlayersTurn().getPlayerName());
 			controlPanel.getPlayerNameText().setBackground(board.getPlayersTurn().getPlayerColor());
+			controlPanel.setGuessResult(null, null); // Resets the guess result
+			Color whiteColor = new Color(255, 255, 255);
+			controlPanel.getGuessResult().setBackground(whiteColor);
+			// controlPanel.setBackground(whiteColor);
 			BoardCell currentLocation = board.getCell(board.getPlayersTurn().getPlayerRow(),
 					board.getPlayersTurn().getPlayerCol());
 
@@ -200,7 +205,7 @@ public class ClueGame extends JFrame {
 				// If the computer can make an accusation it will
 				if (board.getPlayersTurn().canMakeAccusation()) {
 					// Make accusation
-					board.getPlayersTurn().MakeAccusation();
+					board.getPlayersTurn().makeAccusation();
 				} else {
 
 					BoardCell targetCell = ((computerPlayer) board.getPlayersTurn())
@@ -245,6 +250,9 @@ public class ClueGame extends JFrame {
 	private class ACCButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if (board.getPlayersTurn() instanceof computerPlayer) {
+				JOptionPane.showMessageDialog(null, "It's not your turn yet, make an accusation at the start of your turn.", "Accusation", JOptionPane.ERROR_MESSAGE);
+			}
 
 			if (board.getPlayersTurn().getIsHasPlayerMoved()) {
 				JOptionPane.showMessageDialog(null,
@@ -258,13 +266,8 @@ public class ClueGame extends JFrame {
 	}
 
 	public void accButtonPressedLogic() {
-		System.out.print("here");
-		board.getPlayersTurn().setHasPlayerACC(true);
-		for (BoardCell targetCell : board.getTargets()) {
-			targetCell.setIsTargetCell(false);
-		}
-		board.getTargets().clear(); 
-		repaint();
+		
+		
 
 		String[] players = new String[board.getPlayerList().size()];
 		for (int i = 0; i < board.getPlayerList().size(); i++) {
@@ -312,27 +315,34 @@ public class ClueGame extends JFrame {
 		// Getting the player card
 		for (int q = 0; q < board.getPeopleDeck().size(); q++) {
 			if (board.getPeopleDeck().get(q).getCardName().equals(selectedPlayer)) {
-
 				Card playerCard = board.getPeopleDeck().get(q);
 				ACCCards.add(playerCard); // Adds that card to the suggested list
 			}
 		}
-
-		// TODO: close the game after this
-		if (board.checkAccusation(ACCCards.get(0), ACCCards.get(1), ACCCards.get(2))) {
-			JOptionPane.showMessageDialog(null, "You Won!", "Congradulations", JOptionPane.INFORMATION_MESSAGE);
-		} else {
-			JOptionPane.showMessageDialog(null, "Sorry you Lost", "Loser", JOptionPane.INFORMATION_MESSAGE);
-			if (board.getPlayersTurn() instanceof computerPlayer) {
-				// remove loser from player list??
-				// what happened with their cards in hand
-
+		
+		if (result == JOptionPane.CLOSED_OPTION) {
+			board.getPlayersTurn().setHasPlayerACC(false);
+			
+		}
+		else if (result == JOptionPane.YES_OPTION) {
+			// Clears painted color cells from board
+			board.getPlayersTurn().setHasPlayerACC(true);
+			for (BoardCell targetCell : board.getTargets()) {
+				targetCell.setIsTargetCell(false);
+			}
+			board.getTargets().clear(); 
+			repaint();
+			
+			if (board.checkAccusation(ACCCards.get(1), ACCCards.get(2), ACCCards.get(0))) {
+				JOptionPane.showMessageDialog(null, "You Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
+				dispose();
+			} else {
+				String Solution = board.getSolution().toString();
+				JOptionPane.showMessageDialog(null, "Sorry you lost, the solution was: \n " + Solution, "Loser", JOptionPane.INFORMATION_MESSAGE);
+				dispose();
 			}
 		}
-		// this method close the GUI frame
-		if (board.getPlayersTurn() instanceof humanPlayer) {
-			dispose();
-		}
+		
 	}
 
 	// Main entry point for game

@@ -179,7 +179,7 @@ public class computerPlayer extends Player {
 	 * This is an untested method
 	 */
 	@Override
-	public ArrayList<Card> MakeAccusation() {
+	public ArrayList<Card> makeAccusation() {
 		int unseenWeapons = 0, unseenPeople = 0, unseenRooms = 0;
 		ArrayList<Card> accCards = new ArrayList<Card>();
 

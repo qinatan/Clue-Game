@@ -633,6 +633,8 @@ public class Board extends JPanel {
 		dealtDeck.remove(peopleDeck.get(randomPerson));
 		dealtDeck.remove(roomDeck.get(randomRoom));
 		dealtDeck.remove(weaponDeck.get(randomWeapon));
+		
+		System.out.println(solution.toString());
 	}
 
 	// return first disapproval card that matching to suggesting card from other

@@ -111,7 +111,7 @@ public class humanPlayer extends Player {
 	}
 
 	@Override
-	public  ArrayList<Card> MakeAccusation() {
+	public  ArrayList<Card> makeAccusation() {
 		return null;
 		// TODO Auto-generated method stub
 		

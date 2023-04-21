@@ -149,7 +149,6 @@ public class GameControlPanel extends JPanel {
 				this.guessResult.setBackground(color); 
 			}
 		}
-		
 	}
 	
 	public void setPlayerNameText(JTextField playerNameText) {
@@ -166,6 +165,10 @@ public class GameControlPanel extends JPanel {
 
 	public void setRollText(JTextField rollText) {
 		this.rollText = rollText;
+	}
+	
+	public JTextField getGuessResult() {
+		return guessResult;
 	}
 
 

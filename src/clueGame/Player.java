@@ -269,6 +269,6 @@ public abstract class Player {
 
 	public abstract boolean canMakeAccusation();
 
-	public abstract ArrayList<Card> MakeAccusation();
+	public abstract ArrayList<Card> makeAccusation();
 
 }

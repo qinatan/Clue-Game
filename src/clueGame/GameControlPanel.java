@@ -135,10 +135,22 @@ public class GameControlPanel extends JPanel {
 
 	public void setGuess(String guess) {
 		this.guess.setText(guess);
+		Color color = board.getPlayersTurn().getPlayerColor(); 
+		this.guess.setBackground(color); 
 	}
 
-	public void setGuessResult(String guessResult) {
+	public void setGuessResult(String guessResult, Card guessResultCard) {
 		this.guessResult.setText(guessResult);
+		for (Player player : board.getPlayerList())
+		{
+			
+			if (guessResult != null && player.getHand().contains(guessResultCard))
+			{
+				Color color = player.getPlayerColor(); 
+				this.guessResult.setBackground(color); 
+			}
+		}
+		
 	}
 	
 	public void setPlayerNameText(JTextField playerNameText) {
@@ -172,7 +184,7 @@ public class GameControlPanel extends JPanel {
 		frame.setVisible(true);
 		// test filling the data
 		panel.setGuess("I have no guess!");
-		panel.setGuessResult("So you have nothing?");
+		panel.setGuessResult("So you have nothing?", null );
 
 	}
 }

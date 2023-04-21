@@ -116,38 +116,24 @@ public class ClueGame extends JFrame {
 					ArrayList<Card> suggestionCards = board.getPlayersTurn().makeSuggestion();
 
 					// call handle suggestion
-					Card disprovalCard = board.handleSuggestion(suggestionCards.get(0), suggestionCards.get(1),
+					Card disapprovalCard = board.handleSuggestion(suggestionCards.get(0), suggestionCards.get(1),
 							suggestionCards.get(2), board.getPlayersTurn());
+					
+					//add disapproval card to suggesting player's seenMap 
+					board.getPlayersTurn().addToSeenMap(disapprovalCard.getCardType(), disapprovalCard);
+					
+
 					controlPanel.setGuess(
 							suggestionCards.get(0) + " " + suggestionCards.get(1) + " " + suggestionCards.get(2));
 
 //TODO: card colors need to be added here
 					// This is where we handle the human disproven suggestions
-					if (disprovalCard != null) {
-						controlPanel.setGuessResult(disprovalCard.getCardName());
+					if (disapprovalCard != null) {
+						controlPanel.setGuessResult(disapprovalCard.getCardName(), disapprovalCard);
 					} else {
-						controlPanel.setGuessResult("Suggestion Upheld");
+						
+						controlPanel.setGuessResult("Suggestion Upheld", null);
 					}
-					// disprovenCard = null ; //Resets the disproven card. I don't think that this
-					// is needed.
-
-					// This is not needed because make suggestion already moves the suggested player
-//					// get the suggested to the room
-//					for (Card suggestedCard : suggestionCards) {
-//
-//						if (suggestedCard.getCardType() == CardType.PERSON) {
-//							String cardName = suggestedCard.getCardName();
-//							for (Player player : board.getPlayerList()) {
-//								if (player.getPlayerName().equals(cardName)) {
-//
-//									// move suggesred player to room
-//									System.out.println("here");
-//									player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
-//											board.getPlayersTurn().getPlayerCol());
-//								}
-//							}
-//						}
-//					}
 
 					//board.resetPlayersLocations();
 					board.getPlayersTurn().setHasPlayerMoved(true);

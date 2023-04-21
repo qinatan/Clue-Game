@@ -700,11 +700,11 @@ public class Board extends JPanel {
 
 	// I don't know if this should be here or in the board
 	// This doesn't work yet
-	public void resetPlayersLocations() {
-		for (Player player : Board.getPlayerList()) {
-			player.setPlayerLocation(player.getPlayerCol(), player.getPlayerCol());
-		}
-	}
+	//public void resetPlayersLocations() {
+	//	for (Player player : Board.getPlayerList()) {
+	//		player.setPlayerLocation(player.getPlayerCol(), player.getPlayerCol());
+	//	}
+	//}
 
 	// ************** Methods for unit testing purposes only *************//
 	public int getCellWidth() {

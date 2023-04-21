@@ -238,11 +238,10 @@ public abstract class Player {
 		Board board = Board.getInstance(); //TODO: why is this in the method and not just in the player class
 		this.currCell = board.getCell(this.row, this.col);
 		int playerInRoomCount = 0; //I moved this out of the if statement 
-		setDrawOffset(0);// This doesn't really do anything
-		if (currCell.isRoomCenter()) {
+		setDrawOffset(0);
+		if (Boolean.TRUE.equals(currCell.isRoomCenter())) {
 			currRoom = board.getRoomMap().get(currCell.getCellSymbol());
 			// check the number of player in a room
-			
 			for (Player player : board.getPlayerList()) {
 				if (player.currCell == currCell) {
 					playerInRoomCount++;

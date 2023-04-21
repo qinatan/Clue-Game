@@ -214,10 +214,13 @@ public abstract class Player {
 	}
 	
 	
+	
 	public void addToSeenMap(CardType cardType, Card seenCard) {
-
 		if (seenMap.containsKey(cardType)) {
+			// Only add the card to the seenMap if it doesn't already exist
+			if (!seenMap.get(cardType).contains(seenCard)) {
 			seenMap.get(cardType).add(seenCard);
+			}
 		} else {
 			ArrayList<Card> seenCards = new ArrayList<Card>();
 			seenCards.add(seenCard);

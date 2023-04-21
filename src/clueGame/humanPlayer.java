@@ -15,7 +15,6 @@ package clueGame;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -103,6 +102,8 @@ public class humanPlayer extends Player {
 		return suggestedCards;
 	}
 
+	
+	// TODO: Are these necessary?
 	@Override
 	public boolean canMakeAccusation() {
 		// TODO Auto-generated method stub

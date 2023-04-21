@@ -121,17 +121,19 @@ public class ClueGame extends JFrame {
 					
 					//add disapproval card to suggesting player's seenMap 
 					board.getPlayersTurn().addToSeenMap(disapprovalCard.getCardType(), disapprovalCard);
+					// This proves that the disapproval card is added to the seenMap
+					System.out.println(disapprovalCard.toString());
 					
 
 					controlPanel.setGuess(
 							suggestionCards.get(0) + " " + suggestionCards.get(1) + " " + suggestionCards.get(2));
 
-//TODO: card colors need to be added here
+					//TODO: card colors need to be added here
 					// This is where we handle the human disproven suggestions
 					if (disapprovalCard != null) {
 						controlPanel.setGuessResult(disapprovalCard.getCardName(), disapprovalCard);
+						cardsPanel.updatePanels();
 					} else {
-						
 						controlPanel.setGuessResult("Suggestion Upheld", null);
 					}
 

@@ -75,6 +75,20 @@ public class computerPlayer extends Player {
 				finalSuggestion.add(cardList.get(0));
 			}
 		}
+		
+		for(Card suggestedCard : finalSuggestion)
+		{
+			if (suggestedCard.getCardType() == CardType.PERSON)
+			{
+				for (Player player : board.getPlayerList())
+				{
+					if (player.getPlayerName().equals(suggestedCard.getCardName()))
+					{
+						player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol());
+					}
+				}
+			}
+		}
 
 		return finalSuggestion;
 	}

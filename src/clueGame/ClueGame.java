@@ -241,18 +241,6 @@ public class ClueGame extends JFrame {
 						board.getPlayersTurn().setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
 								board.getPlayersTurn().getPlayerCol());
 
-						// TODO: I dont think that this is needed because of the line above
-//						for (Card card : suggestedCards) {
-//							if (card.getCardType().equals(CardType.PERSON)) {
-//								ArrayList<Player> playerList = Board.getPlayerList();
-//								for (Player player : playerList) {
-//									if (player.getPlayerName().equals(card.getCardName())) {
-//										player.setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
-//									}
-//								}
-//
-//							}
-//						}
 					}
 					for (BoardCell cell : board.getTargets()) {
 						cell.setIsTargetCell(false);
@@ -293,7 +281,7 @@ public class ClueGame extends JFrame {
 		for (BoardCell targetCell : board.getTargets()) {
 			targetCell.setIsTargetCell(false);
 		}
-		// TODO: this doesn't repaint the room
+		board.getTargets().clear(); 
 		repaint();
 
 		String[] players = new String[board.getPlayerList().size()];

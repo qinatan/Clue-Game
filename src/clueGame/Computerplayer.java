@@ -18,10 +18,10 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
 
-public class computerPlayer extends Player {
+public class Computerplayer extends Player {
 	Board board = Board.getInstance();
 
-	public computerPlayer(String playerName, String playerColor, String row, String col) {
+	public Computerplayer(String playerName, String playerColor, String row, String col) {
 		super(playerName, playerColor, row, col);
 	}
 
@@ -38,8 +38,6 @@ public class computerPlayer extends Player {
 		// pick this players current room
 		possibleSuggestions.computeIfAbsent(CardType.ROOM, k -> new ArrayList<>()).add(this.getCurrRoomCard());
 		// adds the room we're in to the possible suggestions
-
-		Board board = Board.getInstance();
 
 		for (Card weaponCard : board.getWeaponDeck()) { // Loop through all the weapons we have
 
@@ -80,7 +78,7 @@ public class computerPlayer extends Player {
 		{
 			if (suggestedCard.getCardType() == CardType.PERSON)
 			{
-				for (Player player : board.getPlayerList())
+				for (Player player : Board.getPlayerList())
 				{
 					if (player.getPlayerName().equals(suggestedCard.getCardName()))
 					{

@@ -18,7 +18,7 @@ import clueGame.CardType;
 import clueGame.Player;
 import clueGame.Room;
 import clueGame.Solution;
-import clueGame.computerPlayer;
+import clueGame.Computerplayer;
 
 public class AccusationSuggestionTests {
 	private static Board board;

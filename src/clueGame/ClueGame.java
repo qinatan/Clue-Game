@@ -197,7 +197,7 @@ public class ClueGame extends JFrame {
 			board.calcTargets(currentLocation, randomRoll);
 
 			// If Human Player
-			if (board.getPlayersTurn() instanceof humanPlayer) {
+			if (board.getPlayersTurn() instanceof Humanplayer) {
 				// repaint to highlight cells in target list
 				repaint();
 
@@ -211,7 +211,7 @@ public class ClueGame extends JFrame {
 					board.getPlayersTurn().makeAccusation();
 				} else {
 
-					BoardCell targetCell = ((computerPlayer) board.getPlayersTurn())
+					BoardCell targetCell = ((Computerplayer) board.getPlayersTurn())
 							.targetSelection(board.getTargets());
 
 					// update player location
@@ -253,7 +253,7 @@ public class ClueGame extends JFrame {
 	private class ACCButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (board.getPlayersTurn() instanceof computerPlayer) {
+			if (board.getPlayersTurn() instanceof Computerplayer) {
 				JOptionPane.showMessageDialog(null, "It's not your turn yet, make an accusation at the start of your turn.", "Accusation", JOptionPane.ERROR_MESSAGE);
 			}
 

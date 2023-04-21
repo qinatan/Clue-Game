@@ -89,7 +89,7 @@ public class Board extends JPanel {
 		for (BoardCell[] cells : grid) {
 			for (BoardCell c : cells) {
 
-				if (c.isRoom() && playerTurn instanceof humanPlayer) {
+				if (c.isRoom() && playerTurn instanceof Humanplayer) {
 					Room thisRoom = roomMap.get(c.getCellSymbol());
 					BoardCell centerCell = thisRoom.getCenterCell();
 					if (targets.contains(centerCell)) {
@@ -228,13 +228,13 @@ public class Board extends JPanel {
 
 	private Player newHumanPlayer(String[] result) {
 		Player newPlayer;
-		newPlayer = new humanPlayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
+		newPlayer = new Humanplayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
 		return newPlayer;
 	}
 
 	private Player newComputerPlayer(String[] result) {
 		Player newPlayer;
-		newPlayer = new computerPlayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
+		newPlayer = new Computerplayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
 		return newPlayer;
 	}
 
@@ -751,7 +751,7 @@ public class Board extends JPanel {
 		int numHumanPlayers = 0;
 		for (int i = 0; i < playerList.size(); i++) {
 
-			if (playerList.get(i) instanceof humanPlayer) {
+			if (playerList.get(i) instanceof Humanplayer) {
 				numHumanPlayers++;
 			}
 		}
@@ -762,7 +762,7 @@ public class Board extends JPanel {
 		int numComputerPlayers = 0;
 		for (int i = 0; i < playerList.size(); i++) {
 
-			if (playerList.get(i) instanceof computerPlayer) {
+			if (playerList.get(i) instanceof Computerplayer) {
 				numComputerPlayers++;
 			}
 		}

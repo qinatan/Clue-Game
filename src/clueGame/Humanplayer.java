@@ -21,10 +21,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class humanPlayer extends Player {
+public class Humanplayer extends Player {
 	Board board = Board.getInstance();
 
-	public humanPlayer(String playerName, String playerColor, String row, String col) {
+	public Humanplayer(String playerName, String playerColor, String row, String col) {
 		super(playerName, playerColor, row, col);
 
 	}

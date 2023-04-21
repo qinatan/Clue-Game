@@ -21,7 +21,7 @@ import clueGame.BoardCell;
 import clueGame.Card;
 import clueGame.CardType;
 import clueGame.Player;
-import clueGame.computerPlayer;
+import clueGame.Computerplayer;
 
 class ComputerAITest {
 	private static Board board;
@@ -41,7 +41,7 @@ class ComputerAITest {
 		
 		// Tests that CPUPlayer selects randomly if no rooms in seenList
 		// get the second player from playerList
-		computerPlayer cpuPlayer = (computerPlayer) board.getPlayerList().get(1);
+		Computerplayer cpuPlayer = (Computerplayer) board.getPlayerList().get(1);
 		int row = 10;
 		int col = 8;
 		// get the second player's start location as a known board cell

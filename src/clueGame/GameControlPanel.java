@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -49,7 +50,6 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		
 		currPlayer = board.getPlayersTurn();
 		rollText.setText(String.valueOf(currPlayer.getRollNum()));
 		repaint();
@@ -131,7 +131,49 @@ public class GameControlPanel extends JPanel {
 		bottomLeftPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess")); // Only using this for testing
 		return bottomLeftPanel;
 	}
+	
+	//update guess and guess result when player make an suggestion 
+	public void updateGuessText(ArrayList<Card> suggestionCards, Card disapprovalCard, Player currentPlayer){
+		
+		this.guess.setText(suggestionCards.get(0) + " " + suggestionCards.get(1) + " " + suggestionCards.get(2));
+		this.guess.setBackground(currentPlayer.getPlayerColor());
+		
+		if (disapprovalCard!= null ){
+			
+			if (currentPlayer instanceof Humanplayer){
+			this.guessResult.setText(disapprovalCard.getCardName()); }
 
+			else {
+			this.guessResult.setText("Suggestion Disproven");}
+				
+			for (Player player : board.getPlayerList()){
+				
+				ArrayList<Card> hand = player.getHand(); 
+				if (hand.contains(disapprovalCard)){
+					this.guessResult.setBackground(player.getPlayerColor());
+					break; 
+				}
+			}
+		}
+		else
+		{
+			this.guessResult.setText("Suggestion uphead");
+		}
+	}
+	
+	//update text field after rolling a dice at new turn 
+	public void  newTurnTextUpdate(Player currentPlayer, String diceNumber)
+	{
+		this.playerNameText.setText(currentPlayer.getPlayerName()); 
+		this.playerNameText.setBackground(currentPlayer.getPlayerColor());
+		this.guess.setText(" ");
+		this.guess.setBackground(new Color(255, 255, 255));//white color 
+		this.guessResult.setText(" ");
+		this.guessResult.setBackground(new Color(255, 255, 255)); 
+		this.rollText.setText(diceNumber);
+	}
+	
+	
 	public void setGuess(String guess) {
 		this.guess.setText(guess);
 		Color color = board.getPlayersTurn().getPlayerColor(); 

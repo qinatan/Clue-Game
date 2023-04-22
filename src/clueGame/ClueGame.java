@@ -179,12 +179,16 @@ public class ClueGame extends JFrame {
 		if (board.getPlayersTurn().getIsHasPlayerACC() || board.getPlayersTurn().getIsHasPlayerMoved()) {
 			// switch to get next player in the list
 			board.nextTurn();
+			///// ***** All the code from here down to the next big comment could probably be added to nextTurn()
 			controlPanel.getPlayerNameText().setText(board.getPlayersTurn().getPlayerName());
 			controlPanel.getPlayerNameText().setBackground(board.getPlayersTurn().getPlayerColor());
 			controlPanel.setGuessResult(null, null); // Resets the guess result
 			Color whiteColor = new Color(255, 255, 255);
 			controlPanel.getGuessResult().setBackground(whiteColor);
-			// controlPanel.setBackground(whiteColor);
+			controlPanel.getGuess().setBackground(whiteColor);
+			controlPanel.getGuess().setText(""); // Sets guess to blank at the start of each turn
+			controlPanel.getGuessResult().setText(""); // sets guess result to blank at the start of each turn
+			///// ***** All the code above this could probably be added to nextTurn()
 			BoardCell currentLocation = board.getCell(board.getPlayersTurn().getPlayerRow(),
 					board.getPlayersTurn().getPlayerCol());
 
@@ -226,20 +230,24 @@ public class ClueGame extends JFrame {
 						// This moves the selected player into the room
 						// This code is also on line 130 ish
 						// TODO: This method can be taken out and made into a separate function
-						// TODO : why do we have this double loop logic when the single line should also
-						// work. (line 143 ish)
 						board.getPlayersTurn().setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
 								board.getPlayersTurn().getPlayerCol());
-
+						
+						Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), board.getPlayersTurn());
+						
+						if (disprovenCard.equals(null)) {
+							controlPanel.setGuessResult("Guess not disproven!", null);
+						}
+						
+						else {
+							controlPanel.setGuessResult("Suggestion Disproven", disprovenCard);
+						}
 					}
 					for (BoardCell cell : board.getTargets()) {
 						cell.setIsTargetCell(false);
 					}
 
 					// TODO: Why do we have this here if we move the player right above this
-//					int targetRow = targetCell.getRowNum();
-//					int targetCol = targetCell.getColumnNum();
-//					board.getPlayersTurn().setPlayerLocation(targetRow, targetCol);
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					repaint();
 				}
@@ -247,7 +255,7 @@ public class ClueGame extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn", JOptionPane.ERROR_MESSAGE);
 		}
-		//board.resetPlayersLocations();
+		
 	}
 
 	private class ACCButtonListener implements ActionListener {
@@ -274,7 +282,6 @@ public class ClueGame extends JFrame {
 			players[i] = board.getPlayerList().get(i).getPlayerName();
 		}
 
-		// String currRoom = board.getPlayersTurn().getCurrRoom().getName();
 		String[] rooms = new String[board.getRoomDeck().size()];
 		for (int j = 0; j < board.getRoomDeck().size(); j++) {
 			rooms[j] = board.getRoomDeck().get(j).getCardName();
@@ -285,9 +292,9 @@ public class ClueGame extends JFrame {
 			weapons[k] = board.getWeaponDeck().get(k).getCardName(); // There is also a to string method
 		}
 
-		JComboBox playersBox = new JComboBox(players);
-		JComboBox roomsBox = new JComboBox(rooms);
-		JComboBox weaponsBox = new JComboBox(weapons);
+		JComboBox <Card> playersBox = new JComboBox(players);
+		JComboBox <Card> roomsBox = new JComboBox(rooms);
+		JComboBox <Card> weaponsBox = new JComboBox(weapons);
 
 		final JComponent[] inputs = new JComponent[] { new JLabel("Room"), roomsBox, new JLabel("Player"), playersBox,
 				new JLabel("Weapon"), weaponsBox };

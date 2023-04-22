@@ -127,7 +127,7 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomLeftPanel() {
 		JPanel bottomLeftPanel = new JPanel();
 		bottomLeftPanel.setLayout(new GridLayout(1, 0));
-		bottomLeftPanel.add(guess);
+		bottomLeftPanel.add(getGuess());
 		bottomLeftPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess")); // Only using this for testing
 		return bottomLeftPanel;
 	}
@@ -139,7 +139,15 @@ public class GameControlPanel extends JPanel {
 	}
 
 	public void setGuessResult(String guessResult, Card guessResultCard) {
-		this.guessResult.setText(guessResult);
+		if ((guessResult != null) && (guessResultCard != null)) {
+			if (board.getPlayersTurn() instanceof Humanplayer) {
+			this.guessResult.setText(guessResultCard.toString());
+			}
+			else {
+				this.guessResult.setText(guessResult);
+			}
+		}
+		
 		for (Player player : board.getPlayerList())
 		{
 			
@@ -188,5 +196,13 @@ public class GameControlPanel extends JPanel {
 		panel.setGuess("I have no guess!");
 		panel.setGuessResult("So you have nothing?", null );
 
+	}
+
+	public JTextField getGuess() {
+		return guess;
+	}
+
+	public void setGuess(JTextField guess) {
+		this.guess = guess;
 	}
 }

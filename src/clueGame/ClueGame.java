@@ -235,7 +235,7 @@ public class ClueGame extends JFrame {
 						
 						Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), board.getPlayersTurn());
 						
-						if (disprovenCard.equals(null)) {
+						if (disprovenCard == null) {
 							controlPanel.setGuessResult("Guess not disproven!", null);
 						}
 						

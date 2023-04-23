@@ -31,7 +31,7 @@ public class BoardAdjTargetTest306 {
 		// we want to test a couple of different rooms.
 		// First, the study that only has a single door but a secret room
 		Set<BoardCell> testList = board.getAdjList(2, 2);
-
+		// TODO: Delete this debug statement
 		// System.out.println(board.getAdjList(5, 7));
 
 		assertEquals(2, testList.size());

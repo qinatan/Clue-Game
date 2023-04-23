@@ -180,7 +180,7 @@ public abstract class Player {
 
 	public void printHand() {
 		for (int i = 0; i < hand.size(); i++) {
-			System.out.println(hand.get(i));
+		// System.out.println(hand.get(i));
 		}
 	}
 
@@ -249,7 +249,8 @@ public abstract class Player {
 			setDrawOffset(0);
 		}
 		
-		System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
+		// TODO: delete this debug statement 
+		// System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
 	}
 
 	/**
@@ -260,7 +261,8 @@ public abstract class Player {
 		this.col = col;
 		this.currCell = board.getCell(this.row, this.col);
 		resetPlayerLocation();
-		System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
+		// TODO: Delete this debug statement
+		// System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
 	}
 	
 

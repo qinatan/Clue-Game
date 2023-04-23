@@ -131,6 +131,7 @@ public class FileInitTests {
 		room = board.getRoom(cell);
 		assertTrue(room != null);
 		assertEquals(room.getName(), "Bedroom");
+		// TODO: Delete this debug statement
 	//	System.out.println(cell.getSecretPassage());
 		assertTrue(cell.getSecretPassage() == 'E');
 

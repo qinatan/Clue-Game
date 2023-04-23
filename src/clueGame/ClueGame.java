@@ -127,6 +127,7 @@ public class ClueGame extends JFrame {
 					controlPanel.updateGuessText(suggestionCards, disapprovalCard, board.getPlayersTurn());
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
+					cardsPanel.updatePanels();
 				}
 				
 				else {

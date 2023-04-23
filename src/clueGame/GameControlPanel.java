@@ -157,7 +157,7 @@ public class GameControlPanel extends JPanel {
 		}
 		else
 		{
-			this.guessResult.setText("Suggestion uphead");
+			this.guessResult.setText("Suggestion upheld");
 		}
 	}
 	

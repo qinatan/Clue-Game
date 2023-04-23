@@ -179,7 +179,7 @@ public class Computerplayer extends Player {
 	 */
 	@Override
 	public ArrayList<Card> makeAccusation() {
-		int unseenWeapons = 0, unseenPeople = 0, unseenRooms = 0;
+		int unseenWeapons = 1, unseenPeople = 1, unseenRooms = 1;
 		ArrayList<Card> accCards = new ArrayList<Card>();
 
 		for (Card weaponCard : board.getWeaponDeck()) {

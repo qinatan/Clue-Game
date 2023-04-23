@@ -126,6 +126,9 @@ public class Computerplayer extends Player {
 
 		// No room in target list or room in target list has been seen, return random
 		// BoardCell from target list
+		if (targets.size() <= 0) {
+			return null; 
+		}
 		int randomNumber = randomTarget.nextInt(targets.size());
 		return targets.get(randomNumber);
 

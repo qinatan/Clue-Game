@@ -248,6 +248,7 @@ public abstract class Player {
 		else {
 			setDrawOffset(0);
 		}
+
 		
 		// TODO: delete this debug statement 
 		// System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
@@ -257,9 +258,11 @@ public abstract class Player {
 	 * This is the method that moves the players to any location on the board
 	 */
 	public void setPlayerLocation(int row, int col) {
+		currCell.setOccupied(false); // sets current cell to unoccupied
 		this.row = row;
 		this.col = col;
 		this.currCell = board.getCell(this.row, this.col);
+		this.currCell.setOccupied(true); // sets the cell we're moving to as occupied
 		resetPlayerLocation();
 		// TODO: Delete this debug statement
 		// System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 

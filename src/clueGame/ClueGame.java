@@ -92,7 +92,10 @@ public class ClueGame extends JFrame {
 
 		// TODO: this method should be moved outside of the mouse listener
 		private void mouseClickedLogic(MouseEvent e) {
-		
+			if (board.getTargets() == null || board.getTargets().size() == 0) {
+				board.getPlayersTurn().setHasPlayerMoved(true);
+				return;
+			}
 			board.resetPlayersLocations();
 			int cellWidth = board.getCellWidth();
 			int cellHeight = board.getCellHeight();
@@ -197,19 +200,20 @@ public class ClueGame extends JFrame {
 					
 					// update player location based on target cell
 					BoardCell targetCell = ((Computerplayer) board.getPlayersTurn()).targetSelection(board.getTargets());
-					board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
-					
-					if (targetCell.isRoom()) {
-						//CPU player make suggestion and handle suggestion 
-						ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
-						Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), board.getPlayersTurn());
+					if (targetCell != null) {
+						board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
 						
-						if (disprovenCard != null)
-						{
-							board.getPlayersTurn().addToSeenMap(disprovenCard.getCardType(), disprovenCard);
+						if (targetCell.isRoom()) {
+							//CPU player make suggestion and handle suggestion 
+							ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
+							Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), board.getPlayersTurn());
+							
+							if (disprovenCard != null) {
+								board.getPlayersTurn().addToSeenMap(disprovenCard.getCardType(), disprovenCard);
+							}
+							//update guess and guess result text field 
+							controlPanel.updateGuessText(suggestedCards, disprovenCard, board.getPlayersTurn());
 						}
-						//update guess and guess result text field 
-						controlPanel.updateGuessText(suggestedCards, disprovenCard, board.getPlayersTurn());
 					}
 					
 					board.getPlayersTurn().setHasPlayerMoved(true);

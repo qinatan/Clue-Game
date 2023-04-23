@@ -185,10 +185,17 @@ public class ClueGame extends JFrame {
 			//calculate target list based on current board cell and dice number
 			board.calcTargets(currentLocation, randomRoll);
 
+			if (board.getTargets() == null || board.getTargets().size() == 0) {
+				board.getPlayersTurn().setHasPlayerMoved(true);
+				return;
+			}
+			
 			// If Human Player: repaint to highlight cells in target list
 			if (board.getPlayersTurn() instanceof Humanplayer) {
 				repaint();
 			}
+			
+			
 			// Else it's a CPU Player
 			else {
 

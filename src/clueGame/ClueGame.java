@@ -92,8 +92,7 @@ public class ClueGame extends JFrame {
 
 		// TODO: this method should be moved outside of the mouse listener
 		private void mouseClickedLogic(MouseEvent e) {
-			// TODO: there are functions in here that could probably be moved out into their
-			// own functions
+		
 			board.resetPlayersLocations();
 			int cellWidth = board.getCellWidth();
 			int cellHeight = board.getCellHeight();
@@ -104,43 +103,32 @@ public class ClueGame extends JFrame {
 			if (!(row > board.getNumRows() - 1 || col > board.getNumColumns() - 1)) {
 				BoardCell cell = board.getCell(row, col);
 
-				// Check that the clicked cell is a target walkway
+				// Check that the clicked cell is a target walkway and update player's location 
 				if (board.getTargets().contains(cell) && cell.getCellSymbol() == 'W') {
-					// update player location after they click one of the board cell on target list
 					board.getPlayersTurn().setPlayerLocation(row, col);
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
-
 					// Check if the target cell is a room
 				} else if (board.getTargets().contains(cell) && cell.isRoom()) {
 					BoardCell thisRoomCenter = board.getRoom(cell).getCenterCell();
 					board.getPlayersTurn().setPlayerLocation(thisRoomCenter.getRowNum(), thisRoomCenter.getColumnNum());
 
-					// Make suggestion
+					// Make suggestion and handle suggestion 
 					ArrayList<Card> suggestionCards = board.getPlayersTurn().makeSuggestion();
-
-					// call handle suggestion
-					Card disapprovalCard = board.handleSuggestion(suggestionCards.get(0), suggestionCards.get(1),
-							suggestionCards.get(2), board.getPlayersTurn());					
-
-					controlPanel.setGuess(
-							suggestionCards.get(0) + " " + suggestionCards.get(1) + " " + suggestionCards.get(2));
-
-					// This is where we handle the human disproven suggestions
-					if (disapprovalCard != null) {
-						controlPanel.setGuessResult(disapprovalCard.getCardName(), disapprovalCard);
-						board.getPlayersTurn().addToSeenMap(disapprovalCard.getCardType(), disapprovalCard);
-						cardsPanel.updatePanels();
-					} else {
-						controlPanel.setGuessResult("Suggestion Upheld", null);
-					}
-
+					Card disapprovalCard = board.handleSuggestion(suggestionCards.get(0), suggestionCards.get(1), suggestionCards.get(2), board.getPlayersTurn());					
 					
+					//add dispprovalCard to player's seenMap
+					if (disapprovalCard != null)
+					{
+						board.getPlayersTurn().addToSeenMap(disapprovalCard.getCardType(), disapprovalCard);
+					}
+					
+					//update guess and guess result field
+					controlPanel.updateGuessText(suggestionCards, disapprovalCard, board.getPlayersTurn());
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells();
-
 				}
-
+				
 				else {
 					JOptionPane.showMessageDialog(null, "Please click on a vaild tile", "Error",
 							JOptionPane.ERROR_MESSAGE);
@@ -180,79 +168,52 @@ public class ClueGame extends JFrame {
 		board.resetPlayersLocations();
 		
 		if (board.getPlayersTurn().getIsHasPlayerACC() || board.getPlayersTurn().getIsHasPlayerMoved()) {
-			// switch to get next player in the list
+			
+			// switch to get next player in the list and roll a dice 
 			board.nextTurn();
-			///// ***** All the code from here down to the next big comment could probably be added to nextTurn()
-			controlPanel.getPlayerNameText().setText(board.getPlayersTurn().getPlayerName());
-			controlPanel.getPlayerNameText().setBackground(board.getPlayersTurn().getPlayerColor());
-			controlPanel.setGuessResult(null, null); // Resets the guess result
-			Color whiteColor = new Color(255, 255, 255);
-			controlPanel.getGuessResult().setBackground(whiteColor);
-			controlPanel.getGuess().setBackground(whiteColor);
-			controlPanel.getGuess().setText(""); // Sets guess to blank at the start of each turn
-			controlPanel.getGuessResult().setText(""); // sets guess result to blank at the start of each turn
-			///// ***** All the code above this could probably be added to nextTurn()
-			BoardCell currentLocation = board.getCell(board.getPlayersTurn().getPlayerRow(),
-					board.getPlayersTurn().getPlayerCol());
-
-			// roll a dice
+			BoardCell currentLocation = board.getCell(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol());
 			board.getPlayersTurn().setRollNum();
 			int randomRoll = board.getPlayersTurn().getRollNum();
-			controlPanel.getRollText().setText(String.valueOf(randomRoll));
+			
+			//update text field after switching to new player and rolling dice 
+			controlPanel.newTurnTextUpdate(board.getPlayersTurn(), String.valueOf(randomRoll)); 
 
-			// calculate target list based on current board cell and dice number
+			//calculate target list based on current board cell and dice number
 			board.calcTargets(currentLocation, randomRoll);
 
-			// If Human Player
+			// If Human Player: repaint to highlight cells in target list
 			if (board.getPlayersTurn() instanceof Humanplayer) {
-				// repaint to highlight cells in target list
 				repaint();
-
 			}
 			// Else it's a CPU Player
 			else {
 
-				// If the computer can make an accusation it will
+				// If the computer can make an accusation it will make accusation 
 				if (board.getPlayersTurn().canMakeAccusation()) {
-					// Make accusation
+					
 					board.getPlayersTurn().makeAccusation();
 				} else {
-
-					BoardCell targetCell = ((Computerplayer) board.getPlayersTurn())
-							.targetSelection(board.getTargets());
-
-					// update player location
+					
+					// update player location based on target cell
+					BoardCell targetCell = ((Computerplayer) board.getPlayersTurn()).targetSelection(board.getTargets());
 					board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
-
+					
 					if (targetCell.isRoom()) {
+						//CPU player make suggestion and handle suggestion 
 						ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
-						String guess = suggestedCards.get(0).getCardName() + " + " + suggestedCards.get(1).getCardName()
-								+ " + " + suggestedCards.get(2).getCardName();
-						controlPanel.setGuess(guess);
-
-						// This moves the selected player into the room
-						// This code is also on line 130 ish
-						// TODO: This method can be taken out and made into a separate function
-						board.getPlayersTurn().setPlayerLocation(board.getPlayersTurn().getPlayerRow(),
-								board.getPlayersTurn().getPlayerCol());
-						
 						Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), board.getPlayersTurn());
 						
-						if (disprovenCard == null) {
-							controlPanel.setGuessResult("Guess not disproven!", null);
+						if (disprovenCard != null)
+						{
+							board.getPlayersTurn().addToSeenMap(disprovenCard.getCardType(), disprovenCard);
 						}
-						
-						else {
-							controlPanel.setGuessResult("Suggestion Disproven", disprovenCard);
-						}
+						//update guess and guess result text field 
+						controlPanel.updateGuessText(suggestedCards, disprovenCard, board.getPlayersTurn());
 					}
-					for (BoardCell cell : board.getTargets()) {
-						cell.setIsTargetCell(false);
-					}
-
-					// TODO: Why do we have this here if we move the player right above this
+					
 					board.getPlayersTurn().setHasPlayerMoved(true);
-					repaint();
+					clearTargetCells(); //clear target cells and repaint board 
+					
 				}
 			}
 		} else {

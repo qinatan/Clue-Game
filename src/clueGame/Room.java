@@ -19,8 +19,8 @@ public class Room {
 	private BoardCell centerCell;
 	private boolean hasSecretPassage ; 
 	private Character passageRoom ; 
-	private int numOccupants; 
-	private ArrayList<Player> Occupants; 
+	private int numOccupants = 0;
+	private ArrayList<Player> Occupants = new ArrayList<Player>();
 	
 	public ArrayList<Player> getOccupants() {
 		return Occupants;

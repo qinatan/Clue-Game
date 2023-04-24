@@ -20,8 +20,9 @@ import java.util.Set;
 
 public class Computerplayer extends Player {
 	Board board = Board.getInstance();
-	Boolean isAccusation = false; //initiate to false
-	ArrayList<Card> potentialAccusation = new ArrayList<Card>(); 
+	Boolean upheldSuggestion = false; 
+	ArrayList<Card> latestSuggestion = new ArrayList<Card>(); 
+	
 	public Computerplayer(String playerName, String playerColor, String row, String col) {
 		super(playerName, playerColor, row, col);
 	}
@@ -31,14 +32,14 @@ public class Computerplayer extends Player {
 		hand.add(card);
 	}
 	
-	// I don't like this name, this is just a setter right? 
-	public void accusationMakeReady() {
-		this.isAccusation = true; 
+
+	public void setUpheldSuggestion() {
+		this.upheldSuggestion = true; 
 	}
 	
 	
-	public Boolean getIsAccusation(){
-		return isAccusation; 
+	public Boolean getUpheldSuggestion(){
+		return upheldSuggestion; 
 	}
 
 	public ArrayList<Card> makeSuggestion() {
@@ -100,7 +101,7 @@ public class Computerplayer extends Player {
 			}
 		}
  
-		//this.potentialAccusation = finalSuggestion; 
+		this.latestSuggestion = finalSuggestion; 
 		System.out.println(finalSuggestion.toString());
 		System.out.println();
 		return finalSuggestion;
@@ -150,15 +151,31 @@ public class Computerplayer extends Player {
 	}
 
 	/**
-	 * This method checks to see if the computer player has seen enough to make an
-	 * accusation this method is untested.
-	 * TODO: I don't think this code ever runs - Mike... Also, unseenWeapons, People, and Rooms will never be 0. 
-	 * TODO: I'm considering deleting this method so that AI can only make accusations if they have made a suggestion 
-	 * TODO: I'm not sure how to approach this method anymore because they don't have their hand cards in their seen list
+	 * First checks if the player made a suggestion that was upheld last turn. 
+	 * Second it checks if between it's seen list and hand it can deduct the solution. 
 	 * which is not disproved
 	 * @return
 	 */
 	public boolean canMakeAccusation() {
+		// if upheldSuggestion is set to TRUE, then check hand against those cards
+		if (upheldSuggestion) {
+			Boolean handContains = false;
+			for (Card card: latestSuggestion) {
+				if (this.getHand().contains(card)) {
+					handContains = true;
+				}
+			}
+			// if the last suggestion was upheld, and none of those cards are in players hand, ACCUSE
+			if (!handContains) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		return false;
+		/*
 		int unseenWeapons = 1;
 		int unseenPeople = 1;
 		int unseenRooms = 1;
@@ -192,6 +209,7 @@ public class Computerplayer extends Player {
 		} else {
 			return true;
 		}
+		*/
 
 	}
 
@@ -202,7 +220,7 @@ public class Computerplayer extends Player {
 	 */
 	@Override
 	public ArrayList<Card> makeAccusation() {
-		return this.potentialAccusation; 
+		return this.latestSuggestion; 
 	}
 
 }

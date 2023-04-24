@@ -207,34 +207,34 @@ public class ClueGame extends JFrame {
 				System.out.println("current players seenlist = " + board.getPlayersTurn().getSeenMap()); 
 				System.out.println();
 				// If the suggestion from the previous suggestion is upheld, make accusation with cards from the previous suggestion
-				if (((Computerplayer) board.getPlayersTurn()).canMakeAccusation() || ((Computerplayer) board.getPlayersTurn()).getIsAccusation()) {
+				if (((Computerplayer) board.getPlayersTurn()).canMakeAccusation()) {
 					// TODO: Delete these debug statements
 					System.out.println("They make an accusation!"); 
 					System.out.println();
 					ArrayList<Card>accusation = board.getPlayersTurn().makeAccusation();
+					System.out.println(accusation.toString());
 					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
-					Boolean trueAccusation = true; 
+					Boolean accusationRoom = false; 
+					Boolean accusationWeapon = false;
+					Boolean accusationPerson = false;
 					// TODO: I think all this logic could become a function of Solution. 
 					// i.e. public boolean checkSolution(ArrayList<Card>)
 					// Which we could call with board.getSolution().checkSolution();
 					for (Card accusationCard : accusation) {
 						switch(accusationCard.getCardType()) {
 						case ROOM: 
-							if(!solutions.get(CardType.ROOM).equals(accusationCard)) {
-								trueAccusation = false; 
-								System.out.println("Incorrect Accusation " + accusationCard); 
+							if(solutions.get(CardType.ROOM) == accusationCard) {
+								accusationRoom = true;  
 							}
 							break; 
 						case WEAPON: 
-							if(!solutions.get(CardType.WEAPON).equals(accusationCard)) {
-								trueAccusation = false; 
-								System.out.println("Incorrect Accusation " + accusationCard); 
+							if(solutions.get(CardType.WEAPON) == accusationCard) {
+								accusationWeapon = true; 
 							}
 							break; 
 						case PERSON: 
-							if(!solutions.get(CardType.PERSON).equals(accusationCard)) {
-								trueAccusation = false; 
-								System.out.println("Incorrect Accusation " + accusationCard); 
+							if(solutions.get(CardType.PERSON) == accusationCard) {
+								accusationPerson = true; 
 							}
 							break; 
 						default: 
@@ -242,7 +242,7 @@ public class ClueGame extends JFrame {
 							break;
 						}
 					}
-					if (Boolean.TRUE.equals(trueAccusation)){
+					if (Boolean.TRUE.equals(accusationRoom) && Boolean.TRUE.equals(accusationWeapon) && Boolean.TRUE.equals(accusationPerson)){
 						String currentPlayer = board.getPlayersTurn().getPlayerName(); 
 						JOptionPane.showMessageDialog(null, currentPlayer + " Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -276,7 +276,7 @@ public class ClueGame extends JFrame {
 							    }
 							    if (readyToAccuse) {
 							    System.out.println("No matching cards found, preparing to accuse. ");
-							    ((Computerplayer) board.getPlayersTurn()).accusationMakeReady();
+							    ((Computerplayer) board.getPlayersTurn()).setUpheldSuggestion();
 							    }
 							    
 							    // TODO: check if they have seen all the other cards to improve decision making

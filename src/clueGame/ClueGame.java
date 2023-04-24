@@ -218,36 +218,50 @@ public class ClueGame extends JFrame {
 					// i.e. public boolean checkSolution(ArrayList<Card>)
 					// Which we could call with board.getSolution().checkSolution();
 					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
-					Boolean accusationRoom = false; 
-					Boolean accusationWeapon = false;
-					Boolean accusationPerson = false;
-					for (Card accusationCard : accusation) {
-						switch(accusationCard.getCardType()) {
-						case ROOM: 
-							if(solutions.get(CardType.ROOM) == accusationCard) {
-								accusationRoom = true;  
-							}
-							break; 
-						case WEAPON: 
-							if(solutions.get(CardType.WEAPON) == accusationCard) {
-								accusationWeapon = true; 
-							}
-							break; 
-						case PERSON: 
-							if(solutions.get(CardType.PERSON) == accusationCard) {
-								accusationPerson = true; 
-							}
-							break; 
-						default: 
-							System.out.println("Not valid card"); 
-							break;
-						}
-					}
+//					Boolean accusationRoom = false; 
+//					Boolean accusationWeapon = false;
+//					Boolean accusationPerson = false;
+//					for (Card accusationCard : accusation) {
+//						switch(accusationCard.getCardType()) {
+//						case ROOM: 
+//							if(solutions.get(CardType.ROOM) == accusationCard) {
+//								accusationRoom = true;  
+//							}
+//							break; 
+//						case WEAPON: 
+//							if(solutions.get(CardType.WEAPON) == accusationCard) {
+//								accusationWeapon = true; 
+//							}
+//							break; 
+//						case PERSON: 
+//							if(solutions.get(CardType.PERSON) == accusationCard) {
+//								accusationPerson = true; 
+//							}
+//							break; 
+//						default: 
+//							System.out.println("Not valid card"); 
+//							break;
+//						}
+//					}
 					
-					if (Boolean.TRUE.equals(accusationRoom) && Boolean.TRUE.equals(accusationWeapon) && Boolean.TRUE.equals(accusationPerson)){
-						String currentPlayer = board.getPlayersTurn().getPlayerName(); 
-						JOptionPane.showMessageDialog(null, currentPlayer + " Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
+
+			//		board.checkAccusation(room , person, weapon)
+					if(board.checkAccusation(accusation.get(1), accusation.get(0), accusation.get(2))) {
+						JOptionPane.showMessageDialog(null, board.getPlayersTurn().getPlayerName() + " Won!" + "\n The solution was " + solutions.get(CardType.ROOM) + " " + solutions.get(CardType.WEAPON) + " " + solutions.get(CardType.PERSON) + "", "Loser!", JOptionPane.INFORMATION_MESSAGE);
+						dispose(); 
+					} else {
+						
 					}
+		
+					
+//					if (Boolean.TRUE.equals(accusationRoom) && Boolean.TRUE.equals(accusationWeapon) && Boolean.TRUE.equals(accusationPerson)){
+//						String currentPlayer = board.getPlayersTurn().getPlayerName(); 
+//						JOptionPane.showMessageDialog(null, currentPlayer + " Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
+//						dispose() ; 
+//					} else {
+//						System.out.println("The ACC was " + accusationRoom + " " + accusationWeapon + " " + accusationPerson) ;
+//						System.out.println("The solution was " + solutions.get(CardType.ROOM) + " " + solutions.get(CardType.WEAPON) + " " + solutions.get(CardType.PERSON)) ;
+//					}
 					
 				} else {
 					

@@ -438,11 +438,13 @@ public class Board extends JPanel {
 	 * to it is added to. If not it returns.
 	 */
 	private void isValidAdj(BoardCell cell, BoardCell adjCell) {
-		if (!adjCell.isRoom() && adjCell.getCellSymbol() != 'X') {
+		if (Boolean.FALSE.equals(adjCell.isRoom()) && adjCell.getCellSymbol() != 'X') {
 			cell.addAdjacency(adjCell);
 		}
 	}
 
+	
+	// TODO: Refactor this method to be much shorter
 	private void calculateCellAdj(int row, int col) {
 
 		// If unused cell: Do not create adjList for it
@@ -490,7 +492,7 @@ public class Board extends JPanel {
 		}
 
 		// Add secretPassage destination to center cell's adjList
-		if (currCell.isRoomCenter()) {
+		if (Boolean.TRUE.equals(currCell.isRoomCenter())) {
 			Room currRoom = roomMap.get(currCell.getCellSymbol());
 			if (currRoom.isHasSecretPassage()) {
 				Character nextRoomChar = currRoom.getPassageRoom();
@@ -633,8 +635,6 @@ public class Board extends JPanel {
 		dealtDeck.remove(peopleDeck.get(randomPerson));
 		dealtDeck.remove(roomDeck.get(randomRoom));
 		dealtDeck.remove(weaponDeck.get(randomWeapon));
-		// TODO: Delete this debug statement
-		// System.out.println(solution.toString());
 	}
 
 	// return first disapproval card that matching to suggesting card from other

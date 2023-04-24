@@ -31,10 +31,11 @@ public class Computerplayer extends Player {
 		hand.add(card);
 	}
 	
-	public void accusationMakeReady()
-	{
+	// I don't like this name, this is just a setter right? 
+	public void accusationMakeReady() {
 		this.isAccusation = true; 
 	}
+	
 	
 	public Boolean getIsAccusation(){
 		return isAccusation; 
@@ -121,6 +122,7 @@ public class Computerplayer extends Player {
 		}
 		
 		for (BoardCell target : targetList) {
+			// TODO: Check if that room is in the players seenList, if it is, don't enter
 			if (target.isRoom()) {
 				// get the cellSymbol in order to get the matching room from roomMap
 				Character cellSymbol = target.getCellSymbol();
@@ -148,32 +150,34 @@ public class Computerplayer extends Player {
 	/**
 	 * This method checks to see if the computer player has seen enough to make an
 	 * accusation this method is untested.
-	 * 
+	 * TODO: I don't think this code ever runs - Mike... Also, unseenWeapons, People, and Rooms will never be 0. 
+	 * TODO: I'm considering deleting this method so that AI can only make accusations if they have made a suggestion 
+	 * TODO: I'm not sure how to approach this method anymore because they don't have their hand cards in their seen list
+	 * which is not disproved
 	 * @return
 	 */
 	public boolean canMakeAccusation() {
-		int unseenWeapons = 0, unseenPeople = 0, unseenRooms = 0;
+		int unseenWeapons = 1;
+		int unseenPeople = 1;
+		int unseenRooms = 1;
 
 		for (Card weaponCard : board.getWeaponDeck()) {
-			if (this.seenMap.containsKey(weaponCard)) {
-				continue;
-			} else {
+			if (this.seenMap.containsKey(weaponCard.getCardType()));
+			else {
 				unseenWeapons++;
 			}
 		}
 
 		for (Card playerCard : board.getPeopleDeck()) {
-			if (this.seenMap.containsKey(playerCard)) {
-				continue;
-			} else {
+			if (this.seenMap.containsKey(playerCard.getCardType()));
+			else {
 				unseenPeople++;
 			}
 		}
 
 		for (Card roomCard : board.getRoomDeck()) {
-			if (this.seenMap.containsKey(roomCard)) {
-				continue;
-			} else {
+			if (this.seenMap.containsKey(roomCard.getCardType()));
+			else {
 				unseenRooms++;
 			}
 		}
@@ -193,34 +197,6 @@ public class Computerplayer extends Player {
 	 */
 	@Override
 	public ArrayList<Card> makeAccusation() {
-//		int unseenWeapons = 1, unseenPeople = 1, unseenRooms = 1;
-//		ArrayList<Card> accCards = new ArrayList<Card>();
-//
-//		for (Card weaponCard : board.getWeaponDeck()) {
-//			if (this.seenMap.containsKey(weaponCard)) {
-//				continue;
-//			} else {
-//				accCards.add(weaponCard);
-//			}
-//		}
-//
-//		for (Card playerCard : board.getPeopleDeck()) {
-//			if (this.seenMap.containsKey(playerCard)) {
-//				continue;
-//			} else {
-//				accCards.add(playerCard);
-//			}
-//		}
-//
-//		for (Card roomCard : board.getRoomDeck()) {
-//			if (this.seenMap.containsKey(roomCard)) {
-//				continue;
-//			} else {
-//				accCards.add(roomCard);
-//			}
-//		}
-//
-//		return accCards;
 		return this.potentialAccusation; 
 	}
 

@@ -46,11 +46,9 @@ public class BoardCell {
 	public void drawBoardCell(int width, int height, Graphics g) {
 		
 		Graphics2D g2 = (Graphics2D) g; // cast g to Graphics2d object so we can use those methods
-		Board board = Board.getInstance();	
 		Color black = new Color(0,0,0); 
 		Color skyblue = new Color(135, 206, 235); // Rooms will be sky blue
 		Color grey = new Color(192, 192, 192); // unused space will be grey
-		Color yellow = new Color(255, 255, 0); //walkway will be yellow 
 		Color highlight = new Color(128, 0, 128); 
 		int horOffset = width * columnNum; // calculates the offset of this cell
 		int vertOffset = height * rowNum; // calculates the offset of this cell
@@ -95,7 +93,8 @@ public class BoardCell {
 				case LEFT:
 					g2.setColor(black);
 					g2.drawString("<", horOffset, vertOffset+ 10);
-				
+					break;
+					
 				default:
 					break;
 					
@@ -124,7 +123,6 @@ public class BoardCell {
 		int vertOffset = height * rowNum;
 		if (Boolean.TRUE.equals(this.isLabel())) {
 			String roomLabel = board.getRoomMap().get(cellSymbol).getName(); 
-			Color pink = new Color(255, 192, 203); 
 			Color black = new Color(0,0,0); 
 			g.setColor(black);
 			Font font = new Font("Arial", Font.BOLD, 12); 
@@ -253,7 +251,7 @@ public class BoardCell {
 	}
 
 	public void setOccupied(boolean isOccStatus) {
-		if (this.isRoomCenterCell) {
+		if (Boolean.TRUE.equals(this.isRoomCenterCell)) {
 			this.isOccupied = false;
 		}
 		else {
@@ -280,13 +278,13 @@ public class BoardCell {
 		return adjList;
 	}
 	
-	public void setIsTargetCell(Boolean repainted)
-	{
+	public void setIsTargetCell(Boolean repainted) {
 		this.isTargetCell = repainted; 
 	}
 	
-	public void repaint()
-	{
+	
+	// TODO: This seems very unnecessary
+	public void repaint() {
 		repaint(); 
 	}
 }

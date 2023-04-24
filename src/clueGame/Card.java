@@ -39,6 +39,8 @@ public class Card implements Comparable<Card> {
 		case "Player":
 			this.cardType = CardType.PERSON;
 			break;
+		default:
+			break;
 		}
 
 	}
@@ -61,13 +63,11 @@ public class Card implements Comparable<Card> {
 		return cardType;
 	}
 	
-	public void setCardColor(Color cardColor)
-	{
+	public void setCardColor(Color cardColor) {
 		this.cardColor = cardColor; 
 	}
 	
-	public Color getcardColor()
-	{
+	public Color getcardColor() {
 		return this.cardColor; 
 	}
 
@@ -91,7 +91,6 @@ public class Card implements Comparable<Card> {
 
 	@Override
 	public int compareTo(Card o) {
-	
 		return 0;
 	}
 

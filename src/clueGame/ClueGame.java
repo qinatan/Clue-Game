@@ -170,25 +170,25 @@ public class ClueGame extends JFrame {
 	 * This is where the logic of the next button pressed should be held
 	 */
 	public void nextButtonPressedLogic() {
-		
+		Player currPlayer = board.getPlayersTurn();
 		board.resetPlayersLocations();
 		
 		if (board.getPlayersTurn().getIsHasPlayerACC() || board.getPlayersTurn().getIsHasPlayerMoved()) {
 			
 			// switch to get next player in the list and roll a dice 
 			board.nextTurn();
-			BoardCell currentLocation = board.getCell(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol());
-			board.getPlayersTurn().setRollNum();
-			int randomRoll = board.getPlayersTurn().getRollNum();
+			BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
+			currPlayer.setRollNum();
+			int randomRoll = currPlayer.getRollNum();
 			
 			//update text field after switching to new player and rolling dice 
-			controlPanel.newTurnTextUpdate(board.getPlayersTurn(), String.valueOf(randomRoll)); 
+			controlPanel.newTurnTextUpdate(currPlayer, String.valueOf(randomRoll)); 
 
 			//calculate target list based on current board cell and dice number
 			board.calcTargets(currentLocation, randomRoll);
 
 			if (board.getTargets() == null || board.getTargets().size() == 0) {
-				board.getPlayersTurn().setHasPlayerMoved(true);
+				currPlayer.setHasPlayerMoved(true);
 				return;
 			}
 			
@@ -202,11 +202,14 @@ public class ClueGame extends JFrame {
 			else {
 
 				// If the suggestion from the previous suggestion is upheld, make accusation with cards from the previous suggestion
-				if (((Computerplayer) board.getPlayersTurn()).getIsAccusation()) {
+				if (((Computerplayer) currPlayer).canMakeAccusation()) {
 					
-					ArrayList<Card>accusation = board.getPlayersTurn().makeAccusation();
+					ArrayList<Card>accusation = currPlayer.makeAccusation();
 					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
 					Boolean trueAccusation = true; 
+					// TODO: I think all this logic could become a function of Solution. 
+					// i.e. public boolean checkSolution(ArrayList<Card>)
+					// Which we could call with board.getSolution().checkSolution();
 					for (Card accusationCard : accusation) {
 					
 						switch(accusationCard.getCardType()) {
@@ -231,46 +234,55 @@ public class ClueGame extends JFrame {
 						default: 
 							System.out.println("Not valid card"); 
 							break;
-						
 						}
 					}
-					if (trueAccusation){
+					if (Boolean.TRUE.equals(trueAccusation)){
 						String currentPlayer = board.getPlayersTurn().getPlayerName(); 
 						JOptionPane.showMessageDialog(null, currentPlayer + " Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
+					// TODO: Delete these debug statements
 					System.out.println("They make an accusation!"); 
 					System.out.println(accusation); 
-					System.out.println(board.getSolution()); 
-					System.out.println(board.getPlayersTurn().getHand()); 
-					//check if accusation is true? 
+
 					
 				} else {
 					
 					// update player location based on target cell
-					BoardCell targetCell = ((Computerplayer) board.getPlayersTurn()).targetSelection(board.getTargets());
+					BoardCell targetCell = ((Computerplayer) currPlayer).targetSelection(board.getTargets());
 					if (targetCell != null) {
-						board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
+						currPlayer.setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
 						
 						if (targetCell.isRoom()) {
 							//CPU player make suggestion and handle suggestion 
-							ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
-							Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), null);
+							ArrayList<Card> suggestedCards = currPlayer.makeSuggestion();
+							Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), board.getPlayersTurn());
 							
 							if (disprovenCard != null) {
-								board.getPlayersTurn().addToSeenMap(disprovenCard.getCardType(), disprovenCard);
+								currPlayer.addToSeenMap(disprovenCard.getCardType(), disprovenCard);
 							}
-							else
-							{
-								 ((Computerplayer) board.getPlayersTurn()).accusationMakeReady(); //mark this suggestion is upheld so make accusation on the next turn of this player 
+							// CPU made a suggestion and noone disproved it
+							else {
+								// First check if any of the cards they suggested are in their hand
+								Boolean readyToAccuse = true;
+							    for (Card card: currPlayer.getHand()) {
+							    	if (suggestedCards.contains(card)) {
+							    		readyToAccuse = false; 
+							    	}
+							    }
+							    currPlayer.canMakeAccusation();
+							    
+							    // TODO: check if they have seen all the other cards? 
+								
 							}
 							//update guess and guess result text field 
-							controlPanel.updateGuessText(suggestedCards, disprovenCard, board.getPlayersTurn());
+							controlPanel.updateGuessText(suggestedCards, disprovenCard, currPlayer);
 						}
 					}
-					System.out.println(board.getPlayersTurn().getHand()); 
+					// TODO: Delete these print statements
+					System.out.println("current players hand = " + currPlayer.getHand());
 					System.out.println(); 
-					System.out.println(board.getPlayersTurn().getSeenMap()); 
+					System.out.println("current players seenlist = " + currPlayer.getSeenMap()); 
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells(); //clear target cells and repaint board 
 					
@@ -364,7 +376,7 @@ public class ClueGame extends JFrame {
 			board.getTargets().clear(); 
 			repaint();
 			
-			if (board.checkAccusation(ACCCards.get(1), ACCCards.get(2), ACCCards.get(0))) {
+			if (Boolean.TRUE.equals(board.checkAccusation(ACCCards.get(1), ACCCards.get(2), ACCCards.get(0)))) {
 				JOptionPane.showMessageDialog(null, "You Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
 			} else {
@@ -379,7 +391,7 @@ public class ClueGame extends JFrame {
 	// Main entry point for game
 	public static void main(String[] args) {
 		ClueGame ThisClueGame = new ClueGame();
-		System.out.println(Board.getSolution()); 
+		System.out.println("The Solution is = " + Board.getSolution()); 
 
 	}
 }

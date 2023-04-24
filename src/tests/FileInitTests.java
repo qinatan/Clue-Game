@@ -119,7 +119,7 @@ public class FileInitTests {
 		assertTrue(room.getLabelCell() == cell);
 
 		// this is a room center cell to test
-		cell = board.getCell(13, 19);
+		cell = board.getCell(13, 18);
 		room = board.getRoom(cell);
 		assertTrue(room != null);
 		assertEquals(room.getName(), "Dog House");

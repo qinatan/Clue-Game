@@ -263,7 +263,7 @@ public class ClueGame extends JFrame {
 //						System.out.println("The solution was " + solutions.get(CardType.ROOM) + " " + solutions.get(CardType.WEAPON) + " " + solutions.get(CardType.PERSON)) ;
 //					}
 					
-				} else {
+				} else {  
 					
 					// update player location based on target cell
 					BoardCell targetCell = ((Computerplayer) board.getPlayersTurn()).targetSelection(board.getTargets());

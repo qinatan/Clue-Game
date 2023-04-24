@@ -206,24 +206,25 @@ public class ClueGame extends JFrame {
 					
 					ArrayList<Card>accusation = board.getPlayersTurn().makeAccusation();
 					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
+					Boolean trueAccusation = true; 
 					for (Card accusationCard : accusation) {
 					
 						switch(accusationCard.getCardType()) {
 						case ROOM: 
 							if(!solutions.get(CardType.ROOM).equals(accusationCard)) {
-								
+								trueAccusation = false; 
 								System.out.println("Incorrect Accusation, ROOM"); 
 							}
 							break; 
 						case WEAPON: 
 							if(!solutions.get(CardType.WEAPON).equals(accusationCard)) {
-								
+								trueAccusation = false; 
 								System.out.println("Incorrect Accusation, WEAPON"); 
 							}
 							break; 
 						case PERSON: 
 							if(!solutions.get(CardType.PERSON).equals(accusationCard)) {
-								
+								trueAccusation = false; 
 								System.out.println("Incorrect Accusation, PERSON"); 
 							}
 							break; 
@@ -231,10 +232,13 @@ public class ClueGame extends JFrame {
 							System.out.println("Not valid card"); 
 							break;
 						
-							
 						}
-					
 					}
+					if (trueAccusation){
+						String currentPlayer = board.getPlayersTurn().getPlayerName(); 
+						JOptionPane.showMessageDialog(null, currentPlayer + " Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
 					System.out.println("They make an accusation!"); 
 					System.out.println(accusation); 
 					System.out.println(board.getSolution()); 

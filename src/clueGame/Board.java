@@ -646,6 +646,7 @@ public class Board extends JPanel {
 		for (int i = 0; i < playerList.size(); i++) {
 			Player player = playerList.get(i);
 
+			
 			if (player != suggestingPlayer) {
 				disprovedCard = player.disproveSuggestion(suggestedCard1, sugguestedCard2, suggestedCard3);
 

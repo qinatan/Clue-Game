@@ -20,7 +20,8 @@ import java.util.Set;
 
 public class Computerplayer extends Player {
 	Board board = Board.getInstance();
-
+	Boolean isAccusation = false; //initiate to false
+	ArrayList<Card> potentialAccusation = new ArrayList<Card>(); 
 	public Computerplayer(String playerName, String playerColor, String row, String col) {
 		super(playerName, playerColor, row, col);
 	}
@@ -28,6 +29,15 @@ public class Computerplayer extends Player {
 	@Override
 	public void updateHand(Card card) {
 		hand.add(card);
+	}
+	
+	public void accusationMakeReady()
+	{
+		this.isAccusation = true; 
+	}
+	
+	public Boolean getIsAccusation(){
+		return isAccusation; 
 	}
 
 	public ArrayList<Card> makeSuggestion() {
@@ -88,7 +98,8 @@ public class Computerplayer extends Player {
 				}
 			}
 		}
-
+ 
+		this.potentialAccusation = finalSuggestion; 
 		return finalSuggestion;
 	}
 
@@ -108,7 +119,7 @@ public class Computerplayer extends Player {
 				cardNames.add(roomCards.get(j).getCardName());
 			}
 		}
-
+		
 		for (BoardCell target : targetList) {
 			if (target.isRoom()) {
 				// get the cellSymbol in order to get the matching room from roomMap
@@ -182,34 +193,35 @@ public class Computerplayer extends Player {
 	 */
 	@Override
 	public ArrayList<Card> makeAccusation() {
-		int unseenWeapons = 1, unseenPeople = 1, unseenRooms = 1;
-		ArrayList<Card> accCards = new ArrayList<Card>();
-
-		for (Card weaponCard : board.getWeaponDeck()) {
-			if (this.seenMap.containsKey(weaponCard)) {
-				continue;
-			} else {
-				accCards.add(weaponCard);
-			}
-		}
-
-		for (Card playerCard : board.getPeopleDeck()) {
-			if (this.seenMap.containsKey(playerCard)) {
-				continue;
-			} else {
-				accCards.add(playerCard);
-			}
-		}
-
-		for (Card roomCard : board.getRoomDeck()) {
-			if (this.seenMap.containsKey(roomCard)) {
-				continue;
-			} else {
-				accCards.add(roomCard);
-			}
-		}
-
-		return accCards;
+//		int unseenWeapons = 1, unseenPeople = 1, unseenRooms = 1;
+//		ArrayList<Card> accCards = new ArrayList<Card>();
+//
+//		for (Card weaponCard : board.getWeaponDeck()) {
+//			if (this.seenMap.containsKey(weaponCard)) {
+//				continue;
+//			} else {
+//				accCards.add(weaponCard);
+//			}
+//		}
+//
+//		for (Card playerCard : board.getPeopleDeck()) {
+//			if (this.seenMap.containsKey(playerCard)) {
+//				continue;
+//			} else {
+//				accCards.add(playerCard);
+//			}
+//		}
+//
+//		for (Card roomCard : board.getRoomDeck()) {
+//			if (this.seenMap.containsKey(roomCard)) {
+//				continue;
+//			} else {
+//				accCards.add(roomCard);
+//			}
+//		}
+//
+//		return accCards;
+		return this.potentialAccusation; 
 	}
 
 }

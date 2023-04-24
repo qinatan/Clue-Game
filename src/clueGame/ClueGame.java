@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JComboBox;
@@ -27,7 +29,7 @@ public class ClueGame extends JFrame {
 
 	// Default constructor
 	public ClueGame() {
-
+		
 		// Create board panel and add it to frame
 		Board board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
@@ -199,10 +201,46 @@ public class ClueGame extends JFrame {
 			// Else it's a CPU Player
 			else {
 
-				// If the computer can make an accusation it will make accusation 
-				if (board.getPlayersTurn().canMakeAccusation()) {
+				// If the suggestion from the previous suggestion is upheld, make accusation with cards from the previous suggestion
+				if (((Computerplayer) board.getPlayersTurn()).getIsAccusation()) {
 					
-					board.getPlayersTurn().makeAccusation();
+					ArrayList<Card>accusation = board.getPlayersTurn().makeAccusation();
+					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
+					for (Card accusationCard : accusation) {
+					
+						switch(accusationCard.getCardType()) {
+						case ROOM: 
+							if(!solutions.get(CardType.ROOM).equals(accusationCard)) {
+								
+								System.out.println("Incorrect Accusation, ROOM"); 
+							}
+							break; 
+						case WEAPON: 
+							if(!solutions.get(CardType.WEAPON).equals(accusationCard)) {
+								
+								System.out.println("Incorrect Accusation, WEAPON"); 
+							}
+							break; 
+						case PERSON: 
+							if(!solutions.get(CardType.PERSON).equals(accusationCard)) {
+								
+								System.out.println("Incorrect Accusation, PERSON"); 
+							}
+							break; 
+						default: 
+							System.out.println("Not valid card"); 
+							break;
+						
+							
+						}
+					
+					}
+					System.out.println("They make an accusation!"); 
+					System.out.println(accusation); 
+					System.out.println(board.getSolution()); 
+					System.out.println(board.getPlayersTurn().getHand()); 
+					//check if accusation is true? 
+					
 				} else {
 					
 					// update player location based on target cell
@@ -213,16 +251,22 @@ public class ClueGame extends JFrame {
 						if (targetCell.isRoom()) {
 							//CPU player make suggestion and handle suggestion 
 							ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
-							Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), board.getPlayersTurn());
+							Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), null);
 							
 							if (disprovenCard != null) {
 								board.getPlayersTurn().addToSeenMap(disprovenCard.getCardType(), disprovenCard);
+							}
+							else
+							{
+								 ((Computerplayer) board.getPlayersTurn()).accusationMakeReady(); //mark this suggestion is upheld so make accusation on the next turn of this player 
 							}
 							//update guess and guess result text field 
 							controlPanel.updateGuessText(suggestedCards, disprovenCard, board.getPlayersTurn());
 						}
 					}
-					
+					System.out.println(board.getPlayersTurn().getHand()); 
+					System.out.println(); 
+					System.out.println(board.getPlayersTurn().getSeenMap()); 
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells(); //clear target cells and repaint board 
 					
@@ -331,6 +375,7 @@ public class ClueGame extends JFrame {
 	// Main entry point for game
 	public static void main(String[] args) {
 		ClueGame ThisClueGame = new ClueGame();
+		System.out.println(Board.getSolution()); 
 
 	}
 }

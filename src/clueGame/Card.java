@@ -18,7 +18,6 @@ import java.awt.Color;
 public class Card implements Comparable<Card> {
 	private String cardName;
 	private CardType cardType;
-	private int dealCount = 0;
 	private Color cardColor; 
 
 	// constructors
@@ -86,7 +85,6 @@ public class Card implements Comparable<Card> {
 	}
 
 	public void setDealCount() {
-		dealCount++;
 	}
 
 	@Override

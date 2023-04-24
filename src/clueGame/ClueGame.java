@@ -170,25 +170,25 @@ public class ClueGame extends JFrame {
 	 * This is where the logic of the next button pressed should be held
 	 */
 	public void nextButtonPressedLogic() {
-		Player currPlayer = board.getPlayersTurn();
+		
 		board.resetPlayersLocations();
 		
 		if (board.getPlayersTurn().getIsHasPlayerACC() || board.getPlayersTurn().getIsHasPlayerMoved()) {
 			
 			// switch to get next player in the list and roll a dice 
 			board.nextTurn();
-			BoardCell currentLocation = board.getCell(currPlayer.getPlayerRow(), currPlayer.getPlayerCol());
-			currPlayer.setRollNum();
-			int randomRoll = currPlayer.getRollNum();
+			BoardCell currentLocation = board.getCell(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol());
+			board.getPlayersTurn().setRollNum();
+			int randomRoll = board.getPlayersTurn().getRollNum();
 			
 			//update text field after switching to new player and rolling dice 
-			controlPanel.newTurnTextUpdate(currPlayer, String.valueOf(randomRoll)); 
+			controlPanel.newTurnTextUpdate(board.getPlayersTurn(), String.valueOf(randomRoll)); 
 
 			//calculate target list based on current board cell and dice number
 			board.calcTargets(currentLocation, randomRoll);
 
 			if (board.getTargets() == null || board.getTargets().size() == 0) {
-				currPlayer.setHasPlayerMoved(true);
+				board.getPlayersTurn().setHasPlayerMoved(true);
 				return;
 			}
 			
@@ -202,9 +202,9 @@ public class ClueGame extends JFrame {
 			else {
 
 				// If the suggestion from the previous suggestion is upheld, make accusation with cards from the previous suggestion
-				if (((Computerplayer) currPlayer).canMakeAccusation()) {
+				if (((Computerplayer) board.getPlayersTurn()).canMakeAccusation()) {
 					
-					ArrayList<Card>accusation = currPlayer.makeAccusation();
+					ArrayList<Card>accusation = board.getPlayersTurn().makeAccusation();
 					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
 					Boolean trueAccusation = true; 
 					// TODO: I think all this logic could become a function of Solution. 
@@ -249,40 +249,43 @@ public class ClueGame extends JFrame {
 				} else {
 					
 					// update player location based on target cell
-					BoardCell targetCell = ((Computerplayer) currPlayer).targetSelection(board.getTargets());
+					BoardCell targetCell = ((Computerplayer) board.getPlayersTurn()).targetSelection(board.getTargets());
 					if (targetCell != null) {
-						currPlayer.setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
+						board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
 						
 						if (targetCell.isRoom()) {
 							//CPU player make suggestion and handle suggestion 
-							ArrayList<Card> suggestedCards = currPlayer.makeSuggestion();
+							ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
 							Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), board.getPlayersTurn());
 							
 							if (disprovenCard != null) {
-								currPlayer.addToSeenMap(disprovenCard.getCardType(), disprovenCard);
+								board.getPlayersTurn().addToSeenMap(disprovenCard.getCardType(), disprovenCard);
 							}
 							// CPU made a suggestion and noone disproved it
 							else {
 								// First check if any of the cards they suggested are in their hand
 								Boolean readyToAccuse = true;
-							    for (Card card: currPlayer.getHand()) {
+							    for (Card card: board.getPlayersTurn().getHand()) {
 							    	if (suggestedCards.contains(card)) {
 							    		readyToAccuse = false; 
 							    	}
 							    }
-							    currPlayer.canMakeAccusation();
+							    if (readyToAccuse) {
+							    board.getPlayersTurn().canMakeAccusation();
+							    }
 							    
 							    // TODO: check if they have seen all the other cards? 
 								
 							}
 							//update guess and guess result text field 
-							controlPanel.updateGuessText(suggestedCards, disprovenCard, currPlayer);
+							controlPanel.updateGuessText(suggestedCards, disprovenCard, board.getPlayersTurn());
 						}
 					}
 					// TODO: Delete these print statements
-					System.out.println("current players hand = " + currPlayer.getHand());
-					System.out.println(); 
-					System.out.println("current players seenlist = " + currPlayer.getSeenMap()); 
+					System.out.println(board.getPlayersTurn().toString());
+					System.out.println("current players hand = " + board.getPlayersTurn().getHand());
+					System.out.println("current players seenlist = " + board.getPlayersTurn().getSeenMap()); 
+					System.out.println();
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells(); //clear target cells and repaint board 
 					

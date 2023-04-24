@@ -213,13 +213,14 @@ public class ClueGame extends JFrame {
 					System.out.println();
 					ArrayList<Card>accusation = board.getPlayersTurn().makeAccusation();
 					System.out.println(accusation.toString());
+					
+					// TODO: I think all this logic could become a function of Solution. 
+					// i.e. public boolean checkSolution(ArrayList<Card>)
+					// Which we could call with board.getSolution().checkSolution();
 					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
 					Boolean accusationRoom = false; 
 					Boolean accusationWeapon = false;
 					Boolean accusationPerson = false;
-					// TODO: I think all this logic could become a function of Solution. 
-					// i.e. public boolean checkSolution(ArrayList<Card>)
-					// Which we could call with board.getSolution().checkSolution();
 					for (Card accusationCard : accusation) {
 						switch(accusationCard.getCardType()) {
 						case ROOM: 
@@ -242,6 +243,7 @@ public class ClueGame extends JFrame {
 							break;
 						}
 					}
+					
 					if (Boolean.TRUE.equals(accusationRoom) && Boolean.TRUE.equals(accusationWeapon) && Boolean.TRUE.equals(accusationPerson)){
 						String currentPlayer = board.getPlayersTurn().getPlayerName(); 
 						JOptionPane.showMessageDialog(null, currentPlayer + " Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);

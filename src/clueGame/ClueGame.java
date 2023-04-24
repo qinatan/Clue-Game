@@ -171,7 +171,7 @@ public class ClueGame extends JFrame {
 	 */
 	public void nextButtonPressedLogic() {
 		
-		board.resetPlayersLocations();
+		board.resetPlayersLocations(); // this is necessary for drawing player offsets in rooms
 		
 		if (board.getPlayersTurn().getIsHasPlayerACC() || board.getPlayersTurn().getIsHasPlayerMoved()) {
 			
@@ -200,10 +200,17 @@ public class ClueGame extends JFrame {
 			
 			// Else it's a CPU Player
 			else {
-
+				// TODO: Delete these print statements
+				System.out.println(board.getPlayersTurn().toString());
+				System.out.println("canMakeAccusation = " + board.getPlayersTurn().canMakeAccusation());
+				System.out.println("current players hand = " + board.getPlayersTurn().getHand());
+				System.out.println("current players seenlist = " + board.getPlayersTurn().getSeenMap()); 
+				System.out.println();
 				// If the suggestion from the previous suggestion is upheld, make accusation with cards from the previous suggestion
-				if (((Computerplayer) board.getPlayersTurn()).canMakeAccusation()) {
-					
+				if (((Computerplayer) board.getPlayersTurn()).canMakeAccusation() || ((Computerplayer) board.getPlayersTurn()).getIsAccusation()) {
+					// TODO: Delete these debug statements
+					System.out.println("They make an accusation!"); 
+					System.out.println();
 					ArrayList<Card>accusation = board.getPlayersTurn().makeAccusation();
 					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
 					Boolean trueAccusation = true; 
@@ -211,24 +218,23 @@ public class ClueGame extends JFrame {
 					// i.e. public boolean checkSolution(ArrayList<Card>)
 					// Which we could call with board.getSolution().checkSolution();
 					for (Card accusationCard : accusation) {
-					
 						switch(accusationCard.getCardType()) {
 						case ROOM: 
 							if(!solutions.get(CardType.ROOM).equals(accusationCard)) {
 								trueAccusation = false; 
-								System.out.println("Incorrect Accusation, ROOM"); 
+								System.out.println("Incorrect Accusation " + accusationCard); 
 							}
 							break; 
 						case WEAPON: 
 							if(!solutions.get(CardType.WEAPON).equals(accusationCard)) {
 								trueAccusation = false; 
-								System.out.println("Incorrect Accusation, WEAPON"); 
+								System.out.println("Incorrect Accusation " + accusationCard); 
 							}
 							break; 
 						case PERSON: 
 							if(!solutions.get(CardType.PERSON).equals(accusationCard)) {
 								trueAccusation = false; 
-								System.out.println("Incorrect Accusation, PERSON"); 
+								System.out.println("Incorrect Accusation " + accusationCard); 
 							}
 							break; 
 						default: 
@@ -240,11 +246,6 @@ public class ClueGame extends JFrame {
 						String currentPlayer = board.getPlayersTurn().getPlayerName(); 
 						JOptionPane.showMessageDialog(null, currentPlayer + " Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
 					}
-					
-					// TODO: Delete these debug statements
-					System.out.println("They make an accusation!"); 
-					System.out.println(accusation); 
-
 					
 				} else {
 					
@@ -261,31 +262,31 @@ public class ClueGame extends JFrame {
 							if (disprovenCard != null) {
 								board.getPlayersTurn().addToSeenMap(disprovenCard.getCardType(), disprovenCard);
 							}
-							// CPU made a suggestion and noone disproved it
+							
+							// CPU made a suggestion and no-one disproved it
 							else {
 								// First check if any of the cards they suggested are in their hand
+								System.out.println("A suggestion was not disproven, checking currPlayers hand");
 								Boolean readyToAccuse = true;
 							    for (Card card: board.getPlayersTurn().getHand()) {
 							    	if (suggestedCards.contains(card)) {
+							    		System.out.println("I found " + card.toString() + " in my hand.");
 							    		readyToAccuse = false; 
 							    	}
 							    }
 							    if (readyToAccuse) {
-							    board.getPlayersTurn().canMakeAccusation();
+							    System.out.println("No matching cards found, preparing to accuse. ");
+							    ((Computerplayer) board.getPlayersTurn()).accusationMakeReady();
 							    }
 							    
-							    // TODO: check if they have seen all the other cards? 
+							    // TODO: check if they have seen all the other cards to improve decision making
 								
 							}
 							//update guess and guess result text field 
 							controlPanel.updateGuessText(suggestedCards, disprovenCard, board.getPlayersTurn());
 						}
 					}
-					// TODO: Delete these print statements
-					System.out.println(board.getPlayersTurn().toString());
-					System.out.println("current players hand = " + board.getPlayersTurn().getHand());
-					System.out.println("current players seenlist = " + board.getPlayersTurn().getSeenMap()); 
-					System.out.println();
+					
 					board.getPlayersTurn().setHasPlayerMoved(true);
 					clearTargetCells(); //clear target cells and repaint board 
 					

@@ -642,7 +642,6 @@ public class Board extends JPanel {
 	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3,
 			Player suggestingPlayer) {
 		Card disprovedCard = null;
-
 		for (int i = 0; i < playerList.size(); i++) {
 			Player player = playerList.get(i);
 

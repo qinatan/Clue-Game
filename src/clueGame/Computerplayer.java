@@ -42,7 +42,7 @@ public class Computerplayer extends Player {
 	}
 
 	public ArrayList<Card> makeSuggestion() {
-
+		System.out.println(this.getPlayerName() + " makes a suggestion: ");
 		ArrayList<Card> finalSuggestion = new ArrayList<>();
 		HashMap<CardType, ArrayList<Card>> possibleSuggestions = new HashMap<CardType, ArrayList<Card>>();
 
@@ -100,7 +100,9 @@ public class Computerplayer extends Player {
 			}
 		}
  
-		this.potentialAccusation = finalSuggestion; 
+		//this.potentialAccusation = finalSuggestion; 
+		System.out.println(finalSuggestion.toString());
+		System.out.println();
 		return finalSuggestion;
 	}
 
@@ -162,23 +164,26 @@ public class Computerplayer extends Player {
 		int unseenRooms = 1;
 
 		for (Card weaponCard : board.getWeaponDeck()) {
-			if (this.seenMap.containsKey(weaponCard.getCardType()));
+			if (this.seenMap.containsKey(weaponCard.getCardType()) || this.hand.contains(weaponCard));
 			else {
 				unseenWeapons++;
+				// TODO: possible add this card to potential suggestion
 			}
 		}
 
 		for (Card playerCard : board.getPeopleDeck()) {
-			if (this.seenMap.containsKey(playerCard.getCardType()));
+			if (this.seenMap.containsKey(playerCard.getCardType()) || this.hand.contains(playerCard));
 			else {
 				unseenPeople++;
+				// TODO: possible add this card to potential suggestion
 			}
 		}
 
 		for (Card roomCard : board.getRoomDeck()) {
-			if (this.seenMap.containsKey(roomCard.getCardType()));
+			if (this.seenMap.containsKey(roomCard.getCardType()) || this.hand.contains(roomCard));
 			else {
 				unseenRooms++;
+				// TODO: possible add this card to potential suggestion
 			}
 		}
 

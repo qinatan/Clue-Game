@@ -668,15 +668,35 @@ public class Board extends JPanel {
 		}
 	}
 
-	public Boolean checkAccusation(Card Room, Card Person, Card Weapon) {
+	public Boolean checkAccusation(ArrayList<Card> accusation) {
 		Solution solution = getSolution();
-		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person)
-				&& solution.getWeapon().equals(Weapon)) {
-			return true;
-
-		} else {
-			return false;
+		Map<CardType, Card> solutionMap = solution.getSolutionMap();
+		Boolean accusationRoom = false; 
+		Boolean accusationWeapon = false;
+		Boolean accusationPerson = false;
+		for (Card accusationCard : accusation) {
+			switch(accusationCard.getCardType()) {
+			case ROOM: 
+				if(solutionMap.get(CardType.ROOM) == accusationCard) {
+					accusationRoom = true;  
+				}
+				break; 
+			case WEAPON: 
+				if(solutionMap.get(CardType.WEAPON) == accusationCard) {
+					accusationWeapon = true; 
+				}
+				break; 
+			case PERSON: 
+				if(solutionMap.get(CardType.PERSON) == accusationCard) {
+					accusationPerson = true; 
+				}
+				break; 
+			default: 
+				System.out.println("Not valid card"); 
+				break;
+			}
 		}
+		return (accusationRoom && accusationWeapon && accusationPerson);
 	}
 
 	public void nextTurn() {

@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
+
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -168,6 +170,13 @@ public class ClueGame extends JFrame {
 		
 		board.resetPlayersLocations(); // this is necessary for drawing player offsets in rooms
 		
+		// Checks if the current player was moved for someone elses suggestion. If they were, allow them the opportunity
+		// to stay in the room to make a suggestion. 
+		if (board.getPlayersTurn().getMovedForSuggestion()) {
+			board.getTargets().add(board.getPlayersTurn().getCurrCell());
+			board.getPlayersTurn().setMovedForSuggestion(false);
+		}
+		
 		if (board.getPlayersTurn().getIsHasPlayerACC() || board.getPlayersTurn().getIsHasPlayerMoved()) {
 			
 			// switch to get next player in the list and roll a dice 
@@ -195,68 +204,27 @@ public class ClueGame extends JFrame {
 			
 			// Else it's a CPU Player
 			else {
-				// TODO: Delete these print statements
-				System.out.println(board.getPlayersTurn().toString());
-				System.out.println("canMakeAccusation = " + board.getPlayersTurn().canMakeAccusation());
-				System.out.println("current players hand = " + board.getPlayersTurn().getHand());
-				System.out.println("current players seenlist = " + board.getPlayersTurn().getSeenMap()); 
-				System.out.println();
+
 				// If the suggestion from the previous suggestion is upheld, make accusation with cards from the previous suggestion
 				if (((Computerplayer) board.getPlayersTurn()).canMakeAccusation()) {
-					// TODO: Delete these debug statements
-					System.out.println("They make an accusation!"); 
-					System.out.println();
+
 					ArrayList<Card>accusation = board.getPlayersTurn().makeAccusation();
-					System.out.println(accusation.toString());
 					
 					// TODO: I think all this logic could become a function of Solution. 
 					// i.e. public boolean checkSolution(ArrayList<Card>)
 					// Which we could call with board.getSolution().checkSolution();
 					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
-//					Boolean accusationRoom = false; 
-//					Boolean accusationWeapon = false;
-//					Boolean accusationPerson = false;
-//					for (Card accusationCard : accusation) {
-//						switch(accusationCard.getCardType()) {
-//						case ROOM: 
-//							if(solutions.get(CardType.ROOM) == accusationCard) {
-//								accusationRoom = true;  
-//							}
-//							break; 
-//						case WEAPON: 
-//							if(solutions.get(CardType.WEAPON) == accusationCard) {
-//								accusationWeapon = true; 
-//							}
-//							break; 
-//						case PERSON: 
-//							if(solutions.get(CardType.PERSON) == accusationCard) {
-//								accusationPerson = true; 
-//							}
-//							break; 
-//						default: 
-//							System.out.println("Not valid card"); 
-//							break;
-//						}
-//					}
+
 					
 
-			//		board.checkAccusation(room , person, weapon)
+
 					if(board.checkAccusation(accusation)) {
 						JOptionPane.showMessageDialog(null, board.getPlayersTurn().getPlayerName() + " Won!" + "\n The solution was " + solutions.get(CardType.ROOM) + " " + solutions.get(CardType.WEAPON) + " " + solutions.get(CardType.PERSON) + "", "Loser!", JOptionPane.INFORMATION_MESSAGE);
 						dispose(); 
 					} else {
 						
 					}
-		
-					
-//					if (Boolean.TRUE.equals(accusationRoom) && Boolean.TRUE.equals(accusationWeapon) && Boolean.TRUE.equals(accusationPerson)){
-//						String currentPlayer = board.getPlayersTurn().getPlayerName(); 
-//						JOptionPane.showMessageDialog(null, currentPlayer + " Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
-//						dispose() ; 
-//					} else {
-//						System.out.println("The ACC was " + accusationRoom + " " + accusationWeapon + " " + accusationPerson) ;
-//						System.out.println("The solution was " + solutions.get(CardType.ROOM) + " " + solutions.get(CardType.WEAPON) + " " + solutions.get(CardType.PERSON)) ;
-//					}
+	
 					
 				} else {  
 					
@@ -289,8 +257,6 @@ public class ClueGame extends JFrame {
 							    System.out.println("No matching cards found, preparing to accuse. ");
 							    ((Computerplayer) board.getPlayersTurn()).setUpheldSuggestion();
 							    }
-							    
-							    // TODO: check if they have seen all the other cards to improve decision making
 								
 							}
 							//update guess and guess result text field 

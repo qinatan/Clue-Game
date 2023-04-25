@@ -674,33 +674,21 @@ public class Board extends JPanel {
 		Boolean accusationRoom = false; 
 		Boolean accusationWeapon = false;
 		Boolean accusationPerson = false;
-		System.out.println("Solution Person Card = " + solutionMap.get(CardType.PERSON).toString());
-		System.out.println("Solution Person Card = " + solutionMap.get(CardType.PERSON).toString());
-		System.out.println("Solution Weapon Card = " + solutionMap.get(CardType.WEAPON).toString());
 		
 		for (Card accusationCard : accusation) {
-			System.out.println("Accusation Card = " + accusationCard.toString());
 			switch(accusationCard.getCardType()) {
 			case ROOM: 
-				System.out.println("Room found");
 				if(solutionMap.get(CardType.ROOM).equals(accusationCard)) {
-					System.out.println("Room card matches solution room card");
 					accusationRoom = true;  
 				}
 				break; 
 			case WEAPON: 
-				System.out.println("Weapon found");
 				if(solutionMap.get(CardType.WEAPON).equals(accusationCard)) {
-					System.out.println("Room card matches solution room card");
 					accusationWeapon = true; 
 				}
 				break; 
 			case PERSON: 
-				System.out.println("Person found");
-				System.out.println("Solution Person Card = " + solutionMap.get(CardType.PERSON).toString());
 				if(solutionMap.get(CardType.PERSON).equals(accusationCard)) {
-					System.out.println("Solution Person Card = " + solutionMap.get(CardType.PERSON).toString());
-					System.out.println("Room card matches solution room card");
 					accusationPerson = true; 
 				}
 				break; 
@@ -813,7 +801,6 @@ public class Board extends JPanel {
 
 	public void movePlayer(int i, int j, Player player) {
 		player.setPlayerLocation(i, j);
-
 	}
 
 	public static Solution getSolution() {

@@ -88,6 +88,7 @@ public class Computerplayer extends Player {
 		
 		for(Card suggestedCard : finalSuggestion)
 		{
+			// This logic moves the suggested player into the room with the suggesting player
 			if (suggestedCard.getCardType() == CardType.PERSON)
 			{
 				for (Player player : Board.getPlayerList())
@@ -95,6 +96,7 @@ public class Computerplayer extends Player {
 					if (player.getPlayerName().equals(suggestedCard.getCardName()))
 					{
 						player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol());
+						player.setMovedForSuggestion(true); // tells the suggested player that they have moved for a suggestion
 						board.resetPlayersLocations();
 					}
 				}

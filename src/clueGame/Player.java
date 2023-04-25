@@ -30,6 +30,7 @@ public abstract class Player {
 	private Room currRoom;
 	private int rollNum;
 	private int drawOffset = 0;
+	private Boolean movedForSuggestion = false; 
 	Board board = Board.getInstance();
 
 	// check for both AI and human player
@@ -87,6 +88,14 @@ public abstract class Player {
 	}
 
 	// ******** getters & setters ********* //
+	public Boolean getMovedForSuggestion() {
+		return movedForSuggestion;
+	}
+
+	public void setMovedForSuggestion(Boolean movedForSuggestion) {
+		this.movedForSuggestion = movedForSuggestion;
+	}
+
 	public BoardCell getCurrCell() {
 		return currCell;
 	}
@@ -245,10 +254,6 @@ public abstract class Player {
 		else {
 			setDrawOffset(0);
 		}
-
-		
-		// TODO: delete this debug statement 
-		// System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
 	}
 
 	/**

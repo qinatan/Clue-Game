@@ -70,6 +70,7 @@ public class Humanplayer extends Player {
 
 				// Moves the player
 				player.setPlayerLocation(getPlayerRow(), getPlayerCol());
+				player.setMovedForSuggestion(true);
 				board.resetPlayersLocations();
 
 				// Loop to find that players card

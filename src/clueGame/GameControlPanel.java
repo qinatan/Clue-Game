@@ -14,17 +14,11 @@ package clueGame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Set;
-
+import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
@@ -50,7 +44,6 @@ public class GameControlPanel extends JPanel {
 		JPanel bottomPanel = createBottomPanel();
 		add(topPanel);
 		add(bottomPanel);
-		
 		currPlayer = board.getPlayersTurn();
 		rollText.setText(String.valueOf(currPlayer.getRollNum()));
 		repaint();
@@ -120,7 +113,7 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomRightPanel() {
 		JPanel bottomRightPanel = new JPanel();
 		bottomRightPanel.setLayout(new GridLayout(1, 0));
-		bottomRightPanel.add(guess);
+		bottomRightPanel.add(guessResult);
 		bottomRightPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess Result")); // Only using this for testing
 		return bottomRightPanel;
 	}
@@ -128,17 +121,78 @@ public class GameControlPanel extends JPanel {
 	private JPanel bottomLeftPanel() {
 		JPanel bottomLeftPanel = new JPanel();
 		bottomLeftPanel.setLayout(new GridLayout(1, 0));
-		bottomLeftPanel.add(guessResult);
+		bottomLeftPanel.add(getGuess());
 		bottomLeftPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess")); // Only using this for testing
 		return bottomLeftPanel;
 	}
+	
+	//update guess and guess result when player make an suggestion 
+	public void updateGuessText(ArrayList<Card> suggestionCards, Card disapprovalCard, Player currentPlayer){
+		
+		this.guess.setText(suggestionCards.get(0) + " " + suggestionCards.get(1) + " " + suggestionCards.get(2));
+		this.guess.setBackground(currentPlayer.getPlayerColor());
+		
+		if (disapprovalCard!= null ){
+			
+			if (currentPlayer instanceof Humanplayer){
+			this.guessResult.setText(disapprovalCard.getCardName()); }
 
+			else {
+			this.guessResult.setText("Suggestion Disproven");}
+				
+			for (Player player : board.getPlayerList()){
+				
+				ArrayList<Card> hand = player.getHand(); 
+				if (hand.contains(disapprovalCard)){
+					this.guessResult.setBackground(player.getPlayerColor());
+					break; 
+				}
+			}
+		}
+		else
+		{
+			this.guessResult.setText("Suggestion upheld");
+		}
+	}
+	
+	//update text field after rolling a dice at new turn 
+	public void  newTurnTextUpdate(Player currentPlayer, String diceNumber)
+	{
+		this.playerNameText.setText(currentPlayer.getPlayerName()); 
+		this.playerNameText.setBackground(currentPlayer.getPlayerColor());
+		this.guess.setText(" ");
+		this.guess.setBackground(new Color(255, 255, 255));//white color 
+		this.guessResult.setText(" ");
+		this.guessResult.setBackground(new Color(255, 255, 255)); 
+		this.rollText.setText(diceNumber);
+	}
+	
+	
 	public void setGuess(String guess) {
 		this.guess.setText(guess);
+		Color color = board.getPlayersTurn().getPlayerColor(); 
+		this.guess.setBackground(color); 
 	}
 
-	public void setGuessResult(String guessResult) {
-		this.guessResult.setText(guessResult);
+	public void setGuessResult(String guessResult, Card guessResultCard) {
+		if ((guessResult != null) && (guessResultCard != null)) {
+			if (board.getPlayersTurn() instanceof Humanplayer) {
+			this.guessResult.setText(guessResultCard.toString());
+			}
+			else {
+				this.guessResult.setText(guessResult);
+			}
+		}
+		
+		for (Player player : board.getPlayerList())
+		{
+			
+			if (guessResult != null && player.getHand().contains(guessResultCard))
+			{
+				Color color = player.getPlayerColor(); 
+				this.guessResult.setBackground(color); 
+			}
+		}
 	}
 	
 	public void setPlayerNameText(JTextField playerNameText) {
@@ -156,6 +210,10 @@ public class GameControlPanel extends JPanel {
 	public void setRollText(JTextField rollText) {
 		this.rollText = rollText;
 	}
+	
+	public JTextField getGuessResult() {
+		return guessResult;
+	}
 
 
 	public static void main(String[] args) {
@@ -172,7 +230,15 @@ public class GameControlPanel extends JPanel {
 		frame.setVisible(true);
 		// test filling the data
 		panel.setGuess("I have no guess!");
-		panel.setGuessResult("So you have nothing?");
+		panel.setGuessResult("So you have nothing?", null );
 
+	}
+
+	public JTextField getGuess() {
+		return guess;
+	}
+
+	public void setGuess(JTextField guess) {
+		this.guess = guess;
 	}
 }

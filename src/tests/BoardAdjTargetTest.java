@@ -30,7 +30,7 @@ public class BoardAdjTargetTest {
 		// we want to test a couple of different rooms.
 		
 		//Testing the B room with passage
-		Set<BoardCell> testList = board.getAdjList(1, 3);
+		Set<BoardCell> testList = board.getAdjList(2, 3);
 		assertEquals(2, testList.size());
 		assertTrue(testList.contains(board.getCell(4, 6)));
 		assertTrue(testList.contains(board.getCell(25, 18)));
@@ -190,7 +190,7 @@ public class BoardAdjTargetTest {
 
 		targets = board.getTargets();
 		assertEquals(4, targets.size());
-		assertTrue(targets.contains(board.getCell(13, 19)));
+		assertTrue(targets.contains(board.getCell(13, 18)));
 		assertTrue(targets.contains(board.getCell(15, 16)));
 		assertTrue(targets.contains(board.getCell(17, 16)));
 		assertTrue(targets.contains(board.getCell(16, 15)));

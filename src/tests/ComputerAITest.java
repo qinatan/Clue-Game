@@ -21,7 +21,7 @@ import clueGame.BoardCell;
 import clueGame.Card;
 import clueGame.CardType;
 import clueGame.Player;
-import clueGame.computerPlayer;
+import clueGame.Computerplayer;
 
 class ComputerAITest {
 	private static Board board;
@@ -41,7 +41,7 @@ class ComputerAITest {
 		
 		// Tests that CPUPlayer selects randomly if no rooms in seenList
 		// get the second player from playerList
-		computerPlayer cpuPlayer = (computerPlayer) board.getPlayerList().get(1);
+		Computerplayer cpuPlayer = (Computerplayer) board.getPlayerList().get(1);
 		int row = 10;
 		int col = 8;
 		// get the second player's start location as a known board cell
@@ -188,7 +188,7 @@ class ComputerAITest {
 		// Set players location to plant room
 		yubabaCpuPlayer.setPlayerLocation(24, 10); // row 24, col 10 = plant room center
 		Card currRoom = new Card(CardType.ROOM, "Plant Room");
-		yubabaCpuPlayer.currRoom = currRoom; // sets currRoom to plant room
+		yubabaCpuPlayer.setCurrRoomCard(currRoom); // sets currRoom to plant room
 
 		// Not seen Weapon: Extension Cord
 		yubabaCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Dog Bone"));
@@ -223,7 +223,7 @@ class ComputerAITest {
 		// Creates a new player
 		Player noFaceCpuPlayer = board.getPlayerList().get(3);
 		noFaceCpuPlayer.setPlayerLocation(24, 10); // row 24, col 10 = plant room center
-		noFaceCpuPlayer.currRoom = currRoom; // sets currRoom to plant room
+		noFaceCpuPlayer.setCurrRoomCard(currRoom); // sets currRoom to plant room
 
 		// Not seen Weapon: Extension Cord, Dog Bone
 		noFaceCpuPlayer.addToSeenMap(CardType.WEAPON, new Card(CardType.WEAPON, "Broken DVD"));

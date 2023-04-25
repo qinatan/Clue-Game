@@ -5,10 +5,10 @@
  * Player class is responsible for all actions of a player including make suggestion, 
  * disprove suggestion by showing a matching card to a suggested card by another player
  * 
- * @author: Mike Eact 
+ * @author: Mike Eack 
  * @author: John Omalley 
  * @author: Qina Tan 
- * @start Date: 8/3/2025
+ * @start Date: 4/24/2023
  * @collaborator: none 
  * @resources: none 
  */
@@ -18,10 +18,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Random;
 
 public abstract class Player {
@@ -29,11 +26,13 @@ public abstract class Player {
 	private Color playerColor;
 	private String color;
 	private int row, col;
-	public Card currRoom;
 	private BoardCell currCell;
+	private Room currRoom;
 	private int rollNum;
-	private int drawOffset = 0; // Players should be drawn a little to the right if there is already a player in the current room center
-							
+	private int drawOffset = 0;
+	private Boolean movedForSuggestion = false; 
+	Board board = Board.getInstance();
+
 	// check for both AI and human player
 	private boolean hasPlayerMoved = false;
 	private boolean hasPlayerACC = false;
@@ -41,7 +40,7 @@ public abstract class Player {
 	protected ArrayList<Card> hand = new ArrayList<Card>();
 	protected Map<CardType, ArrayList<Card>> seenMap = new HashMap<CardType, ArrayList<Card>>();
 
-	public Player(String playerName, String playerColor, String row, String col) {
+	protected Player(String playerName, String playerColor, String row, String col) {
 		this.name = playerName;
 		this.row = Integer.parseInt(row);
 		this.col = Integer.parseInt(col);
@@ -89,6 +88,14 @@ public abstract class Player {
 	}
 
 	// ******** getters & setters ********* //
+	public Boolean getMovedForSuggestion() {
+		return movedForSuggestion;
+	}
+
+	public void setMovedForSuggestion(Boolean movedForSuggestion) {
+		this.movedForSuggestion = movedForSuggestion;
+	}
+
 	public BoardCell getCurrCell() {
 		return currCell;
 	}
@@ -124,7 +131,7 @@ public abstract class Player {
 	public Map<CardType, ArrayList<Card>> getSeenMap() {
 		return seenMap;
 	}
-	
+
 	public int getDrawOffset() {
 		return drawOffset;
 	}
@@ -133,6 +140,22 @@ public abstract class Player {
 		this.drawOffset = drawOffset;
 	}
 
+	public Room getCurrRoom() {
+		return currRoom;
+	}
+
+	public void setCurrRoom(Room currRoom) {
+		this.currRoom = currRoom;
+	}
+
+	public Card getCurrRoomCard() {
+		Card roomCard = new Card(CardType.ROOM, currRoom.getName());
+		return roomCard;
+	}
+
+	public void setCurrRoomCard(Card room) {
+		this.currRoom = new Room(room.getCardName());
+	}
 
 	// *********************************** //
 
@@ -163,7 +186,7 @@ public abstract class Player {
 
 	public void printHand() {
 		for (int i = 0; i < hand.size(); i++) {
-			System.out.println(hand.get(i));
+		// System.out.println(hand.get(i));
 		}
 	}
 
@@ -195,11 +218,15 @@ public abstract class Player {
 		}
 		return null;
 	}
-
+	
+	
+	
 	public void addToSeenMap(CardType cardType, Card seenCard) {
-
 		if (seenMap.containsKey(cardType)) {
+			// Only add the card to the seenMap if it doesn't already exist
+			if (!seenMap.get(cardType).contains(seenCard)) {
 			seenMap.get(cardType).add(seenCard);
+			}
 		} else {
 			ArrayList<Card> seenCards = new ArrayList<Card>();
 			seenCards.add(seenCard);
@@ -207,19 +234,53 @@ public abstract class Player {
 		}
 
 	}
+	
+	public void resetPlayerLocation() {
+		
+		// If a player is in a room, check the room to see how many occupants are in it,
+		// Calculate a new offset based on numOccupants
+		if (Boolean.TRUE.equals(currCell.isRoomCenter())) {
+			currRoom = board.getRoomMap().get(currCell.getCellSymbol());
+			ArrayList <Player> occupants = currRoom.getOccupants();
+			int index = 0;
+			for (int i = 0 ; i < occupants.size(); i++) {
+				if (occupants.get(i).getPlayerName().equals(name)) {
+					index = i; 
+				}
+			}
+			setDrawOffset(index * 15);
+			
+		}
+		else {
+			setDrawOffset(0);
+		}
+	}
+
+	/**
+	 * This is the method that moves the players to any location on the board
+	 */
+	public void setPlayerLocation(int row, int col) {
+		currCell.setOccupied(false); // sets current cell to unoccupied
+		this.row = row;
+		this.col = col;
+		this.currCell = board.getCell(this.row, this.col);
+		this.currCell.setOccupied(true); // sets the cell we're moving to as occupied
+		resetPlayerLocation();
+	}
+	
+
 
 	// ********** TEST METHODS **************** //
 	// These methods should only be used to facilitate unit testing and never run in
-	// prod code //
-
-	public void setPlayerLocation(int row, int col) {
-		this.row = row;
-		this.col = col;
-	}
+	// production code //
 
 	@Override
 	public String toString() {
 		return "Player [name=" + name + "]";
 	}
+
+	public abstract boolean canMakeAccusation();
+
+	public abstract ArrayList<Card> makeAccusation();
 
 }

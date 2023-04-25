@@ -1,5 +1,6 @@
 package clueGame;
 
+import java.util.ArrayList;
 
 /**
  * Room class contains information of a cell indicated as a room, includes room name, room initial
@@ -18,7 +19,25 @@ public class Room {
 	private BoardCell centerCell;
 	private boolean hasSecretPassage ; 
 	private Character passageRoom ; 
+	private int numOccupants = 0;
+	private ArrayList<Player> Occupants = new ArrayList<Player>();
 	
+	public ArrayList<Player> getOccupants() {
+		return Occupants;
+	}
+
+	public void setOccupants(ArrayList<Player> occupants) {
+		Occupants = occupants;
+	}
+
+	public int getNumOccupants() {
+		return numOccupants;
+	}
+
+	public void setNumOccupants(int numOccupants) {
+		this.numOccupants = numOccupants;
+	}
+
 	// ********* Constructors *********** // 
 	public Room(String name, char symbol) {
 		//super();
@@ -81,11 +100,21 @@ public class Room {
 	
 	
 	// ******** Other Methods ************** // 
+	
+	public void updateRoomState() { 
+		Occupants = new ArrayList();
+		for (Player player: Board.getPlayerList()) {
+			if (Boolean.TRUE.equals(player.getCurrCell().isRoom())) {
+				if (player.getCurrRoom().getName().equals(Name)) {
+					Occupants.add(player);
+				}
+			}
+		}
+	}
 
 	@Override
 	public String toString() {
-		String string = "Name = " + Name + "passageRoom= " + passageRoom.toString();
-		return string;
+		return Name;
 	}
 	
 	

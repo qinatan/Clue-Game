@@ -13,10 +13,7 @@ import javax.swing.JPanel;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.io.*;
-import java.awt.Graphics;
 
 /**
  * Board
@@ -47,7 +44,7 @@ public class Board extends JPanel {
 	private static final int TYPECHAR = 0;
 	private static final int NAMECHAR = 1;
 	private static final int SYMBOLCHAR = 2;
-	private static final int ROWCHAR = 3; 
+	private static final int ROWCHAR = 3;
 	private static final int COLCHAR = 4;
 	private static Solution solution;
 	private Player playerTurn;
@@ -89,12 +86,12 @@ public class Board extends JPanel {
 		for (BoardCell[] cells : grid) {
 			for (BoardCell c : cells) {
 
-				if (c.isRoom() && playerTurn instanceof humanPlayer) {
+				if (c.isRoom() && playerTurn instanceof Humanplayer) {
 					Room thisRoom = roomMap.get(c.getCellSymbol());
 					BoardCell centerCell = thisRoom.getCenterCell();
 					if (targets.contains(centerCell)) {
 						c.setIsTargetCell(true);
-						targets.add(c) ; 
+						targets.add(c);
 					}
 
 				}
@@ -228,13 +225,13 @@ public class Board extends JPanel {
 
 	private Player newHumanPlayer(String[] result) {
 		Player newPlayer;
-		newPlayer = new humanPlayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
+		newPlayer = new Humanplayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
 		return newPlayer;
 	}
 
 	private Player newComputerPlayer(String[] result) {
 		Player newPlayer;
-		newPlayer = new computerPlayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
+		newPlayer = new Computerplayer(result[NAMECHAR], result[SYMBOLCHAR], result[ROWCHAR], result[COLCHAR]);
 		return newPlayer;
 	}
 
@@ -351,7 +348,7 @@ public class Board extends JPanel {
 	 */
 	private void gridCellClassifier(int row, int col, String[] result) {
 		// sets cell to "room" if not a walkway or unused square,
-		// TODO: So walkways and unused cells have isRoom = false, but are in roomMap
+		// So walkways and unused cells have isRoom = false, but are in roomMap
 		if (!result[col].equals("X") && result[col].charAt(0) != 'W') {
 			grid[row][col].setIsRoom(true);
 		}
@@ -438,11 +435,13 @@ public class Board extends JPanel {
 	 * to it is added to. If not it returns.
 	 */
 	private void isValidAdj(BoardCell cell, BoardCell adjCell) {
-		if (!adjCell.isRoom() && adjCell.getCellSymbol() != 'X') {
+		if (Boolean.FALSE.equals(adjCell.isRoom()) && adjCell.getCellSymbol() != 'X') {
 			cell.addAdjacency(adjCell);
 		}
 	}
 
+	
+	
 	private void calculateCellAdj(int row, int col) {
 
 		// If unused cell: Do not create adjList for it
@@ -490,7 +489,7 @@ public class Board extends JPanel {
 		}
 
 		// Add secretPassage destination to center cell's adjList
-		if (currCell.isRoomCenter()) {
+		if (Boolean.TRUE.equals(currCell.isRoomCenter())) {
 			Room currRoom = roomMap.get(currCell.getCellSymbol());
 			if (currRoom.isHasSecretPassage()) {
 				Character nextRoomChar = currRoom.getPassageRoom();
@@ -640,10 +639,10 @@ public class Board extends JPanel {
 	public Card handleSuggestion(Card suggestedCard1, Card sugguestedCard2, Card suggestedCard3,
 			Player suggestingPlayer) {
 		Card disprovedCard = null;
-
 		for (int i = 0; i < playerList.size(); i++) {
 			Player player = playerList.get(i);
 
+			
 			if (player != suggestingPlayer) {
 				disprovedCard = player.disproveSuggestion(suggestedCard1, sugguestedCard2, suggestedCard3);
 
@@ -669,17 +668,38 @@ public class Board extends JPanel {
 		}
 	}
 
-	public Boolean checkAccusation(Card Room, Card Person, Card Weapon) {
+	public Boolean checkAccusation(ArrayList<Card> accusation) {
 		Solution solution = getSolution();
-		if (solution.getRoom().equals(Room) && solution.getPerson().equals(Person)
-				&& solution.getWeapon().equals(Weapon)) {
-			return true;
-
-		} else {
-			return false;
+		Map<CardType, Card> solutionMap = solution.getSolutionMap();
+		Boolean accusationRoom = false; 
+		Boolean accusationWeapon = false;
+		Boolean accusationPerson = false;
+		
+		for (Card accusationCard : accusation) {
+			switch(accusationCard.getCardType()) {
+			case ROOM: 
+				if(solutionMap.get(CardType.ROOM).equals(accusationCard)) {
+					accusationRoom = true;  
+				}
+				break; 
+			case WEAPON: 
+				if(solutionMap.get(CardType.WEAPON).equals(accusationCard)) {
+					accusationWeapon = true; 
+				}
+				break; 
+			case PERSON: 
+				if(solutionMap.get(CardType.PERSON).equals(accusationCard)) {
+					accusationPerson = true; 
+				}
+				break; 
+			default: 
+				System.out.println("Not valid card"); 
+				break;
+			}
 		}
+		return (accusationRoom && accusationWeapon && accusationPerson);
 	}
-	
+
 	public void nextTurn() {
 		// human player's turn if already iterate to the last player
 		if (getPlayerList().indexOf(getPlayersTurn()) == getPlayerList().size() - 1) {
@@ -694,6 +714,22 @@ public class Board extends JPanel {
 
 	public void setPlayersTurn(Player playersTurn) {
 		this.playerTurn = playersTurn;
+	}
+
+	// I don't know if this should be here or in the board
+	
+	public void resetPlayersLocations() {
+		// Update room state for all rooms
+		for (Room room: getRoomMap().values()) {
+			room.updateRoomState();
+		}
+		
+		// Update all player locations based on new roomStates
+		for (Player player: getPlayerList()) {
+			player.resetPlayerLocation();
+		}
+		
+		repaint();
 	}
 
 	// ************** Methods for unit testing purposes only *************//
@@ -733,7 +769,7 @@ public class Board extends JPanel {
 		int numHumanPlayers = 0;
 		for (int i = 0; i < playerList.size(); i++) {
 
-			if (playerList.get(i) instanceof humanPlayer) {
+			if (playerList.get(i) instanceof Humanplayer) {
 				numHumanPlayers++;
 			}
 		}
@@ -744,7 +780,7 @@ public class Board extends JPanel {
 		int numComputerPlayers = 0;
 		for (int i = 0; i < playerList.size(); i++) {
 
-			if (playerList.get(i) instanceof computerPlayer) {
+			if (playerList.get(i) instanceof Computerplayer) {
 				numComputerPlayers++;
 			}
 		}
@@ -765,7 +801,6 @@ public class Board extends JPanel {
 
 	public void movePlayer(int i, int j, Player player) {
 		player.setPlayerLocation(i, j);
-
 	}
 
 	public static Solution getSolution() {
@@ -817,7 +852,6 @@ public class Board extends JPanel {
 	}
 
 	private void createSolutionForTest() {
-
 		// initialized solution to be the first person, first room, first weapon
 		Board.solution = new Solution(peopleDeck.get(0), roomDeck.get(0), weaponDeck.get(0));
 		// update dealtStack after removing solution cards

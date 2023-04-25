@@ -44,8 +44,7 @@ public class CardsPanel extends JPanel {
 		peopleCardsPanel.removeAll(); //These likely aren't needed
 		roomCardsPanel.removeAll();
 
-		
-		// setLayout(new GridLayout(3, 1)); //This doesnt caßhnge anything
+
 		JPanel peopleCardsPanel = peopleCardsPanel();
 		JPanel roomCardsPanel = roomCardsPanel();
 		JPanel weaponCardsPanel = weaponCardsPanel();
@@ -62,14 +61,9 @@ public class CardsPanel extends JPanel {
 		JPanel peopleCardsPanel = new JPanel();
 		peopleCardsPanel.setLayout(new GridLayout(2, 0));
 		peopleCardsPanel.setBorder(new TitledBorder(new EtchedBorder(), "peopleCards"));
-		ArrayList<JTextField> seenPeopleCards = getSeenCards(CardType.PERSON, board.getPlayerList().get(0)); // Assuming
-																												// we
-																												// are
-																												// chihiro
-		ArrayList<JTextField> seenPeopleCardsFromHand = getHandCards(CardType.PERSON, board.getPlayerList().get(0)); // Assuming
-																														// we
-																														// are
-																														// chihiro
+		ArrayList<JTextField> seenPeopleCards = getSeenCards(CardType.PERSON, board.getPlayerList().get(0)); 
+		ArrayList<JTextField> seenPeopleCardsFromHand = getHandCards(CardType.PERSON, board.getPlayerList().get(0)); 
+		
 		// Adds seen cards
 		JPanel seenPanel = new JPanel();
 		seenPanel.setLayout(new GridLayout(0, 1));
@@ -98,13 +92,9 @@ public class CardsPanel extends JPanel {
 		JPanel roomCardsPanel = new JPanel();
 		roomCardsPanel.setLayout(new GridLayout(2, 0));
 		roomCardsPanel.setBorder(new TitledBorder(new EtchedBorder(), "roomCards"));
-		ArrayList<JTextField> seenRoomCards = getSeenCards(CardType.ROOM, board.getPlayerList().get(0)); // Assuming we
-																											// are
-																											// chihiro
-		ArrayList<JTextField> seenRoomCardsFromHand = getHandCards(CardType.ROOM, board.getPlayerList().get(0)); // Assuming
-																													// we
-																													// are
-																													// chihiro
+		ArrayList<JTextField> seenRoomCards = getSeenCards(CardType.ROOM, board.getPlayerList().get(0)); 
+		ArrayList<JTextField> seenRoomCardsFromHand = getHandCards(CardType.ROOM, board.getPlayerList().get(0)); 
+		
 		// Adds seen cards
 		JPanel seenPanel = new JPanel();
 		seenPanel.setLayout(new GridLayout(0, 1));
@@ -129,14 +119,9 @@ public class CardsPanel extends JPanel {
 	private JPanel weaponCardsPanel() {
 		weaponCardsPanel.setLayout(new GridLayout(3, 0));
 		weaponCardsPanel.setBorder(new TitledBorder(new EtchedBorder(), "weaponCards"));
-		ArrayList<JTextField> seenWeaponCardsText = getSeenCards(CardType.WEAPON, board.getPlayerList().get(0)); // Assuming
-																													// we
-																													// are
-																													// chihiro
-		ArrayList<JTextField> seenWeaponCardsFromHand = getHandCards(CardType.WEAPON, board.getPlayerList().get(0)); // Assuming
-																														// we
-																														// are
-																														// chihiro
+		ArrayList<JTextField> seenWeaponCardsText = getSeenCards(CardType.WEAPON, board.getPlayerList().get(0)); 
+		ArrayList<JTextField> seenWeaponCardsFromHand = getHandCards(CardType.WEAPON, board.getPlayerList().get(0)); 
+		
 		// Adds seen cards
 		JPanel seenPanel = new JPanel();
 		seenPanel.setLayout(new GridLayout(0, 1));
@@ -179,7 +164,6 @@ public class CardsPanel extends JPanel {
 
 	private ArrayList<JTextField> getHandCards(CardType cardType, Player player) {
 		ArrayList<JTextField> seenCardsList = new ArrayList<JTextField>();
-
 		for (Card card : player.getHand()) {
 			if (cardType == card.getCardType()) {
 				Color cardColor = card.getcardColor();

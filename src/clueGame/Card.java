@@ -1,9 +1,9 @@
 /**
  * Card Class contains attributes describing a card, includes card type, card name
- * @author: Mike Eact 
+ * @author: Mike EacK 
  * @author: John Omalley 
  * @author: Qina Tan 
- * @start Date: 8/3/2025
+ * @start Date: 4/24/2023
  * @collaborator: none 
  * @resources: none 
  * 
@@ -18,7 +18,6 @@ import java.awt.Color;
 public class Card implements Comparable<Card> {
 	private String cardName;
 	private CardType cardType;
-	private int dealCount = 0;
 	private Color cardColor; 
 
 	// constructors
@@ -38,6 +37,8 @@ public class Card implements Comparable<Card> {
 			break;
 		case "Player":
 			this.cardType = CardType.PERSON;
+			break;
+		default:
 			break;
 		}
 
@@ -61,13 +62,11 @@ public class Card implements Comparable<Card> {
 		return cardType;
 	}
 	
-	public void setCardColor(Color cardColor)
-	{
+	public void setCardColor(Color cardColor) {
 		this.cardColor = cardColor; 
 	}
 	
-	public Color getcardColor()
-	{
+	public Color getcardColor() {
 		return this.cardColor; 
 	}
 
@@ -78,18 +77,18 @@ public class Card implements Comparable<Card> {
 		return cardType.equals(that.cardType) && cardName.equals(that.cardName);
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "Card [cardName=" + cardName + ", cardType=" + cardType + "]";
+		return cardName + " ";
 	}
 
 	public void setDealCount() {
-		dealCount++;
 	}
 
 	@Override
 	public int compareTo(Card o) {
-	
 		return 0;
 	}
 

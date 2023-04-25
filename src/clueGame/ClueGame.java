@@ -241,7 +241,7 @@ public class ClueGame extends JFrame {
 					
 
 			//		board.checkAccusation(room , person, weapon)
-					if(board.checkAccusation(accusation) {
+					if(board.checkAccusation(accusation)) {
 						JOptionPane.showMessageDialog(null, board.getPlayersTurn().getPlayerName() + " Won!" + "\n The solution was " + solutions.get(CardType.ROOM) + " " + solutions.get(CardType.WEAPON) + " " + solutions.get(CardType.PERSON) + "", "Loser!", JOptionPane.INFORMATION_MESSAGE);
 						dispose(); 
 					} else {
@@ -391,7 +391,7 @@ public class ClueGame extends JFrame {
 			board.getTargets().clear(); 
 			repaint();
 			
-			if (Boolean.TRUE.equals(board.checkAccusation(ACCCards.get(1), ACCCards.get(2), ACCCards.get(0)))) {
+			if (Boolean.TRUE.equals(board.checkAccusation(ACCCards))) {
 				JOptionPane.showMessageDialog(null, "You Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
 			} else {

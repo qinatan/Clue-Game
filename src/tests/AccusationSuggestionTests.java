@@ -37,7 +37,11 @@ public class AccusationSuggestionTests {
 	@Test
 	public void accusationTest() {
 		Solution solution = Board.getSolution();
-
+		ArrayList<Card> accusationCorrect = new ArrayList<Card>();
+		ArrayList<Card> accusationWrongPerson = new ArrayList<Card>();
+		ArrayList<Card> accusationWrongWeapon = new ArrayList<Card>();
+		ArrayList<Card> accusationWrongRoom = new ArrayList<Card>();
+ 
 		Card correctRoom = solution.getRoom();
 		Card correctPerson = solution.getPerson();
 		Card correctWeapon = solution.getWeapon();
@@ -45,12 +49,29 @@ public class AccusationSuggestionTests {
 		Card wrongRoom = board.getPlayerList().get(0).getHand().get(0);
 		Card wrongPerson = board.getPlayerList().get(0).getHand().get(0);
 		Card wrongWeapon = board.getPlayerList().get(0).getHand().get(0);
-
+		
+		accusationCorrect.add(correctWeapon);
+		accusationCorrect.add(correctPerson);
+		accusationCorrect.add(correctRoom);
+		
+		accusationWrongPerson.add(correctWeapon);
+		accusationWrongPerson.add(correctRoom);
+		accusationWrongPerson.add(wrongPerson);
+		
+		accusationWrongRoom.add(correctWeapon);
+		accusationWrongRoom.add(correctPerson);
+		accusationWrongRoom.add(wrongRoom);
+		
+		accusationWrongWeapon.add(wrongWeapon);
+		accusationWrongWeapon.add(correctPerson);
+		accusationWrongWeapon.add(correctRoom);
+		
+	
 		// Correct solution
-		Assert.assertTrue(board.checkAccusation(correctRoom, correctPerson, correctWeapon)); //Check for correct solution
-		Assert.assertFalse(board.checkAccusation(correctRoom, wrongPerson, correctWeapon)); // Solution with wrong person
-		Assert.assertFalse(board.checkAccusation(correctRoom, correctPerson, wrongWeapon)); // solution with wrong weapon
-		Assert.assertFalse(board.checkAccusation(wrongRoom, correctPerson, correctWeapon)); // solution with wrong weapon
+		Assert.assertTrue(board.checkAccusation(accusationCorrect)); //Check for correct solution
+		Assert.assertFalse(board.checkAccusation(accusationWrongPerson)); // Solution with wrong person
+		Assert.assertFalse(board.checkAccusation(accusationWrongWeapon)); // solution with wrong weapon
+		Assert.assertFalse(board.checkAccusation(accusationWrongRoom)); // solution with wrong weapon
 	}
 
 	// Test player Disproves suggestion -- PASSED -- May need to cleanup code 

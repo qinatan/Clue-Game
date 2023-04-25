@@ -1,7 +1,7 @@
 /**
  * Human class is an extension of abstraction of Player. 
  * It is responsible for actions for all human players, includes updating cards in a player's hand, and make suggestion
- *  @author: Mike Eact 
+ *  @author: Mike Eack 
  * @author: John Omalley 
  * @author: Qina Tan 
  * @start Date: 4/9/2023
@@ -37,8 +37,6 @@ public class Humanplayer extends Player {
 
 		ArrayList<Card> suggestedCards = new ArrayList<Card>();
 
-		// TODO: These loops could probably be redone. They are only needed to get the
-		// cards into a arrays of strings
 		String[] players = new String[board.getPlayerList().size()];
 		for (int i = 0; i < board.getPlayerList().size(); i++) {
 			players[i] = board.getPlayerList().get(i).getPlayerName();
@@ -61,7 +59,6 @@ public class Humanplayer extends Player {
 
 		// This should move the player that the human player suggested to the human
 		// players current room.
-		// TODO: this can be refactored to remove a line
 		String selectedPlayer = (String) playersBox.getSelectedItem();
 		String selectedWeapon = (String) weaponsBox.getSelectedItem();
 
@@ -71,13 +68,13 @@ public class Humanplayer extends Player {
 				// Moves the player
 				player.setPlayerLocation(getPlayerRow(), getPlayerCol());
 				player.setMovedForSuggestion(true);
+				System.out.println("Set " + player.toString() + " to true");
 				board.resetPlayersLocations();
 
 				// Loop to find that players card
 				for (int q = 0; q < board.getPeopleDeck().size(); q++) {
 					if (board.getPeopleDeck().get(q).getCardName().equals(player.getPlayerName())) {
 
-						// TODO: this can be refactored to save a line
 						Card playerCard = board.getPeopleDeck().get(q);
 						suggestedCards.add(playerCard); // Adds that card to the suggested list
 					}
@@ -103,7 +100,6 @@ public class Humanplayer extends Player {
 	}
 
 	
-	// TODO: Are these necessary?
 	@Override
 	public boolean canMakeAccusation() {
 		// TODO Auto-generated method stub
@@ -112,9 +108,7 @@ public class Humanplayer extends Player {
 
 	@Override
 	public  ArrayList<Card> makeAccusation() {
-		return null;
-		// TODO Auto-generated method stub
-		
+		return null;	
 	}
 
 }

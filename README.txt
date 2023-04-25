@@ -1,6 +1,6 @@
-C16A- Clue Board 2 
+Finishing Clue
 
-In this project, we got all of our adjacency list and target list tests to pass. 
+In this assignment we finalized all the clue game functionality.  
 
 I, Michael Eack, certify that I participated equitably in the creation of this assignment
 I, John, O'Malley certify that I participated equitably in the creation of this assignment

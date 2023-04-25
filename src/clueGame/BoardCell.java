@@ -14,8 +14,8 @@ import java.awt.Graphics2D;
  * BoardCell contains variables that store information of a boardCell, including: row and column location,
  * initial and other special conditions (room, roomLable, roomCenter, doorway, secrete passage, occupied, adjacency list)
  * 
- * @author michaeleack 
- * @author johnOmalley
+ * @author Michael Eack 
+ * @author John Omalley
  * @author Qina Tan
  * Date: 3/10/23
  * Collaborators: N/A

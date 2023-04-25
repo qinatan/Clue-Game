@@ -5,10 +5,10 @@
  * Player class is responsible for all actions of a player including make suggestion, 
  * disprove suggestion by showing a matching card to a suggested card by another player
  * 
- * @author: Mike Eact 
+ * @author: Mike Eack 
  * @author: John Omalley 
  * @author: Qina Tan 
- * @start Date: 8/3/2025
+ * @start Date: 4/24/2023
  * @collaborator: none 
  * @resources: none 
  */
@@ -25,8 +25,8 @@ public abstract class Player {
 	private String name;
 	private Color playerColor;
 	private String color;
-	private int row, col; // TODO: These do virtually the same thing
-	private BoardCell currCell; // TODO: These do virtually the same thing
+	private int row, col;
+	private BoardCell currCell;
 	private Room currRoom;
 	private int rollNum;
 	private int drawOffset = 0;
@@ -266,8 +266,6 @@ public abstract class Player {
 		this.currCell = board.getCell(this.row, this.col);
 		this.currCell.setOccupied(true); // sets the cell we're moving to as occupied
 		resetPlayerLocation();
-		// TODO: Delete this debug statement
-		// System.out.println(getDrawOffset() + " " + currCell.isRoom() + " " + this.getPlayerName()) ; 
 	}
 	
 

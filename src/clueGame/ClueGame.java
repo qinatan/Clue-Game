@@ -4,6 +4,18 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+
+/**
+ * Clue Game
+ * 
+ * This is the main entry point for our game.
+ * 
+ * @author michaeleack
+ * @author johnOmalley Date: 3/7/23 Collaborators: None Sources: None
+ * @author Qina Tan
+ */
+
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -89,7 +101,6 @@ public class ClueGame extends JFrame {
 
 	private class movePlayerClick implements MouseListener {
 
-		// TODO: this method should be moved outside of the mouse listener
 		private void mouseClickedLogic(MouseEvent e) {
 			if (board.getTargets() == null || board.getTargets().size() == 0) {
 				board.getPlayersTurn().setHasPlayerMoved(true);
@@ -101,7 +112,6 @@ public class ClueGame extends JFrame {
 			int col = (int) e.getPoint().getX() / cellWidth;
 			int row = ((int) e.getPoint().getY() - 30) / cellHeight;
 
-			// TODO: we should probably distribute the ! to clean this line up
 			if (!(row > board.getNumRows() - 1 || col > board.getNumColumns() - 1)) {
 				BoardCell cell = board.getCell(row, col);
 
@@ -170,13 +180,6 @@ public class ClueGame extends JFrame {
 		
 		board.resetPlayersLocations(); // this is necessary for drawing player offsets in rooms
 		
-		// Checks if the current player was moved for someone elses suggestion. If they were, allow them the opportunity
-		// to stay in the room to make a suggestion. 
-		if (board.getPlayersTurn().getMovedForSuggestion()) {
-			board.getTargets().add(board.getPlayersTurn().getCurrCell());
-			board.getPlayersTurn().setMovedForSuggestion(false);
-		}
-		
 		if (board.getPlayersTurn().getIsHasPlayerACC() || board.getPlayersTurn().getIsHasPlayerMoved()) {
 			
 			// switch to get next player in the list and roll a dice 
@@ -209,16 +212,8 @@ public class ClueGame extends JFrame {
 				if (((Computerplayer) board.getPlayersTurn()).canMakeAccusation()) {
 
 					ArrayList<Card>accusation = board.getPlayersTurn().makeAccusation();
-					
-					// TODO: I think all this logic could become a function of Solution. 
-					// i.e. public boolean checkSolution(ArrayList<Card>)
-					// Which we could call with board.getSolution().checkSolution();
 					Map<CardType, Card> solutions = Board.getSolution().getSolutionMap(); 
-
-					
-
-
-					if(board.checkAccusation(accusation)) {
+					if(Boolean.TRUE.equals(board.checkAccusation(accusation))) {
 						JOptionPane.showMessageDialog(null, board.getPlayersTurn().getPlayerName() + " Won!" + "\n The solution was " + solutions.get(CardType.ROOM) + " " + solutions.get(CardType.WEAPON) + " " + solutions.get(CardType.PERSON) + "", "Loser!", JOptionPane.INFORMATION_MESSAGE);
 						dispose(); 
 					} else {
@@ -233,7 +228,7 @@ public class ClueGame extends JFrame {
 					if (targetCell != null) {
 						board.getPlayersTurn().setPlayerLocation(targetCell.getRowNum(), targetCell.getColumnNum());
 						
-						if (targetCell.isRoom()) {
+						if (Boolean.TRUE.equals(targetCell.isRoom())) {
 							//CPU player make suggestion and handle suggestion 
 							ArrayList<Card> suggestedCards = board.getPlayersTurn().makeSuggestion();
 							Card disprovenCard = board.handleSuggestion(suggestedCards.get(0), suggestedCards.get(1), suggestedCards.get(2), board.getPlayersTurn());
@@ -245,16 +240,13 @@ public class ClueGame extends JFrame {
 							// CPU made a suggestion and no-one disproved it
 							else {
 								// First check if any of the cards they suggested are in their hand
-								System.out.println("A suggestion was not disproven, checking currPlayers hand");
 								Boolean readyToAccuse = true;
 							    for (Card card: board.getPlayersTurn().getHand()) {
 							    	if (suggestedCards.contains(card)) {
-							    		System.out.println("I found " + card.toString() + " in my hand.");
 							    		readyToAccuse = false; 
 							    	}
 							    }
-							    if (readyToAccuse) {
-							    System.out.println("No matching cards found, preparing to accuse. ");
+							    if (Boolean.TRUE.equals(readyToAccuse)) {
 							    ((Computerplayer) board.getPlayersTurn()).setUpheldSuggestion();
 							    }
 								
@@ -271,6 +263,13 @@ public class ClueGame extends JFrame {
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Please finish your turn", "Players turn", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		// Checks if the current player was moved for someone elses suggestion. If they were, allow them the opportunity
+		// to stay in the room to make a suggestion. 
+		if (Boolean.TRUE.equals(board.getPlayersTurn().getMovedForSuggestion())) {
+			board.getTargets().add(board.getPlayersTurn().getCurrCell());
+			board.getPlayersTurn().setMovedForSuggestion(false);
 		}
 		
 	}
@@ -317,7 +316,7 @@ public class ClueGame extends JFrame {
 				new JLabel("Weapon"), weaponsBox };
 		int result = JOptionPane.showConfirmDialog(null, inputs, "Make Accusation", JOptionPane.PLAIN_MESSAGE);
 
-		ArrayList<Card> ACCCards = new ArrayList<Card>();
+		ArrayList<Card> accCards = new ArrayList<>();
 
 		String selectedPlayer = (String) playersBox.getSelectedItem();
 		String selectedWeapon = (String) weaponsBox.getSelectedItem();
@@ -325,14 +324,14 @@ public class ClueGame extends JFrame {
 		// Getting the weapon Card
 		for (int w = 0; w < board.getWeaponDeck().size(); w++) {
 			if (board.getWeaponDeck().get(w).getCardName().equals(selectedWeapon)) {
-				ACCCards.add(board.getWeaponDeck().get(w));
+				accCards.add(board.getWeaponDeck().get(w));
 			}
 		}
 
 		// Getting the room card
 		for (int w = 0; w < board.getRoomDeck().size(); w++) {
 			if (board.getRoomDeck().get(w).getCardName().equals(selectedRoom)) {
-				ACCCards.add(board.getRoomDeck().get(w));
+				accCards.add(board.getRoomDeck().get(w));
 			}
 		}
 
@@ -340,7 +339,7 @@ public class ClueGame extends JFrame {
 		for (int q = 0; q < board.getPeopleDeck().size(); q++) {
 			if (board.getPeopleDeck().get(q).getCardName().equals(selectedPlayer)) {
 				Card playerCard = board.getPeopleDeck().get(q);
-				ACCCards.add(playerCard); // Adds that card to the suggested list
+				accCards.add(playerCard); // Adds that card to the suggested list
 			}
 		}
 		
@@ -357,7 +356,7 @@ public class ClueGame extends JFrame {
 			board.getTargets().clear(); 
 			repaint();
 			
-			if (Boolean.TRUE.equals(board.checkAccusation(ACCCards))) {
+			if (Boolean.TRUE.equals(board.checkAccusation(accCards))) {
 				JOptionPane.showMessageDialog(null, "You Won!", "Congratulations", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
 			} else {
@@ -372,7 +371,5 @@ public class ClueGame extends JFrame {
 	// Main entry point for game
 	public static void main(String[] args) {
 		ClueGame ThisClueGame = new ClueGame();
-		System.out.println("The Solution is = " + Board.getSolution()); 
-
 	}
 }

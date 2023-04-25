@@ -1,9 +1,9 @@
 /**
  * Card Class contains attributes describing a card, includes card type, card name
- * @author: Mike Eact 
+ * @author: Mike EacK 
  * @author: John Omalley 
  * @author: Qina Tan 
- * @start Date: 8/3/2025
+ * @start Date: 4/24/2023
  * @collaborator: none 
  * @resources: none 
  * 

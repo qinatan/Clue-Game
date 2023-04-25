@@ -1,10 +1,10 @@
 /**
  * 
  * Solution class contains three different types of cards: Person, Weapon, and Room, one card from each type
- * @author: Mike Eact 
+ * @author: Mike Eack
  * @author: John Omalley 
  * @author: Qina Tan 
- * @start Date: 8/3/2025
+ * @start Date: 4/24/2023
  * @collaborator: none 
  * @resources: none  
  */

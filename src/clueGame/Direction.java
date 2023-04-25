@@ -1,7 +1,7 @@
 /**
  * 
  * Direction is used to indicate 
- * @author: Mike Eact 
+ * @author: Mike Eack 
  * @author: John Omalley 
  * @author: Qina Tan 
  * @start Date: 4/9/2023

@@ -1,10 +1,10 @@
 /**
  * computerPlayer is an extension of abstract class of Players
  * It is responsible for for actions of AI players including making suggestion and select a target from target list when making a move 
- * @author: Mike Eact 
+ * @author: Mike Eack
  * @author: John Omalley 
  * @author: Qina Tan 
- * @start Date: 8/3/2025
+ * @start Date: 4/24/2023
  * @collaborator: none 
  * @resources: none 
  * 
@@ -97,6 +97,7 @@ public class Computerplayer extends Player {
 					{
 						player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol());
 						player.setMovedForSuggestion(true); // tells the suggested player that they have moved for a suggestion
+						System.out.println("Set " + player.toString() + " to true");
 						board.resetPlayersLocations();
 					}
 				}
@@ -104,8 +105,6 @@ public class Computerplayer extends Player {
 		}
  
 		this.latestSuggestion = finalSuggestion; 
-		System.out.println(finalSuggestion.toString());
-		System.out.println();
 		return finalSuggestion;
 	}
 

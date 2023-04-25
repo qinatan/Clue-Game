@@ -348,7 +348,7 @@ public class Board extends JPanel {
 	 */
 	private void gridCellClassifier(int row, int col, String[] result) {
 		// sets cell to "room" if not a walkway or unused square,
-		// TODO: So walkways and unused cells have isRoom = false, but are in roomMap
+		// So walkways and unused cells have isRoom = false, but are in roomMap
 		if (!result[col].equals("X") && result[col].charAt(0) != 'W') {
 			grid[row][col].setIsRoom(true);
 		}
@@ -441,7 +441,7 @@ public class Board extends JPanel {
 	}
 
 	
-	// TODO: Refactor this method to be much shorter
+	
 	private void calculateCellAdj(int row, int col) {
 
 		// If unused cell: Do not create adjList for it

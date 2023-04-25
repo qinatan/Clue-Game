@@ -68,7 +68,7 @@ public class Humanplayer extends Player {
 				// Moves the player
 				player.setPlayerLocation(getPlayerRow(), getPlayerCol());
 				player.setMovedForSuggestion(true);
-				System.out.println("Set " + player.toString() + " to true");
+				
 				board.resetPlayersLocations();
 
 				// Loop to find that players card
@@ -102,7 +102,7 @@ public class Humanplayer extends Player {
 	
 	@Override
 	public boolean canMakeAccusation() {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 

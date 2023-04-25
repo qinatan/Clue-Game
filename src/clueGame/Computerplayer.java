@@ -43,7 +43,7 @@ public class Computerplayer extends Player {
 	}
 
 	public ArrayList<Card> makeSuggestion() {
-		System.out.println(this.getPlayerName() + " makes a suggestion: ");
+		
 		ArrayList<Card> finalSuggestion = new ArrayList<>();
 		HashMap<CardType, ArrayList<Card>> possibleSuggestions = new HashMap<CardType, ArrayList<Card>>();
 
@@ -97,7 +97,7 @@ public class Computerplayer extends Player {
 					{
 						player.setPlayerLocation(board.getPlayersTurn().getPlayerRow(), board.getPlayersTurn().getPlayerCol());
 						player.setMovedForSuggestion(true); // tells the suggested player that they have moved for a suggestion
-						System.out.println("Set " + player.toString() + " to true");
+						
 						board.resetPlayersLocations();
 					}
 				}
@@ -126,7 +126,7 @@ public class Computerplayer extends Player {
 		}
 		
 		for (BoardCell target : targetList) {
-			// TODO: Check if that room is in the players seenList, if it is, don't enter
+			//  Check if that room is in the players seenList, if it is, don't enter
 			if (target.isRoom()) {
 				// get the cellSymbol in order to get the matching room from roomMap
 				Character cellSymbol = target.getCellSymbol();
@@ -176,42 +176,7 @@ public class Computerplayer extends Player {
 		}
 		
 		return false;
-		/*
-		int unseenWeapons = 1;
-		int unseenPeople = 1;
-		int unseenRooms = 1;
-
-		for (Card weaponCard : board.getWeaponDeck()) {
-			if (this.seenMap.containsKey(weaponCard.getCardType()) || this.hand.contains(weaponCard));
-			else {
-				unseenWeapons++;
-				// TODO: possible add this card to potential suggestion
-			}
-		}
-
-		for (Card playerCard : board.getPeopleDeck()) {
-			if (this.seenMap.containsKey(playerCard.getCardType()) || this.hand.contains(playerCard));
-			else {
-				unseenPeople++;
-				// TODO: possible add this card to potential suggestion
-			}
-		}
-
-		for (Card roomCard : board.getRoomDeck()) {
-			if (this.seenMap.containsKey(roomCard.getCardType()) || this.hand.contains(roomCard));
-			else {
-				unseenRooms++;
-				// TODO: possible add this card to potential suggestion
-			}
-		}
-
-		if (unseenWeapons > 1 || unseenPeople > 1 || unseenRooms > 1) {
-			return false;
-		} else {
-			return true;
-		}
-		*/
-
+		
 	}
 
 	

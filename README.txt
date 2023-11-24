@@ -1,7 +1,3 @@
-Finishing Clue
+A desktop single player Clue game. 
 
-In this assignment we finalized all the clue game functionality.  
-
-I, Michael Eack, certify that I participated equitably in the creation of this assignment
-I, John, O'Malley certify that I participated equitably in the creation of this assignment
-I, Qina Tan, certify that I participated equitably in the creation of this assignment.
+<img src="https://github.com/meack2/Clue/blob/main/clue.gif?raw=true" width="500" height="400" />
